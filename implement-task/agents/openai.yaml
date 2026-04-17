@@ -1,0 +1,4 @@
+name: implement-task
+version: 1
+allow_implicit_invocation: false
+summary: Execute one approved plan-bound task with strict scope control, self-check, and deviation/blocker reporting.

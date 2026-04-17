@@ -1,0 +1,8 @@
+name: Review Phase
+description: |
+  Independent review workflow for task-level implementation review and roadmap-level implementation review.
+  Use when you need structured comparison against approved plan/roadmap/business intent and a severity-classified report.
+  Do not use as a generic coding or planning skill.
+instructions: |
+  Prefer explicit invocation. Keep findings evidence-based, severity-classified, and action-oriented.
+allow_implicit_invocation: false

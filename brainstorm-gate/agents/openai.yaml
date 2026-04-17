@@ -1,0 +1,3 @@
+name: brainstorm-gate
+description: First-gate brainstorm skill that pressure-tests the idea and routes to exactly one next artifact with an explicit continuation prompt.
+allow_implicit_invocation: false

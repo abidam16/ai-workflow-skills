@@ -1,0 +1,5 @@
+name: prd-writer
+display_name: PRD Writer
+description: Create or update a concise, product-level PRD when product intent needs to be defined or revised.
+version: 1.1.0
+allow_implicit_invocation: false

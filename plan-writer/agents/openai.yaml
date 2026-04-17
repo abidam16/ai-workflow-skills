@@ -1,0 +1,3 @@
+name: plan-writer
+description: Create or update a single-task PLAN.md that turns one approved work item into a bounded implementation contract.
+allow_implicit_invocation: false
