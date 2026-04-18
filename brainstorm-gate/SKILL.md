@@ -1,6 +1,6 @@
 ---
 name: brainstorm-gate
-description: Use this skill to run the first gate of the workflow for new ideas, feature additions, user-reported problems, technical concerns, roadmap shifts, and product changes. This skill pressure-tests the problem, value, trade-offs, and alternatives, then routes explicitly to exactly one next artifact: PRD creation/update, roadmap creation/update, ADR creation/update, or reject/defer. Use it when the main need is deciding what the next artifact should be and why. Do not use it to write full PRDs, roadmaps, ADRs, or plans directly.
+description: "Use this skill to run the first gate of the workflow for new ideas, feature additions, user-reported problems, technical concerns, roadmap shifts, and product changes. This skill pressure-tests the problem, value, trade-offs, and alternatives, then routes explicitly to exactly one next artifact: PRD creation/update, roadmap creation/update, ADR creation/update, or reject/defer. Use it when the main need is deciding what the next artifact should be and why. Do not use it to write full PRDs, roadmaps, ADRs, or plans directly."
 ---
 
 # Brainstorm Gate
