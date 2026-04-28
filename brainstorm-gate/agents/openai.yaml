@@ -1,3 +1,3 @@
 name: brainstorm-gate
-description: First-gate brainstorm skill that pressure-tests the idea and routes to exactly one next artifact with an explicit continuation prompt.
+description: First-gate brainstorm skill that pressure-tests an idea, decides exactly one next artifact, and optionally creates a durable BRAINSTORM handoff artifact for later workflow phases.
 allow_implicit_invocation: false

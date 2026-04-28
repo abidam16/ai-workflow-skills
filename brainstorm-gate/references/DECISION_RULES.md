@@ -2,74 +2,147 @@
 
 Use these rules in order.
 
-## Rule 1: Reject or defer first
-Choose `REJECT_OR_DEFER` if any of these are true:
+The final output must choose exactly one decision.
+
+## Rule 1: Reject or Defer First
+
+Choose `REJECT_OR_DEFER` when any of these are true:
+
 - the problem is weak, unclear, or low-value
 - the idea solves little meaningful pain
-- the signal is too speculative to justify documentation
-- the current information is insufficient for a responsible next artifact
+- the signal is too speculative
+- the idea is premature relative to current priorities
+- required evidence is missing
+- the user cannot yet define who is affected or why it matters
+- the cost/risk is obviously disproportionate to the expected value
 
-When rejecting or deferring, still state exactly what evidence or clarification would reopen the idea.
+When rejecting or deferring, still state what would reopen the idea.
 
-## Rule 2: PRD takes priority when product truth is missing or changing
+Common reopen conditions:
+
+- stronger user evidence
+- clearer business value
+- clearer product scope
+- clearer technical constraints
+- priority change
+- recurring operational pain
+
+## Rule 2: PRD Takes Priority When Product Truth Is Missing or Changing
+
 Choose `NEW_PRD` when:
-- the idea is new and product intent is not yet defined in a PRD
-- the problem, users, goals, scope, flows, or rules must be established
+
+- the idea is new and product intent does not exist in durable form
+- the problem, users, goals, non-goals, scope, flows, or rules must be established
+- the idea defines a new product, major capability, or meaningful user-facing behavior
+- downstream agents would otherwise need to infer product truth from chat history
 
 Choose `PRD_UPDATE` when:
-- an existing PRD already exists
-- the change affects product intent, user-facing behavior, scope, goals, rules, or success criteria
 
-If `NEW_PRD` or `PRD_UPDATE` is chosen, do **not** also choose roadmap in the same final decision.
-The correct next step is the PRD phase.
-After PRD, roadmap may follow if needed.
+- an existing PRD exists
+- the change affects product intent, user-facing behavior, scope, goals, non-goals, product rules, current behavior, target behavior, or success criteria
+- roadmap or implementation learning changes the product truth
 
-## Rule 3: ADR is for lasting technical decisions
+If `NEW_PRD` or `PRD_UPDATE` is chosen, do not also choose roadmap in the same final decision.
+
+The correct next step is the PRD phase. Roadmap may follow after PRD if needed.
+
+## Rule 3: ADR Is for Lasting Technical Decisions
+
 Choose `NEW_ADR` when:
+
 - the immediate need is to record one meaningful technical or architectural decision
 - alternatives exist and trade-offs matter
 - the decision will constrain later implementation
+- the decision affects reliability, scalability, integration style, persistence, security, deployment, observability, or maintainability
+- product intent is already clear enough for this technical decision
 
 Choose `ADR_UPDATE` only when:
-- your workflow intentionally maintains an existing ADR record in-place
-- the change is truly an update to the same decision rather than a superseding decision
 
-If your ADR practice prefers superseding instead of updating, note that clearly.
+- the workflow intentionally maintains an existing ADR in place
+- the change is truly a correction or update to the same decision
+- the repo's ADR practice allows mutation of existing ADRs
 
-## Rule 4: Roadmap is for sequencing already-accepted intent
+Preferred default:
+
+- create a new ADR and mark older ADRs as superseded when the decision materially changes
+
+## Rule 4: Roadmap Is for Sequencing Already-Accepted Intent
+
 Choose `NEW_PRODUCT_ROADMAP` when:
+
 - the product direction is already accepted
 - there is no suitable strategic roadmap yet
-- the next need is phased product sequencing
+- the next need is phased product sequencing across larger product direction
 
 Choose `PRODUCT_ROADMAP_UPDATE` when:
+
 - a product-level roadmap already exists
-- strategic themes, phases, or sequencing changed
+- strategic themes, phases, priorities, milestones, or sequencing changed
 
 Choose `NEW_INITIATIVE_ROADMAP` when:
-- the product or technical intent is already sufficiently clear
-- the next need is a focused delivery sequence for one feature, refactor, migration, or initiative
+
+- product or technical intent is already sufficiently clear
+- the next need is a focused delivery sequence for one feature, refactor, migration, integration, or initiative
 - there is no suitable existing initiative roadmap
 
 Choose `INITIATIVE_ROADMAP_UPDATE` when:
-- the initiative already has a roadmap
-- the scope, sequencing, dependencies, risks, or exit criteria changed
 
-## Rule 5: One final decision only
-At the end of the brainstorm, choose exactly one final decision.
+- the initiative already has a roadmap
+- scope, sequencing, dependencies, risks, milestones, or exit criteria changed
+
+Do not choose roadmap when product truth is missing or changing. Choose PRD first.
+
+Do not choose roadmap when the only unresolved issue is a technical decision. Choose ADR first.
+
+## Rule 5: One Final Decision Only
+
 If multiple artifacts seem relevant, choose the immediate next artifact, not the full downstream chain.
 
-## Mandatory next-step wording
-The final output must include an explicit line in this pattern:
-- `Immediate next step: Proceed to NEW_PRD.`
-- `Immediate next step: Proceed to PRD_UPDATE.`
-- `Immediate next step: Proceed to NEW_INITIATIVE_ROADMAP.`
-- `Immediate next step: Proceed to NEW_ADR.`
-- `Immediate next step: Stop here. Do not proceed until stronger evidence exists.`
+Examples:
 
-The final output must also include a direct continuation prompt in this pattern:
-- `Proceed to create the PRD based on this brainstorm output.`
-- `Proceed to update the PRD based on this brainstorm output.`
-- `Proceed to create the initiative roadmap based on this brainstorm output.`
-- `Proceed to create the ADR based on this brainstorm output.`
-- `Stop here and revisit after gathering stronger evidence.`
+- Product idea is unclear and also needs sequencing later: choose `NEW_PRD`, not roadmap.
+- Technical choice is blocking implementation and alternatives matter: choose `NEW_ADR`, not plan.
+- Product intent and ADR are accepted but delivery order is unclear: choose roadmap.
+- Idea is weak or under-evidenced: choose `REJECT_OR_DEFER`.
+
+## Rule 6: Artifact Action Must Match Workflow Need
+
+Choose `CREATE_DURABLE_BRAINSTORM_ARTIFACT` when the brainstorm output will feed another skill or later workflow phase.
+
+Choose `UPDATE_EXISTING_BRAINSTORM_ARTIFACT` when the user is revising a prior brainstorm artifact.
+
+Choose `CHAT_ONLY_NO_ARTIFACT` when the brainstorm is lightweight and no stable handoff is needed.
+
+## Mandatory Next-Step Wording
+
+Use one of these patterns:
+
+```text
+Immediate next step: Proceed to NEW_PRD.
+Immediate next step: Proceed to PRD_UPDATE.
+Immediate next step: Proceed to NEW_PRODUCT_ROADMAP.
+Immediate next step: Proceed to PRODUCT_ROADMAP_UPDATE.
+Immediate next step: Proceed to NEW_INITIATIVE_ROADMAP.
+Immediate next step: Proceed to INITIATIVE_ROADMAP_UPDATE.
+Immediate next step: Proceed to NEW_ADR.
+Immediate next step: Proceed to ADR_UPDATE.
+Immediate next step: Stop here. Do not proceed until stronger evidence exists.
+```
+
+## Mandatory Continuation Prompt Wording
+
+Use one of these patterns:
+
+```text
+Proceed to create the PRD based on <brainstorm artifact path>.
+Proceed to update the PRD based on <brainstorm artifact path>.
+Proceed to create the product roadmap based on <brainstorm artifact path>.
+Proceed to update the product roadmap based on <brainstorm artifact path>.
+Proceed to create the initiative roadmap based on <brainstorm artifact path>.
+Proceed to update the initiative roadmap based on <brainstorm artifact path>.
+Proceed to create the ADR based on <brainstorm artifact path>.
+Proceed to update the ADR based on <brainstorm artifact path>.
+Stop here and revisit after gathering stronger evidence.
+```
+
+For chat-only output, use "this brainstorm output" instead of an artifact path.
