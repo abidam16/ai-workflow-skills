@@ -14,11 +14,11 @@
 
 | Artifact | Path / Section | Result |
 |---|---|---|
-| PLAN |  |  |
-| PRD |  |  |
-| Architecture |  |  |
-| ADR |  |  |
-| Roadmap |  |  |
+| PLAN | | |
+| PRD | | |
+| Architecture | | |
+| ADR | | |
+| Roadmap | | |
 
 ## Architecture Sensitivity
 
@@ -44,7 +44,7 @@
 
 | Required action | Target artifact | Reason |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ## Work Not Performed
 

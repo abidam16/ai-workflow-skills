@@ -13,13 +13,13 @@
 
 | Artifact | Path / Reference | Status | Used For |
 |---|---|---|---|
-| PLAN |  |  | task scope and execution contract |
-| PRD |  |  | product behavior / acceptance intent |
-| Architecture |  |  | system-shape constraints |
-| ADR |  |  | recorded technical decisions |
-| Roadmap |  |  | phase/slice context |
-| Implementation Summary |  |  | delivered changes and deviations |
-| Validation Evidence |  |  | tests/checks/manual evidence |
+| PLAN | | | task scope and execution contract |
+| PRD | | | product behavior / acceptance intent |
+| Architecture | | | system-shape constraints |
+| ADR | | | recorded technical decisions |
+| Roadmap | | | phase/slice context |
+| Implementation Summary | | | delivered changes and deviations |
+| Validation Evidence | | | tests/checks/manual evidence |
 
 ## 3. Source Artifact Readiness
 
@@ -98,7 +98,7 @@
 
 | Severity | Category | Title | Description | Why It Matters | Recommended Action |
 |---|---|---|---|---|---|
-| `HIGH_URGENCY | MEDIUM_URGENCY | LOW_URGENCY | FUTURE_IMPROVEMENT` |  |  |  |  |  |
+| `HIGH_URGENCY | MEDIUM_URGENCY | LOW_URGENCY | FUTURE_IMPROVEMENT` | | | | | |
 
 ## 13. Risk Assessment
 
@@ -117,10 +117,9 @@ List supporting actions here, ordered by importance. This section may contain mu
 
 ## 15. Concrete Next Step
 
-- `next_step_type`: `MERGE_OR_CLOSE_TASK | APPLY_MINOR_FIXES | RETURN_TO_IMPLEMENTATION | UPDATE_PLAN | UPDATE_ARCHITECTURE | CREATE_OR_UPDATE_ADR | UPDATE_ROADMAP | UPDATE_PRD | REQUEST_MISSING_EVIDENCE | SPLIT_REVIEW_SCOPE | START_NEXT_PLAN | STOP_AND_ESCALATE`
+- `next_step_type`: `MERGE_OR_CLOSE_TASK | APPLY_MINOR_FIXES | RETURN_TO_IMPLEMENTATION | UPDATE_PLAN | CREATE_ARCHITECTURE | UPDATE_ARCHITECTURE | CREATE_ADR | UPDATE_ADR | CREATE_OR_UPDATE_ADR | UPDATE_ROADMAP | UPDATE_PRD | REQUEST_MISSING_EVIDENCE | SPLIT_REVIEW_SCOPE | START_NEXT_PLAN | STOP_AND_ESCALATE`
 - `target`:
 - `action`:
 - `why_this_is_next`:
 - `blocking_condition`:
 - `suggested_prompt`:
-

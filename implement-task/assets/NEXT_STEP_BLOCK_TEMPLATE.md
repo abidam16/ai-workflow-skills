@@ -7,7 +7,7 @@
 - `blocking_condition`:
 - `suggested_prompt`:
 
-Allowed `next_step_type` values:
+Allowed local `next_step_type` values:
 
 - `RUN_REVIEW`
 - `RUN_VALIDATION`

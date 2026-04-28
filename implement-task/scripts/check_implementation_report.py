@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""Lightweight validator for architecture-aware implementation reports.
+"""Validate implement-task reports for the normalized Concrete Next Step contract.
 
 Usage:
-    python scripts/check_implementation_report.py IMPLEMENTATION_SUMMARY.md
-    python scripts/check_implementation_report.py BLOCKER_REPORT.md
+    python scripts/check_implementation_report.py path/to/implementation-summary.md
 """
 
 from __future__ import annotations
@@ -12,28 +11,7 @@ import re
 import sys
 from pathlib import Path
 
-REQUIRED_COMMON_SECTIONS = [
-    "Outcome",
-    "Source Artifacts Checked",
-    "Architecture Sensitivity",
-    "Concrete Next Step",
-]
-
-IMPLEMENTED_SECTIONS = [
-    "Scope Lock",
-    "What Was Implemented",
-    "Files Changed",
-    "Plan Fulfillment",
-    "Validation and Tests",
-]
-
-BLOCKER_SECTIONS = [
-    "Blocker Summary",
-    "Blocking Issue",
-    "Required Upstream Fix",
-]
-
-NEXT_STEP_FIELDS = [
+REQUIRED_FIELDS = [
     "next_step_type",
     "target",
     "action",
@@ -41,19 +19,6 @@ NEXT_STEP_FIELDS = [
     "blocking_condition",
     "suggested_prompt",
 ]
-
-ALLOWED_STATUSES = {
-    "IMPLEMENTED",
-    "IMPLEMENTED_WITH_REPORTED_DEVIATION",
-    "BLOCKED_REQUIRES_PLAN_CLARIFICATION",
-    "BLOCKED_REQUIRES_PLAN_SPLIT",
-    "BLOCKED_REQUIRES_ARCHITECTURE_CLARIFICATION",
-    "BLOCKED_REQUIRES_ARCHITECTURE_UPDATE",
-    "BLOCKED_REQUIRES_ADR_DECISION",
-    "BLOCKED_REQUIRES_UPSTREAM_DECISION",
-    "BLOCKED_BY_CONFLICTING_SOURCES",
-    "BLOCKED_BY_VALIDATION_FAILURE",
-}
 
 ALLOWED_NEXT_STEP_TYPES = {
     "RUN_REVIEW",
@@ -70,92 +35,88 @@ ALLOWED_NEXT_STEP_TYPES = {
     "STOP_AND_ESCALATE",
 }
 
-VAGUE_ACTIONS = {
-    "continue",
-    "proceed",
-    "move forward",
-    "review done",
-    "implementation done",
-    "fix issues",
-    "do next step",
-    "next step",
-    "review",
-    "test",
-}
+BANNED_TERMS = [
+    "Immediate Next Step",
+    "Continuation Prompt",
+    "`next_step`",
+    "next_step:",
+    "`follow_up`",
+    "follow_up:",
+]
+
+VAGUE_ACTION_PATTERNS = [
+    r"^\s*continue\s*\.?\s*$",
+    r"^\s*continue development\s*\.?\s*$",
+    r"^\s*fix issues\s*\.?\s*$",
+    r"^\s*update docs as needed\s*\.?\s*$",
+    r"^\s*review later\s*\.?\s*$",
+    r"^\s*implementation done\s*\.?\s*$",
+]
+
+PLACEHOLDERS = {"", "tbd", "todo", "n/a", "-", "...", "<todo>", "<tbd>"}
 
 
-def section_exists(text: str, heading: str) -> bool:
-    pattern = rf"^##+\s+{re.escape(heading)}\s*$"
-    return re.search(pattern, text, flags=re.MULTILINE) is not None
-
-
-def extract_field(text: str, field: str) -> str | None:
-    pattern = rf"`{re.escape(field)}`\s*:\s*([^\n]+)"
-    match = re.search(pattern, text)
+def extract_field(block: str, field: str) -> str | None:
+    # Supports: - `field`: value
+    pattern = rf"^-\s*`{re.escape(field)}`:\s*(.*)$"
+    match = re.search(pattern, block, flags=re.MULTILINE)
     if not match:
         return None
-    return match.group(1).strip().strip("`")
+    return match.group(1).strip()
 
 
 def main() -> int:
     if len(sys.argv) != 2:
-        print("Usage: check_implementation_report.py IMPLEMENTATION_SUMMARY.md", file=sys.stderr)
+        print("Usage: check_implementation_report.py <path>", file=sys.stderr)
         return 2
 
     path = Path(sys.argv[1])
-    if not path.exists():
-        print(f"File not found: {path}", file=sys.stderr)
-        return 2
-
     text = path.read_text(encoding="utf-8")
+
     errors: list[str] = []
 
-    for section in REQUIRED_COMMON_SECTIONS:
-        if not section_exists(text, section):
-            errors.append(f"Missing required section: {section}")
+    count = len(re.findall(r"^## Concrete Next Step\s*$", text, flags=re.MULTILINE))
+    if count == 0:
+        errors.append("Missing required section: ## Concrete Next Step")
+    elif count > 1:
+        errors.append("Multiple ## Concrete Next Step sections found; expected exactly one")
 
-    status = extract_field(text, "outcome_status")
-    if not status:
-        errors.append("Missing outcome_status field")
-    elif status not in ALLOWED_STATUSES:
-        errors.append(f"Invalid outcome_status: {status}")
+    for banned in BANNED_TERMS:
+        if banned in text:
+            errors.append(f"Banned old/loose next-step term found: {banned}")
 
-    if status and status.startswith("IMPLEMENTED"):
-        for section in IMPLEMENTED_SECTIONS:
-            if not section_exists(text, section):
-                errors.append(f"Missing implemented-report section: {section}")
-    elif status and status.startswith("BLOCKED"):
-        for section in BLOCKER_SECTIONS:
-            if not section_exists(text, section):
-                errors.append(f"Missing blocker-report section: {section}")
+    if count == 1:
+        block = text.split("## Concrete Next Step", 1)[1]
+        for field in REQUIRED_FIELDS:
+            value = extract_field(block, field)
+            if value is None:
+                errors.append(f"Missing required field: `{field}`")
+                continue
+            normalized = value.strip().strip('"').strip("'").lower()
+            if normalized in PLACEHOLDERS:
+                errors.append(f"Field `{field}` has placeholder/empty value: {value!r}")
 
-    for field in NEXT_STEP_FIELDS:
-        if extract_field(text, field) is None:
-            errors.append(f"Missing Concrete Next Step field: {field}")
+        next_step_type = extract_field(block, "next_step_type")
+        if next_step_type:
+            next_step_type_clean = next_step_type.strip().strip("`").strip()
+            if next_step_type_clean not in ALLOWED_NEXT_STEP_TYPES:
+                errors.append(
+                    f"Invalid next_step_type: {next_step_type_clean}. "
+                    f"Allowed: {', '.join(sorted(ALLOWED_NEXT_STEP_TYPES))}"
+                )
 
-    next_step_type = extract_field(text, "next_step_type")
-    if next_step_type and next_step_type not in ALLOWED_NEXT_STEP_TYPES:
-        errors.append(f"Invalid next_step_type: {next_step_type}")
-
-    action = extract_field(text, "action")
-    if action:
-        normalized = action.lower().strip().rstrip(".")
-        if normalized in VAGUE_ACTIONS:
-            errors.append(f"Concrete Next Step action is too vague: {action}")
-
-    suggested_prompt = extract_field(text, "suggested_prompt")
-    if suggested_prompt:
-        normalized = suggested_prompt.lower().strip().strip('"').rstrip(".")
-        if normalized in VAGUE_ACTIONS or len(normalized.split()) < 6:
-            errors.append(f"Concrete Next Step suggested_prompt is too vague: {suggested_prompt}")
+        action = extract_field(block, "action") or ""
+        for pattern in VAGUE_ACTION_PATTERNS:
+            if re.match(pattern, action, flags=re.IGNORECASE):
+                errors.append(f"Vague action wording is not allowed: {action!r}")
 
     if errors:
-        print("Implementation report validation failed:")
-        for err in errors:
-            print(f"- {err}")
+        print("Concrete Next Step validation failed:", file=sys.stderr)
+        for error in errors:
+            print(f"- {error}", file=sys.stderr)
         return 1
 
-    print("Implementation report validation passed.")
+    print("Concrete Next Step validation passed.")
     return 0
 
 

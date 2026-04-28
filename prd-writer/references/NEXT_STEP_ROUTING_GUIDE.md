@@ -1,6 +1,21 @@
 # Next Step Routing Guide
 
-Every PRD run must end with one concrete next step.
+Every PRD run must end with exactly one normalized `## Concrete Next Step` block.
+
+Required shape:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+Do not use older terminal fields such as `Immediate Next Step`, `Continuation Prompt`, `Next Step`, `Recommended Follow-up`, or a loose `next_step` field.
 
 ## Allowed next step types
 
@@ -39,6 +54,10 @@ Target examples:
 - `PLAN.md`
 - `docs/plans/accept-invitation-endpoint-plan.md`
 
+### `RETURN_TO_BRAINSTORM`
+
+Use when product truth is not ready because the idea itself still needs exploration or artifact routing.
+
 ### `REQUEST_PRODUCT_DECISION`
 
 Use when PRD cannot proceed because a product question needs a decision.
@@ -63,7 +82,7 @@ Use only when a valid plan already exists and the PRD update does not require ar
 
 Use when sources conflict in a way that cannot be resolved by one artifact update.
 
-## Required fields
+## Required field quality
 
 Each next step must include:
 
@@ -73,6 +92,8 @@ Each next step must include:
 - `why_this_is_next`
 - `blocking_condition`
 - `suggested_prompt`
+
+The `target` must name a concrete artifact or action, not a vague phase.
 
 ## Vague wording to avoid
 
@@ -87,6 +108,8 @@ Do not write:
 Write:
 
 ```md
+## Concrete Next Step
+
 - `next_step_type`: CREATE_OR_UPDATE_ARCHITECTURE
 - `target`: `ARCHITECTURE.md`
 - `action`: Create architecture for invitation, membership, and notification boundaries based on this PRD.

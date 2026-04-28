@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Lightweight validator for architecture-aware PLAN.md files.
+"""Validate architecture-aware PLAN.md files and normalized Concrete Next Step output.
 
 Usage:
     python scripts/check_plan_doc.py PLAN.md
@@ -50,15 +50,24 @@ ALLOWED_NEXT_STEP_TYPES = {
 
 ALLOWED_READINESS = {"NOT_RELEVANT", "READY", "PARTIAL", "MISSING", "CONFLICTING"}
 
-VAGUE_ACTIONS = {
-    "continue",
-    "fix issues",
-    "do the task",
-    "proceed",
-    "move forward",
-    "review done",
-    "implementation",
-}
+OLD_TERMINAL_PATTERNS = [
+    r"^##+\s+Immediate Next Step\s*$",
+    r"^##+\s+Continuation Prompt\s*$",
+    r"`?next_step`?\s*:",
+    r"`?follow_up`?\s*:",
+]
+
+PLACEHOLDER_VALUES = {"", "todo", "tbd", "n/a", "-", "...", "<todo>", "<tbd>"}
+
+VAGUE_ACTION_PATTERNS = [
+    r"^continue\b",
+    r"^proceed\b",
+    r"^move forward\b",
+    r"^fix issues\.?$",
+    r"^do the task\.?$",
+    r"^implementation\.?$",
+    r"^the plan is ready\.?$",
+]
 
 
 def section_exists(text: str, heading: str) -> bool:
@@ -66,12 +75,28 @@ def section_exists(text: str, heading: str) -> bool:
     return re.search(pattern, text, flags=re.MULTILINE) is not None
 
 
+def count_section(text: str, heading: str) -> int:
+    pattern = rf"^##+\s+{re.escape(heading)}\s*$"
+    return len(re.findall(pattern, text, flags=re.MULTILINE))
+
+
 def extract_field(text: str, field: str) -> str | None:
     pattern = rf"`{re.escape(field)}`\s*:\s*([^\n]+)"
     match = re.search(pattern, text)
     if not match:
         return None
-    return match.group(1).strip().strip("`")
+    return match.group(1).strip().strip("`").strip()
+
+
+def is_placeholder(value: str | None) -> bool:
+    if value is None:
+        return True
+    return value.strip().lower() in PLACEHOLDER_VALUES
+
+
+def is_vague_action(action: str) -> bool:
+    normalized = action.lower().strip().rstrip(".")
+    return any(re.search(pattern, normalized) for pattern in VAGUE_ACTION_PATTERNS)
 
 
 def main() -> int:
@@ -91,9 +116,22 @@ def main() -> int:
         if not section_exists(text, section):
             errors.append(f"Missing required section: {section}")
 
+    concrete_count = count_section(text, "Concrete Next Step")
+    if concrete_count == 0:
+        errors.append("Missing required section: Concrete Next Step")
+    elif concrete_count > 1:
+        errors.append(f"Expected exactly one Concrete Next Step section, found {concrete_count}")
+
+    for pattern in OLD_TERMINAL_PATTERNS:
+        if re.search(pattern, text, flags=re.MULTILINE | re.IGNORECASE):
+            errors.append(f"Old or loose next-step field still present: {pattern}")
+
     for field in NEXT_STEP_FIELDS:
-        if extract_field(text, field) is None:
+        value = extract_field(text, field)
+        if value is None:
             errors.append(f"Missing Concrete Next Step field: {field}")
+        elif is_placeholder(value):
+            errors.append(f"Concrete Next Step field is empty or placeholder: {field}")
 
     next_step_type = extract_field(text, "next_step_type")
     if next_step_type and next_step_type not in ALLOWED_NEXT_STEP_TYPES:
@@ -104,10 +142,8 @@ def main() -> int:
         errors.append(f"Invalid architecture_readiness: {readiness}")
 
     action = extract_field(text, "action")
-    if action:
-        normalized = action.lower().strip().rstrip(".")
-        if normalized in VAGUE_ACTIONS:
-            errors.append(f"Concrete Next Step action is too vague: {action}")
+    if action and is_vague_action(action):
+        errors.append(f"Concrete Next Step action is too vague: {action}")
 
     if errors:
         print("PLAN.md validation failed:")

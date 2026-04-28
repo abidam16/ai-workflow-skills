@@ -7,7 +7,7 @@
 - `blocking_condition`:
 - `suggested_prompt`:
 
-Allowed `next_step_type` values:
+Allowed `next_step_type` values for `plan-writer`:
 
 - `IMPLEMENT_PLAN`
 - `SPLIT_INTO_PLANS`

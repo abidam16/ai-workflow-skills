@@ -36,4 +36,21 @@ Run:
 python scripts/check_roadmap_doc.py path/to/ROADMAP.md
 ```
 
-The script checks for core roadmap sections and the mandatory `Concrete Next Step` block.
+The script checks for core roadmap sections and the mandatory normalized `## Concrete Next Step` block with all six required fields. It also rejects old terminal fields such as `Immediate Next Step`, `Continuation Prompt`, loose `next_step`, and loose `follow_up`.
+
+## Concrete Next Step contract
+
+Every roadmap output must end with exactly one block:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+Do not end with a summary-only statement such as "roadmap is done" or an old-style `Immediate Next Step` / `Continuation Prompt` pair.

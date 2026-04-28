@@ -2,7 +2,6 @@
 
 ## Task Summary
 
-<!-- One paragraph. What exactly will be implemented? -->
 
 ## Plan Status
 
@@ -14,11 +13,11 @@
 
 | Artifact | Path / Section | Status | Used For |
 |---|---|---|---|
-| PRD |  |  |  |
-| Architecture |  |  |  |
-| ADR |  |  |  |
-| Roadmap |  |  |  |
-| Review Report |  |  |  |
+| PRD | | | |
+| Architecture | | | |
+| ADR | | | |
+| Roadmap | | | |
+| Review Report | | | |
 
 ## Architecture Readiness
 
@@ -28,7 +27,6 @@
 
 ## Objective
 
-<!-- One primary objective only. -->
 
 ## Scope
 
@@ -72,7 +70,7 @@
 
 | Area | Expected change | Reason |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ### Must Not Change
 

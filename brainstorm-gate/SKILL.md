@@ -1,100 +1,83 @@
 ---
 name: brainstorm-gate
-description: |
-  Use this skill as the first decision gate for new ideas, feature additions,
-  user-reported problems, technical concerns, architecture concerns, roadmap
-  shifts, documentation workflow changes, and product changes.
-  The skill pressure-tests the problem, value, alternatives, risks, and trade-offs,
-  then routes to exactly one next artifact: PRD creation/update, ARCHITECTURE
-  creation/update, ADR creation/update, roadmap creation/update, document plan
-  creation/update, or reject/defer.
-
-  This skill can produce either a lightweight chat-only brainstorm conclusion or
-  a durable BRAINSTORM artifact that becomes the source-of-truth handoff for the
-  next workflow phase.
-
-  Do not use this skill to write full PRDs, ARCHITECTURE documents, ADRs,
-  roadmaps, document plans, execution plans, or implementation tasks directly.
+description: Route brainstorm output to exactly one next durable artifact or rejection/defer outcome. Use when an idea, discussion, or uncertainty needs classification before PRD, architecture, ADR, roadmap, plan, implementation, or review. Do not use to write the downstream artifact itself.
 ---
 
 # Brainstorm Gate
 
-## 1. Purpose
+## Shared workflow policy
 
-This skill is the first decision gate of the workflow.
-
-It exists to:
-
-- clarify the real problem or opportunity
-- test whether the idea is worth pursuing
-- identify business value and user impact
-- evaluate alternatives and trade-offs
-- identify meaningful constraints, risks, and open questions
-- route to exactly one correct next artifact
-- create a compact durable handoff when later phases need stable context
-
-This skill does **not** write the full downstream artifact.
-
-It decides what should happen next and preserves only the minimum context needed by the next phase.
-
-## 2. Shared Workflow Sources of Truth
-
-Use these shared workflow docs when they exist in the target repo:
+Apply these shared docs instead of restating their rules here:
 
 - `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
 - `docs/workflow/HANDOFF_CONTRACTS.md`
+- `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
+- `docs/workflow/NEXT_STEP_TYPES.md`
+- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
 
-Do not duplicate the full shared workflow rules inside this skill.
+Shared docs define artifact authority, routing order, create/update rules, handoff payloads, and the required final next-step block.
 
-Apply those documents as the higher-level workflow policy, then use this skill for the brainstorm-specific phase behavior.
+## Purpose
 
-If those shared workflow docs are not present, use this skill's local references:
+Use this skill to turn messy brainstorm discussion into one explicit routing decision.
 
-- `references/MODES.md`
-- `references/DECISION_RULES.md`
-- `references/DURABLE_ARTIFACT_RULES.md`
-- `references/HANDOFF_PAYLOADS.md`
+The output must answer:
 
-## 3. When to Use This Skill
+> What is the single correct next artifact or action?
 
-Use this skill when the user is exploring or evaluating:
+This skill may summarize reasoning, but it must not create the selected PRD, architecture, ADR, roadmap, plan, implementation, or review report.
 
-- a new product idea
-- a new capability or feature addition
-- a user-reported problem or recurring pain point
-- a technical concern that may require an ADR
-- an architecture concern that may require `ARCHITECTURE.md` creation or update
-- a scope change in an existing product
-- a roadmap or delivery sequencing change
-- a documentation or artifact workflow change that may require a document plan
-- whether an idea should proceed, stop, or be deferred
+## Use this skill when
 
-Use this skill when the main question is:
+Use this skill when:
 
-> What should this idea become next, and why?
+- a new idea has been discussed but the next artifact is unclear
+- multiple possible artifacts appear useful and one must be selected
+- a user asks what durable document should be created or updated next
+- a brainstorm result needs to be preserved as compact handoff context
+- downstream work is blocked because the workflow entry point is unclear
 
-## 4. When Not to Use This Skill
+## Do not use this skill when
 
-Do not use this skill when the correct artifact is already explicitly selected and no brainstorm/routing decision is needed.
+Do not use this skill when the correct next artifact is already explicit and the user wants that artifact written.
 
-Examples:
+Route directly to the relevant skill:
 
-- The user asks directly to write a PRD from already-approved context.
-- The user asks directly to write or update `ARCHITECTURE.md` from already-approved context.
-- The user asks directly to write an ADR for a clearly bounded technical decision.
-- The user asks directly to write a roadmap from already-approved product/technical intent.
-- The user asks directly to write a document plan from an approved scope.
-- The user asks directly to write an execution plan from an approved roadmap slice.
-- The user asks to implement code.
-- The user asks to review completed work.
+- product truth -> `prd-writer`
+- system shape -> `architecture-writer`
+- one technical decision -> `adr-writer`
+- delivery sequencing -> `roadmap-planner`
+- one executable task plan -> `plan-writer`
+- implementation -> `implement-task`
+- conformance checking -> `review-phase`
 
-In those cases, use the corresponding downstream skill directly.
+## Inputs expected
 
-## 5. Core Invariant
+Prefer these inputs when available:
 
-Every brainstorm run must end with exactly one explicit decision:
+- brainstorm notes or discussion summary
+- existing artifact paths, if any
+- known current source-of-truth documents
+- explicit user preference or constraint
+- uncertainty that must be resolved before continuing
 
-- `REJECT_OR_DEFER`
+If inputs are incomplete, infer conservatively and keep uncertainty visible.
+
+## Procedure
+
+1. Extract the core idea, problem, motivation, and uncertainty.
+2. Identify which artifact type would resolve the current uncertainty.
+3. Apply the shared decision matrix.
+4. Choose exactly one immediate next artifact/action.
+5. Produce a compact handoff payload for that next skill.
+6. End with `## Concrete Next Step`.
+
+## Valid decisions
+
+Use the decision names from the shared decision matrix.
+
+Common decisions include:
+
 - `NEW_PRD`
 - `PRD_UPDATE`
 - `NEW_ARCHITECTURE`
@@ -105,281 +88,47 @@ Every brainstorm run must end with exactly one explicit decision:
 - `PRODUCT_ROADMAP_UPDATE`
 - `NEW_INITIATIVE_ROADMAP`
 - `INITIATIVE_ROADMAP_UPDATE`
-- `NEW_DOCUMENT_PLAN`
-- `DOCUMENT_PLAN_UPDATE`
+- `REJECT_OR_DEFER`
 
-Do not end with:
+## Output requirements
 
-- multiple competing next steps
-- a vague recommendation
-- a list of possible artifacts without choosing one
-- a full downstream artifact
-- an implementation plan
+Every output must include:
 
-If multiple artifacts seem useful, choose the **single immediate next artifact** that resolves the current uncertainty.
+```md
+## Brainstorm Decision
 
-## 6. Output Modes
+- Decision:
+- Target artifact/action:
+- Why this is the correct next step:
+- What is explicitly not next:
 
-This skill has two output modes.
+## Handoff Payload
 
-### 6.1 `CHAT_ONLY_BRAINSTORM`
+- Problem / idea:
+- Relevant context:
+- Key constraints:
+- Open questions:
+- Suggested next skill:
 
-Use this mode when:
+## Concrete Next Step
 
-- the user is casually exploring an idea
-- no downstream workflow phase is expected yet
-- the decision does not need to be referenced later
-- the idea is weak and not worth preserving
-
-Output a concise brainstorm conclusion using `assets/BRAINSTORM_RESPONSE_TEMPLATE.md`.
-
-### 6.2 `DURABLE_BRAINSTORM_OUTPUT`
-
-Use this mode when:
-
-- the brainstorm result will feed a PRD, architecture document, ADR, roadmap, document plan, implementation, or review phase
-- the user wants a durable document
-- the decision rationale must be preserved
-- another AI agent or future session must consume the result
-- the idea is deferred but likely to be revisited
-- the idea affects product direction, architecture, roadmap sequencing, document workflow, or implementation scope
-
-Output a durable artifact using `assets/BRAINSTORM_OUTPUT_TEMPLATE.md`.
-
-Default durable path:
-
-```text
-/docs/brainstorm/BRAINSTORM-<sequence>-<short-slug>.md
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
 ```
 
-If the next sequence number cannot be safely determined, use:
+Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
-```text
-/docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
-```
+## Quality bar
 
-The slug must be lowercase, short, and hyphen-separated.
+A good brainstorm-gate output is:
 
-Examples:
-
-```text
-/docs/brainstorm/BRAINSTORM-001-notification-inbox.md
-/docs/brainstorm/BRAINSTORM-002-ai-report-template-builder.md
-/docs/brainstorm/BRAINSTORM-003-modular-backend-architecture.md
-/docs/brainstorm/BRAINSTORM-XXX-payment-reconciliation.md
-```
-
-## 7. Durable Artifact Rule
-
-A durable brainstorm artifact is not a PRD, architecture document, ADR, roadmap, document plan, or implementation plan.
-
-It is:
-
-```text
-idea conclusion + decision rationale + compact handoff payload
-```
-
-It must include:
-
-- artifact metadata
-- request classification
-- problem/opportunity summary
-- value assessment
-- users, actors, systems, or stakeholders affected
-- options considered
-- trade-offs
-- constraints
-- risks
-- material open questions
-- final decision
-- why this decision
-- what will be carried forward
-- what is explicitly not needed next
-- next artifact handoff payload
-- immediate next step
-- continuation prompt
-
-It must not include:
-
-- full exploratory chat transcript
-- full PRD sections
-- full `ARCHITECTURE.md` sections
-- full ADR sections
-- full roadmap phases
-- full document plan sections
-- implementation task breakdown
-- file lists
-- class names, endpoint lists, or table schemas unless they are necessary to explain a decision boundary
-- low-importance observations
-
-## 8. Handoff Discipline
-
-Use `references/HANDOFF_PAYLOADS.md` to choose the correct handoff payload shape for the selected decision.
-
-The brainstorm output must have a generic section named:
-
-```text
-Next Artifact Handoff Payload
-```
-
-Do not create special sections such as:
-
-- `PRD Section`
-- `Architecture Section`
-- `ADR Section`
-- `Roadmap Section`
-- `Document Plan Section`
-
-The selected downstream skill owns the downstream artifact format.
-
-This skill only passes the minimum structured input required for that next skill.
-
-## 9. Workflow
-
-Follow this sequence:
-
-1. Classify the request mode using `references/MODES.md`.
-2. Identify known source artifacts, if any.
-3. Restate the problem or opportunity in one clear sentence.
-4. Identify affected users, actors, systems, or stakeholders.
-5. Assess value, urgency, and evidence strength.
-6. Identify current alternatives or workarounds.
-7. Compare at least two plausible options when trade-offs matter.
-8. Capture constraints, risks, and material open questions.
-9. Select exactly one final decision using `references/DECISION_RULES.md`.
-10. Select output mode using `references/DURABLE_ARTIFACT_RULES.md`.
-11. Produce the output using the correct asset template.
-12. End with one immediate next step and one continuation prompt.
-
-## 10. Routing Discipline
-
-Use PRD when product intent, user-facing behavior, goals, non-goals, scope, product rules, or success criteria must be defined or changed.
-
-Use Architecture when the system structure, boundaries, layers, integration map, runtime model, or repo-level conventions must be made durable before later work can proceed.
-
-Use ADR when the main unresolved issue is one lasting technical or architectural decision with meaningful alternatives and trade-offs.
-
-Use roadmap when the intent is already accepted and the next need is staged delivery structure, sequencing, dependencies, risks, and exit criteria.
-
-Use document plan when the product/technical intent is already accepted and the next need is planning how a bounded documentation artifact or artifact set should be produced/refactored.
-
-Use reject/defer when the idea is weak, low-value, under-evidenced, premature, or missing material constraints.
-
-If PRD is required, do not also route directly to architecture, ADR, roadmap, or document plan in the same final decision.
-
-If architecture is required, do not also route directly to ADR unless the architecture context already exists and the only remaining question is one bounded decision.
-
-If roadmap is required, specify whether it is a product roadmap or initiative roadmap.
-
-If document plan is required, specify whether it is a new document plan or an update/refactor of an existing document plan.
-
-If ADR is required, specify whether it is a new ADR or an update.
-
-If reject/defer is selected, state what evidence or clarification would reopen the idea.
-
-## 11. Architecture vs ADR Boundary
-
-Choose Architecture when the question is:
-
-```text
-How is the system structured, and what durable context must future work share?
-```
-
-Choose ADR when the question is:
-
-```text
-Which one technical option should we choose, and why?
-```
-
-Architecture is broader and living. ADR is narrower and historical.
-
-Do not overuse Architecture. Choose it only when multiple future decisions or tasks need the same system-level context.
-
-## 12. Mandatory Closing Behavior
-
-Every output must end with all of the following:
-
-1. `Decision` — exactly one decision from the allowed list
-2. `Artifact action` — one of:
-   - `CREATE_DURABLE_BRAINSTORM_ARTIFACT`
-   - `UPDATE_EXISTING_BRAINSTORM_ARTIFACT`
-   - `CHAT_ONLY_NO_ARTIFACT`
-3. `Durable artifact path` — required if artifact action creates or updates a durable brainstorm artifact
-4. `Why this decision` — short rationale for why this is the correct immediate artifact
-5. `What will be carried forward` — minimum context for the next phase
-6. `What is explicitly not needed next` — nearby artifacts that should not happen immediately
-7. `Immediate next step` — exact next artifact action
-8. `Continuation prompt` — direct prompt that can be copied into the next skill/session
-
-Examples:
-
-```text
-Decision: NEW_PRD
-Artifact action: CREATE_DURABLE_BRAINSTORM_ARTIFACT
-Durable artifact path: docs/brainstorm/BRAINSTORM-001-notification-inbox.md
-Immediate next step: Proceed to NEW_PRD.
-Continuation prompt: Proceed to create the PRD based on docs/brainstorm/BRAINSTORM-001-notification-inbox.md.
-```
-
-```text
-Decision: NEW_ARCHITECTURE
-Artifact action: CREATE_DURABLE_BRAINSTORM_ARTIFACT
-Durable artifact path: docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md
-Immediate next step: Proceed to NEW_ARCHITECTURE.
-Continuation prompt: Proceed to create the architecture document based on docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md.
-```
-
-```text
-Decision: REJECT_OR_DEFER
-Artifact action: CHAT_ONLY_NO_ARTIFACT
-Immediate next step: Stop here. Do not proceed until stronger evidence exists.
-Continuation prompt: Stop here and revisit after gathering stronger evidence.
-```
-
-## 13. Stop Condition
-
-When the final decision is `REJECT_OR_DEFER`, do not create a downstream artifact.
-
-State:
-
-- why forward progress should stop
-- what is missing or conflicting
-- what evidence, constraint, or decision would reopen the idea
-- whether a durable brainstorm artifact is still worth keeping
-
-Use a durable artifact for `REJECT_OR_DEFER` only when the idea is likely to be revisited or the rationale is important to preserve.
-
-## 14. Output Quality Bar
-
-A good brainstorm output must be:
-
-- decision-explicit
-- artifact-explicit
-- problem-valid
-- value-aware
-- evidence-aware
-- trade-off-aware
-- constraint-aware
-- concise enough for the next skill to consume
-- durable only when durability helps future workflow
-- free from downstream artifact duplication
-
-Before finalizing, check:
-
-- Is there exactly one decision?
-- Is the output mode correct?
-- Is the durable artifact path present when needed?
-- Is the handoff payload compatible with the selected decision?
-- Are non-next artifacts explicitly excluded?
-- Is the continuation prompt copy-paste usable?
-
-## 15. Read Before Use
-
-Read these local files before using the skill:
-
-- `references/MODES.md`
-- `references/DECISION_RULES.md`
-- `references/DURABLE_ARTIFACT_RULES.md`
-- `references/HANDOFF_PAYLOADS.md`
-- `assets/BRAINSTORM_OUTPUT_TEMPLATE.md`
-- `assets/BRAINSTORM_RESPONSE_TEMPLATE.md`
+- decisive
+- short
+- explicit about why this artifact is next
+- explicit about what is not next
+- useful as handoff context
+- free of downstream artifact content

@@ -1,6 +1,26 @@
 # Next Step Routing Guide
 
-Every ADR run must end with one concrete next step.
+Every ADR run must end with exactly one `## Concrete Next Step` block.
+
+Do not use legacy terminal fields:
+
+- `Immediate Next Step`
+- `Continuation Prompt`
+- loose `next_step`
+- loose `follow_up`
+
+## Required block
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
 
 ## Use `UPDATE_ARCHITECTURE` when
 
@@ -71,3 +91,5 @@ Avoid vague actions:
 Prefer specific actions:
 
 - "Update `ARCHITECTURE.md` section `Data Ownership` to link ADR-0004 and mark `user_product_membership` as the authorization source of truth."
+- "Create `ROADMAP.md` phase handoff for notification read model after ADR-0004 is accepted and indexed in `ARCHITECTURE.md`."
+- "Revise ADR-0004 to add the rejected alternative for direct Kafka publishing without outbox."

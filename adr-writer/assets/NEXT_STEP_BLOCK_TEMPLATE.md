@@ -7,7 +7,7 @@
 - `blocking_condition`:
 - `suggested_prompt`:
 
-Allowed `next_step_type` values:
+Allowed `next_step_type` values for `adr-writer`:
 
 - `UPDATE_ARCHITECTURE`
 - `CREATE_OR_UPDATE_ROADMAP`

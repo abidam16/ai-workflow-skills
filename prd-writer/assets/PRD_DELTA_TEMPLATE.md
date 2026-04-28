@@ -1,4 +1,4 @@
-# PRD_DELTA.md
+# PRD Delta Summary
 
 ## PRD Delta Summary
 
@@ -10,13 +10,13 @@
 
 | Artifact | Path / Section | Impact |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ## Sections Changed
 
 | Section | Change | Reason |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ## Product Behavior Impact
 

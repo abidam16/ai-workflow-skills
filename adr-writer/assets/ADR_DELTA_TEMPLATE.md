@@ -1,49 +1,46 @@
-# ADR Delta / Supersession Summary
+# ADR Delta: <ADR-NNNN Title>
 
-## Decision
+## Delta Type
 
-- `decision_type`: CREATE_NEW_ADR / UPDATE_EXISTING_ADR / CREATE_SUPERSEDING_ADR / ROUTE_ELSEWHERE
-- `target_adr`: `docs/adr/NNNN-title.md`
-- `status_change`: none / proposed-to-accepted / accepted-to-superseded / proposed-to-rejected / other
+Create new ADR / Update proposed ADR / Supersede accepted ADR / Correct metadata or links
+
+## Target ADR
+
+- ADR:
+- Current status:
+- Target status:
 
 ## Reason for Change
 
-<Why this ADR needs to be created, updated, or superseded.>
+-
 
-## Source Artifacts Checked
+## Source Artifacts
 
 - PRD:
 - Architecture:
-- Initiative Architecture:
 - Related ADRs:
 - Roadmap:
-- Plan / Review:
+- Plan / Review evidence:
 
-## Decision Boundary
+## Change Summary
 
-### Decides
+| Section | Current State | Required Change | Reason |
+|---|---|---|---|
+|  |  |  |  |
 
-- <what changed or is decided>
+## Supersession Rule
 
-### Does Not Decide
-
-- <excluded scope>
-
-## Changed Content
-
-| Section | Change Type | Summary |
-|---|---|---|
-| <section> | add / update / supersede / remove | <summary> |
+If the accepted decision changed, create a new superseding ADR instead of silently rewriting history.
 
 ## Architecture Linkage
 
-- `architecture_linkage`: NONE / ARCHITECTURE_CONTEXT_ONLY / ADD_ADR_INDEX_ENTRY / UPDATE_ROOT_ARCHITECTURE / UPDATE_INITIATIVE_ARCHITECTURE / UPDATE_ROOT_AND_INITIATIVE_ARCHITECTURE / ARCHITECTURE_CONFLICT_FOUND / ARCHITECTURE_MISSING
-- Affected architecture document(s): `<path>`
-- Required architecture follow-up: <specific action>
+- `architecture_linkage`:
+- Architecture document:
+- Architecture sections affected:
+- ADR index update required:
 
 ## Downstream Impact
 
-- PRD Impact:
 - Architecture Impact:
 - Roadmap Impact:
 - Plan Impact:

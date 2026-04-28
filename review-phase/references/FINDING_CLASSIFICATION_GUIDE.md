@@ -1,8 +1,8 @@
 # Finding Classification Guide
 
-Use severity to drive the final review status and next step.
+Use severity to drive the final review status and concrete next step.
 
-## HIGH_URGENCY
+## `HIGH_URGENCY`
 
 Blocks acceptance, merge, release, or dependent work.
 
@@ -29,7 +29,7 @@ Typical next steps:
 - `CREATE_OR_UPDATE_ADR`
 - `REQUEST_MISSING_EVIDENCE`
 
-## MEDIUM_URGENCY
+## `MEDIUM_URGENCY`
 
 Important but may not block acceptance depending on context.
 
@@ -45,7 +45,7 @@ Allowed statuses:
 - `APPROVED_WITH_MINOR_IMPROVEMENTS`
 - `NEEDS_REVISION` if risk is accumulating or impacts dependent work
 
-## LOW_URGENCY
+## `LOW_URGENCY`
 
 Minor improvement that usually does not block acceptance.
 
@@ -61,7 +61,7 @@ Allowed statuses:
 - `APPROVED`
 - `APPROVED_WITH_MINOR_IMPROVEMENTS`
 
-## FUTURE_IMPROVEMENT
+## `FUTURE_IMPROVEMENT`
 
 Out-of-scope improvement that should not affect current acceptance.
 

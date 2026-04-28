@@ -54,4 +54,6 @@ Use these categories when relevant:
 
 ## Review stance
 
-Do not require architecture for tiny local changes that do not affect system shape. But when architecture exists and is relevant, treat it as binding.
+Do not require architecture for tiny local changes that do not affect system shape.
+
+When architecture exists and is relevant, treat it as binding.

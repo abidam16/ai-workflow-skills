@@ -2,217 +2,167 @@
 
 Use these rules in order.
 
-The final output must choose exactly one decision.
+## Rule 1: Reject or defer first
 
-## Rule 1: Reject or Defer First
-
-Choose `REJECT_OR_DEFER` when any of these are true:
+Choose `REJECT_OR_DEFER` if any of these are true:
 
 - the problem is weak, unclear, or low-value
 - the idea solves little meaningful pain
-- the signal is too speculative
-- the idea is premature relative to current priorities
-- required evidence is missing
-- the user cannot yet define who is affected or why it matters
-- the cost/risk is obviously disproportionate to the expected value
+- the signal is too speculative to justify documentation
+- the current information is insufficient for a responsible next artifact
 
-When rejecting or deferring, still state what would reopen the idea.
+When rejecting or deferring, still state exactly what evidence or clarification would reopen the idea.
 
-Common reopen conditions:
+The final output must still end with a `Concrete Next Step` block.
 
-- stronger user evidence
-- clearer business value
-- clearer product scope
-- clearer technical constraints
-- priority change
-- recurring operational pain
-
-## Rule 2: PRD Takes Priority When Product Truth Is Missing or Changing
+## Rule 2: PRD takes priority when product truth is missing or changing
 
 Choose `NEW_PRD` when:
 
-- the idea is new and product intent does not exist in durable form
-- the problem, users, goals, non-goals, scope, flows, or rules must be established
-- the idea defines a new product, major capability, or meaningful user-facing behavior
-- downstream agents would otherwise need to infer product truth from chat history
+- the idea is new and product intent is not yet defined in a PRD
+- the problem, users, goals, scope, flows, or rules must be established
 
 Choose `PRD_UPDATE` when:
 
-- an existing PRD exists
-- the change affects product intent, user-facing behavior, scope, goals, non-goals, product rules, current behavior, target behavior, or success criteria
-- roadmap, architecture, ADR, implementation, or review learning changes the product truth
+- an existing PRD already exists
+- the change affects product intent, user-facing behavior, scope, goals, rules, or success criteria
 
-If `NEW_PRD` or `PRD_UPDATE` is chosen, do not also choose architecture, ADR, roadmap, or document plan in the same final decision.
+If `NEW_PRD` or `PRD_UPDATE` is chosen, do **not** also choose architecture, ADR, roadmap, or document plan in the same final decision.
 
-The correct next step is the PRD phase. Architecture, ADR, roadmap, and document plan may follow after PRD if needed.
+The correct next step is the PRD phase. After PRD, architecture, ADR, roadmap, or plan may follow if needed.
 
-## Rule 3: Architecture Is for Durable System Structure
+## Rule 3: Architecture is for shared system shape
 
 Choose `NEW_ARCHITECTURE` when:
 
-- no durable architecture document exists and future work would depend on system-level context
-- the idea requires system structure before roadmap, ADR, document plan, or implementation
-- module boundaries, layers, integrations, runtime model, deployment shape, data flow, ownership boundaries, or dependency rules are unclear
-- multiple future tasks or decisions need the same system-level context
-- the next skill needs a durable system map, not one decision record
+- product or technical intent is stable enough to define system shape
+- multiple future decisions or tasks need shared system-level context
+- component boundaries, data ownership, runtime flows, integration boundaries, security, consistency, deployment, or observability rules must be made durable
+- implementation would likely drift without a system-shape source of truth
 
 Choose `ARCHITECTURE_UPDATE` when:
 
-- an architecture document already exists
-- system structure changed materially
-- module boundaries, integration patterns, runtime model, deployment shape, dependency rules, or cross-cutting conventions need revision
-- existing architecture guidance would mislead future implementation
-- the change is broader than one ADR but does not change core product truth
+- an existing `ARCHITECTURE.md` or initiative architecture document exists
+- the accepted system shape, component boundaries, data ownership, runtime flow, integration model, deployment assumptions, or cross-cutting rules changed
 
 Do not choose Architecture when:
 
-- the problem is product intent or user-facing behavior; choose PRD
-- the question is one bounded technical decision with clear options; choose ADR
-- the question is delivery sequencing; choose roadmap
-- the question is planning one bounded document-writing task; choose document plan
-- the question is one implementation task; use an execution/implementation planning skill instead
+- the unresolved issue is one bounded technical choice with alternatives and consequences; choose ADR instead
+- product truth is missing; choose PRD instead
+- delivery sequencing is the only unresolved issue; choose roadmap instead
+- one executable task is already clear; choose plan instead
 
-Hard threshold:
-
-```text
-Choose Architecture only when multiple future decisions or tasks need the same system-level context.
-```
-
-## Rule 4: ADR Is for One Lasting Technical Decision
+## Rule 4: ADR is for one lasting technical decision
 
 Choose `NEW_ADR` when:
 
 - the immediate need is to record one meaningful technical or architectural decision
 - alternatives exist and trade-offs matter
 - the decision will constrain later implementation
-- the decision affects reliability, scalability, integration style, persistence, security, deployment, observability, maintainability, or developer workflow
-- product intent is already clear enough for this technical decision
-- architecture context is already clear enough, or the decision boundary is narrow enough to stand alone
+- the broader architecture context already exists or is not needed for this one bounded decision
 
 Choose `ADR_UPDATE` only when:
 
-- the workflow intentionally maintains an existing ADR in place
-- the change is truly a correction or update to the same decision
-- the repo's ADR practice allows mutation of existing ADRs
+- your workflow intentionally maintains an existing ADR record in-place
+- the change is truly an update to the same decision rather than a superseding decision
 
-Preferred default:
+If your ADR practice prefers superseding instead of updating, note that clearly.
 
-- create a new ADR and mark older ADRs as superseded when the decision materially changes
-
-Do not choose ADR when the real gap is broad system structure. Choose Architecture first.
-
-## Rule 5: Roadmap Is for Sequencing Already-Accepted Intent
+## Rule 5: Roadmap is for sequencing already-accepted intent
 
 Choose `NEW_PRODUCT_ROADMAP` when:
 
 - the product direction is already accepted
 - there is no suitable strategic roadmap yet
-- the next need is phased product sequencing across larger product direction
+- the next need is phased product sequencing
 
 Choose `PRODUCT_ROADMAP_UPDATE` when:
 
 - a product-level roadmap already exists
-- strategic themes, phases, priorities, milestones, or sequencing changed
+- strategic themes, phases, or sequencing changed
 
 Choose `NEW_INITIATIVE_ROADMAP` when:
 
-- product or technical intent is already sufficiently clear
-- the next need is a focused delivery sequence for one feature, refactor, migration, integration, or initiative
+- the product or technical intent is already sufficiently clear
+- architecture and relevant ADR constraints are sufficient for sequencing, when applicable
+- the next need is a focused delivery sequence for one feature, refactor, migration, or initiative
 - there is no suitable existing initiative roadmap
 
 Choose `INITIATIVE_ROADMAP_UPDATE` when:
 
 - the initiative already has a roadmap
-- scope, sequencing, dependencies, risks, milestones, or exit criteria changed
+- the scope, sequencing, dependencies, risks, or exit criteria changed
 
-Do not choose roadmap when product truth is missing or changing. Choose PRD first.
-
-Do not choose roadmap when broad system structure is missing or stale. Choose Architecture first.
-
-Do not choose roadmap when the only unresolved issue is a technical decision. Choose ADR first.
-
-## Rule 6: Document Plan Is for Planning Artifact Production or Refactor
+## Rule 6: Document plan is for bounded documentation work
 
 Choose `NEW_DOCUMENT_PLAN` when:
 
-- the product/technical intent is already accepted
-- the user wants to produce one or more durable documents but the document-production scope must be planned first
-- the next need is defining which documents to create, how they relate, what order to produce them in, or what context each document must consume
-- a documentation refactor is needed, but there is no existing document plan
+- the accepted need is to produce or refactor a bounded documentation artifact or artifact set
+- the next problem is documentation production planning, not product, architecture, ADR, roadmap, implementation, or review
 
 Choose `DOCUMENT_PLAN_UPDATE` when:
 
 - an existing document plan exists
-- the set of documents, order, source artifacts, acceptance criteria, or handoff assumptions changed
-- the plan needs refactor rather than a new plan
+- the source artifacts, target artifacts, sequence, acceptance criteria, or constraints changed
 
-Do not choose document plan when:
+## Rule 7: One final decision only
 
-- the next artifact is already obvious and bounded; route directly to that artifact
-- product truth is missing; choose PRD
-- system structure is missing; choose Architecture
-- the issue is one technical decision; choose ADR
-- the issue is phased delivery sequencing; choose Roadmap
+At the end of the brainstorm, choose exactly one final decision.
 
-## Rule 7: One Final Decision Only
+If multiple artifacts seem relevant, choose the immediate next artifact/action, not the full downstream chain.
 
-If multiple artifacts seem relevant, choose the immediate next artifact, not the full downstream chain.
+## Mandatory Concrete Next Step
 
-Examples:
+The final output must end with this exact block:
 
-- Product idea is unclear and also needs architecture later: choose `NEW_PRD`, not Architecture.
-- System boundaries are unclear and several ADRs may follow: choose `NEW_ARCHITECTURE`, not ADR.
-- Technical choice is blocking implementation and alternatives matter: choose `NEW_ADR`, not document plan.
-- Product intent and ADR are accepted but delivery order is unclear: choose roadmap.
-- The user needs to organize several documentation outputs after intent is accepted: choose document plan.
-- Idea is weak or under-evidenced: choose `REJECT_OR_DEFER`.
+```md
+## Concrete Next Step
 
-## Rule 8: Artifact Action Must Match Workflow Need
-
-Choose `CREATE_DURABLE_BRAINSTORM_ARTIFACT` when the brainstorm output will feed another skill or later workflow phase.
-
-Choose `UPDATE_EXISTING_BRAINSTORM_ARTIFACT` when the user is revising a prior brainstorm artifact.
-
-Choose `CHAT_ONLY_NO_ARTIFACT` when the brainstorm is lightweight and no stable handoff is needed.
-
-## Mandatory Next-Step Wording
-
-Use one of these patterns:
-
-```text
-Immediate next step: Proceed to NEW_PRD.
-Immediate next step: Proceed to PRD_UPDATE.
-Immediate next step: Proceed to NEW_ARCHITECTURE.
-Immediate next step: Proceed to ARCHITECTURE_UPDATE.
-Immediate next step: Proceed to NEW_ADR.
-Immediate next step: Proceed to ADR_UPDATE.
-Immediate next step: Proceed to NEW_PRODUCT_ROADMAP.
-Immediate next step: Proceed to PRODUCT_ROADMAP_UPDATE.
-Immediate next step: Proceed to NEW_INITIATIVE_ROADMAP.
-Immediate next step: Proceed to INITIATIVE_ROADMAP_UPDATE.
-Immediate next step: Proceed to NEW_DOCUMENT_PLAN.
-Immediate next step: Proceed to DOCUMENT_PLAN_UPDATE.
-Immediate next step: Stop here. Do not proceed until stronger evidence exists.
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
 ```
 
-## Mandatory Continuation Prompt Wording
+Do not use the old terminal fields as the final output contract:
 
-Use one of these patterns:
+- `Immediate next step`
+- `Continuation prompt`
+
+Those concepts now belong inside the normalized `Concrete Next Step` block.
+
+## Recommended Next Step Mapping
+
+| Decision | Recommended `next_step_type` | Target |
+|---|---|---|
+| `NEW_PRD` | `CREATE_PRD` | `PRD.md` |
+| `PRD_UPDATE` | `UPDATE_PRD` | existing `PRD.md` |
+| `NEW_ARCHITECTURE` | `CREATE_ARCHITECTURE` | `ARCHITECTURE.md` or initiative architecture doc |
+| `ARCHITECTURE_UPDATE` | `UPDATE_ARCHITECTURE` | existing architecture document |
+| `NEW_ADR` | `CREATE_ADR` | `docs/adr/<number>-<decision>.md` |
+| `ADR_UPDATE` | `UPDATE_ADR` | existing ADR |
+| `NEW_PRODUCT_ROADMAP` | `CREATE_PRODUCT_ROADMAP` | product `ROADMAP.md` |
+| `PRODUCT_ROADMAP_UPDATE` | `UPDATE_PRODUCT_ROADMAP` | product `ROADMAP.md` |
+| `NEW_INITIATIVE_ROADMAP` | `CREATE_INITIATIVE_ROADMAP` | initiative roadmap |
+| `INITIATIVE_ROADMAP_UPDATE` | `UPDATE_INITIATIVE_ROADMAP` | existing initiative roadmap |
+| `NEW_DOCUMENT_PLAN` | `CREATE_DOCUMENT_PLAN` | document plan |
+| `DOCUMENT_PLAN_UPDATE` | `UPDATE_DOCUMENT_PLAN` | existing document plan |
+| `REJECT_OR_DEFER` | `REJECT_OR_DEFER` or `STOP` | no downstream artifact |
+
+## Prompt Quality Rule
+
+`suggested_prompt` must be directly copy-pasteable.
+
+Good:
 
 ```text
-Proceed to create the PRD based on <brainstorm artifact path>.
-Proceed to update the PRD based on <brainstorm artifact path>.
-Proceed to create the architecture document based on <brainstorm artifact path>.
-Proceed to update the architecture document based on <brainstorm artifact path>.
-Proceed to create the ADR based on <brainstorm artifact path>.
-Proceed to update the ADR based on <brainstorm artifact path>.
-Proceed to create the product roadmap based on <brainstorm artifact path>.
-Proceed to update the product roadmap based on <brainstorm artifact path>.
-Proceed to create the initiative roadmap based on <brainstorm artifact path>.
-Proceed to update the initiative roadmap based on <brainstorm artifact path>.
-Proceed to create the document plan based on <brainstorm artifact path>.
-Proceed to update the document plan based on <brainstorm artifact path>.
-Stop here and revisit after gathering stronger evidence.
+Use `architecture-writer` to create `ARCHITECTURE.md` based on `docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md`.
 ```
 
-For chat-only output, use "this brainstorm output" instead of an artifact path.
+Bad:
+
+```text
+Continue with the next step.
+```

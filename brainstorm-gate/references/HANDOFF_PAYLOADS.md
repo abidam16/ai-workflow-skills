@@ -12,28 +12,36 @@ Every handoff payload must include:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <DRAFT | APPROVED | UPDATED | DEFERRED | REJECTED | BLOCKED>
-decision: <final decision>
-why: <compact rationale>
+artifact_status:
+decision:
+why:
 source_artifacts:
-  - <brainstorm artifact path or source document path>
-next_step: <exact next step>
+  -
+concrete_next_step:
+  next_step_type:
+  target:
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Optional fields:
 
 ```yaml
 open_questions:
-  - <only material questions>
+  -
 constraints:
-  - <only material constraints>
+  -
 risks:
-  - <only material risks>
+  -
 deferred_items:
-  - <only if relevant>
+  -
 follow_up_needed:
-  - <only if relevant>
+  -
 ```
+
+Do not use the old `next_step` field as the only next-step contract. Use `concrete_next_step` inside the payload and the full `## Concrete Next Step` block at the end of the output.
 
 ## Brainstorm → PRD
 
@@ -46,25 +54,31 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <status>
-decision: <NEW_PRD | PRD_UPDATE>
-problem_statement: <one clear sentence>
+artifact_status:
+decision:
+problem_statement:
 target_users_or_actors:
-  - <user or actor>
-business_need: <why this matters>
-product_intent_summary: <compact product direction>
+  -
+business_need:
+product_intent_summary:
 goals:
-  - <goal>
+  -
 non_goals:
-  - <non-goal>
+  -
 key_flows_or_domains:
-  - <flow or domain>
+  -
 known_constraints:
-  - <constraint>
-reason_prd_is_needed: <why PRD is the correct immediate artifact>
+  -
+reason_prd_is_needed:
 source_artifacts:
-  - <brainstorm artifact path>
-next_step: <Proceed to NEW_PRD or PRD_UPDATE>
+  -
+concrete_next_step:
+  next_step_type: CREATE_PRD # or UPDATE_PRD
+  target: PRD.md
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Consumed by PRD writer:
@@ -96,30 +110,36 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <status>
-decision: <NEW_ARCHITECTURE | ARCHITECTURE_UPDATE>
-architecture_scope: <system, repo, product area, or initiative scope>
-system_or_repo_context: <compact context for the architecture writer>
-why_architecture_is_needed_now: <why system structure is the correct immediate artifact>
+artifact_status:
+decision:
+architecture_scope:
+system_or_repo_context:
+why_architecture_is_needed_now:
 known_modules_or_boundaries:
-  - <module, layer, bounded context, or ownership boundary>
+  -
 known_data_flows:
-  - <data flow if known>
+  -
 known_integration_points:
-  - <integration point if known>
+  -
 known_runtime_or_deployment_context:
-  - <runtime/deployment fact if known>
+  -
 known_cross_cutting_concerns:
-  - <security, observability, performance, reliability, maintainability, etc.>
+  -
 known_constraints:
-  - <constraint>
+  -
 known_risks:
-  - <risk>
+  -
 open_questions:
-  - <material question>
+  -
 source_artifacts:
-  - <brainstorm artifact path>
-next_step: <Proceed to NEW_ARCHITECTURE or ARCHITECTURE_UPDATE>
+  -
+concrete_next_step:
+  next_step_type: CREATE_ARCHITECTURE # or UPDATE_ARCHITECTURE
+  target: ARCHITECTURE.md
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Consumed by Architecture writer:
@@ -153,21 +173,27 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <status>
-decision: <NEW_ADR | ADR_UPDATE>
-decision_scope: <one bounded technical decision>
-technical_problem_statement: <technical problem to decide>
-why_this_is_technical_not_product: <reason>
-why_adr_not_architecture: <why this is one decision rather than broad system structure>
+artifact_status:
+decision:
+decision_scope:
+technical_problem_statement:
+why_this_is_technical_not_product:
+why_adr_not_architecture:
 decision_drivers:
-  - <driver>
+  -
 credible_options_if_known:
-  - <option>
+  -
 known_constraints:
-  - <constraint>
+  -
 source_artifacts:
-  - <brainstorm artifact path>
-next_step: <Proceed to NEW_ADR or ADR_UPDATE>
+  -
+concrete_next_step:
+  next_step_type: CREATE_ADR # or UPDATE_ADR
+  target: docs/adr/<number>-<decision>.md
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Consumed by ADR writer:
@@ -200,22 +226,28 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <status>
-decision: <roadmap decision>
-initiative_or_product_scope: <scope>
-delivery_objective: <what delivery should accomplish>
-why_roadmap_is_needed_now: <why sequencing is the immediate need>
+artifact_status:
+decision:
+initiative_or_product_scope:
+delivery_objective:
+why_roadmap_is_needed_now:
 known_dependencies:
-  - <dependency>
+  -
 known_risks:
-  - <risk>
+  -
 known_constraints:
-  - <constraint>
-whether_prd_is_already_sufficient: <yes | no | unknown, with reason>
-whether_architecture_is_already_sufficient: <yes | no | unknown, with reason>
+  -
+whether_prd_is_already_sufficient:
+whether_architecture_is_already_sufficient:
 source_artifacts:
-  - <brainstorm artifact path>
-next_step: <Proceed to roadmap action>
+  -
+concrete_next_step:
+  next_step_type: CREATE_INITIATIVE_ROADMAP # or another roadmap route
+  target: ROADMAP.md
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Consumed by roadmap planner:
@@ -245,25 +277,31 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <status>
-decision: <NEW_DOCUMENT_PLAN | DOCUMENT_PLAN_UPDATE>
-document_plan_scope: <which document or document set needs planning>
-why_document_plan_is_needed_now: <why planning documentation production/refactor is the immediate need>
+artifact_status:
+decision:
+document_plan_scope:
+why_document_plan_is_needed_now:
 known_source_artifacts:
-  - <source artifact>
+  -
 intended_output_artifacts:
-  - <target document or document family>
+  -
 known_dependencies:
-  - <dependency>
+  -
 known_constraints:
-  - <constraint>
+  -
 known_risks:
-  - <risk>
+  -
 acceptance_criteria_signals:
-  - <quality or completion signal>
+  -
 source_artifacts:
-  - <brainstorm artifact path>
-next_step: <Proceed to NEW_DOCUMENT_PLAN or DOCUMENT_PLAN_UPDATE>
+  -
+concrete_next_step:
+  next_step_type: CREATE_DOCUMENT_PLAN # or UPDATE_DOCUMENT_PLAN
+  target:
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 Consumed by Document Plan writer:
@@ -292,18 +330,24 @@ Required payload:
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: <DEFERRED | REJECTED | BLOCKED>
+artifact_status:
 decision: REJECT_OR_DEFER
-why_forward_progress_should_stop: <reason>
+why_forward_progress_should_stop:
 what_is_missing_or_conflicting:
-  - <missing evidence, unresolved conflict, or unclear constraint>
+  -
 recommended_resolution:
-  - <what to do before reopening>
+  -
 reopen_when:
-  - <condition>
+  -
 source_artifacts:
-  - <brainstorm artifact path if durable, otherwise source inputs>
-next_step: Stop here. Do not proceed until stronger evidence exists.
+  -
+concrete_next_step:
+  next_step_type: REJECT_OR_DEFER
+  target: No downstream artifact.
+  action: Stop the workflow for now.
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
 No downstream artifact should be created from this decision.

@@ -1,148 +1,69 @@
 # Brainstorm Modes
 
-Use these modes to classify the request before routing to a final decision.
-
-The mode is not the final decision. The mode helps identify the dominant kind of uncertainty.
-
 ## 1. New Product / New Opportunity
 
-Use when the user is exploring a new app, product, SaaS, internal tool, or major business capability.
+Use when the user is exploring a new app, product, SaaS, or business capability.
 
-Common final decisions:
-
-- `NEW_PRD`
-- `NEW_ARCHITECTURE`
-- `NEW_ADR`
-- `NEW_DOCUMENT_PLAN`
-- `REJECT_OR_DEFER`
-
-Bias toward `NEW_PRD` when product intent is not yet durable.
-
-Choose Architecture only if the product intent is already clear enough and the missing artifact is system structure.
+Bias toward PRD creation unless product intent is already fully stable and only architecture, ADR, roadmap, or document planning remains.
 
 ## 2. Feature Addition
 
-Use when the product already exists and the user wants to add or expand a capability.
+Use when the product already exists and the user wants to add or expand capability.
 
-Common final decisions:
+Possible outputs:
 
-- `PRD_UPDATE`
-- `NEW_ARCHITECTURE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `NEW_INITIATIVE_ROADMAP`
-- `INITIATIVE_ROADMAP_UPDATE`
-- `NEW_DOCUMENT_PLAN`
-- `REJECT_OR_DEFER`
-
-Choose PRD update when user behavior, scope, goals, product rules, or success criteria change.
-
-Choose Architecture when system structure or repo-level rules must become durable before later work.
-
-Choose initiative roadmap when product/technical intent is already sufficiently clear and the next problem is sequencing.
+- PRD update
+- Architecture creation/update
+- new initiative roadmap
+- initiative roadmap update
+- ADR
+- reject/defer
 
 ## 3. User Report / Feedback / Problem Signal
 
-Use when the trigger is user pain, bug patterns, workflow friction, operational incidents, or recurring complaints.
+Use when the trigger is user pain, bug patterns, workflow friction, or recurring complaints.
 
-Common final decisions:
+Possible outputs:
 
-- `PRD_UPDATE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `NEW_INITIATIVE_ROADMAP`
-- `NEW_DOCUMENT_PLAN`
-- `REJECT_OR_DEFER`
-
-Reject/defer if the signal is weak, anecdotal, or not yet connected to a meaningful product or technical problem.
+- PRD update
+- Architecture update if the problem exposes boundary/system-shape issues
+- initiative roadmap
+- ADR
+- reject/defer
 
 ## 4. Technical / Architecture Concern
 
-Use when the main question is architecture, integration style, reliability, persistence, migration, messaging, deployment, observability, security posture, maintainability, or another durable technical concern.
+Use when the main question is about architecture, integration style, reliability approach, persistence strategy, migration strategy, or another lasting technical choice.
 
-Common final decisions:
+Bias toward Architecture when shared system shape, boundaries, or runtime context must become durable.
 
-- `NEW_ARCHITECTURE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `ADR_UPDATE`
-- `NEW_INITIATIVE_ROADMAP`
-- `REJECT_OR_DEFER`
-
-Bias toward Architecture when the missing context is broad system structure, boundaries, flows, runtime model, or repo conventions.
-
-Bias toward ADR when alternatives exist and one bounded decision will constrain future implementation.
-
-Do not choose ADR when the real gap is product intent or broad system structure.
+Bias toward ADR when the unresolved issue is one bounded technical decision with clear alternatives and consequences.
 
 ## 5. Existing Product / Scope Change
 
-Use when priorities, assumptions, user behavior, product boundaries, domain rules, architecture assumptions, or success criteria changed.
+Use when priorities, assumptions, user behavior, or product boundaries changed.
 
-Common final decisions:
+Possible outputs:
 
-- `PRD_UPDATE`
-- `ARCHITECTURE_UPDATE`
-- `PRODUCT_ROADMAP_UPDATE`
-- `INITIATIVE_ROADMAP_UPDATE`
-- `NEW_ADR`
-- `DOCUMENT_PLAN_UPDATE`
-- `REJECT_OR_DEFER`
-
-Choose PRD update if product truth changed.
-
-Choose Architecture update if system structure or durable technical context changed.
-
-Choose roadmap update if product and architecture truth remain valid but sequencing changed.
+- PRD update
+- Architecture update
+- roadmap update
+- ADR update
+- reject/defer
 
 ## 6. Roadmap Shift / Delivery Reshaping
 
-Use when the product or technical intent is already accepted and the main need is changing phase boundaries, sequencing, dependencies, risks, milestones, or exit criteria.
+Use when the core product and architecture intent are already accepted and the main need is changing sequence, phase boundaries, risk handling, or initiative structure.
 
-Common final decisions:
+Bias toward roadmap creation/update, not PRD or Architecture.
 
-- `NEW_PRODUCT_ROADMAP`
-- `PRODUCT_ROADMAP_UPDATE`
-- `NEW_INITIATIVE_ROADMAP`
-- `INITIATIVE_ROADMAP_UPDATE`
-- `REJECT_OR_DEFER`
+## 7. Documentation Workflow Change
 
-Bias toward roadmap only when the intent is already clear enough.
+Use when the user is changing durable document workflow, skill behavior, document sequencing, or artifact production process.
 
-If broad system structure is not durable enough to sequence work safely, choose Architecture before roadmap.
+Possible outputs:
 
-## 7. Documentation / Artifact Planning
-
-Use when the main issue is deciding how to create, update, refactor, or sequence durable documents or artifact sets.
-
-Common final decisions:
-
-- `NEW_DOCUMENT_PLAN`
-- `DOCUMENT_PLAN_UPDATE`
-- `NEW_PRD`
-- `PRD_UPDATE`
-- `NEW_ARCHITECTURE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `REJECT_OR_DEFER`
-
-Bias toward Document Plan when the product/technical direction is accepted and the remaining uncertainty is document production order, source artifacts, output artifacts, or acceptance criteria.
-
-Do not choose Document Plan when the correct next artifact is already obvious and bounded.
-
-## 8. Revisit / Deferred Idea
-
-Use when the user returns to an old idea that was previously rejected, deferred, or unresolved.
-
-Common final decisions:
-
-- `NEW_PRD`
-- `PRD_UPDATE`
-- `NEW_ARCHITECTURE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `NEW_INITIATIVE_ROADMAP`
-- `NEW_DOCUMENT_PLAN`
-- `REJECT_OR_DEFER`
-
-First check what evidence, constraint, or priority changed since the earlier defer decision.
+- document plan creation/update
+- architecture update if system-shape rules are affected
+- ADR if one technical/workflow decision must be recorded
+- roadmap update if delivery sequencing changes

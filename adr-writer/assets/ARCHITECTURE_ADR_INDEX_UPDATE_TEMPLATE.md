@@ -2,19 +2,26 @@
 
 ## Target Architecture Document
 
-`ARCHITECTURE.md` or `docs/architecture/<initiative>-architecture.md`
+`ARCHITECTURE.md` or `docs/architecture/<initiative-slug>-architecture.md`
 
 ## ADR Index Entry
 
 | Topic | Decision | ADR | Status |
 |---|---|---|---|
-| <topic> | <short decision> | `docs/adr/NNNN-title.md` | Accepted / Proposed / Superseded |
+|  |  | `docs/adr/NNNN-title.md` | Accepted / Proposed / Superseded |
 
 ## Architecture Sections Requiring Update
 
-- Section:
-  - Required change:
-  - Reason:
+| Section | Required Change | Reason |
+|---|---|---|
+|  |  |  |
+
+## Architecture Linkage
+
+- `architecture_linkage`:
+- Architecture document:
+- Architecture sections affected:
+- ADR index update required:
 
 ## Concrete Next Step
 

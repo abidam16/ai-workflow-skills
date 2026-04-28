@@ -1,10 +1,12 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """Lightweight PRD document checker for the prd-writer skill.
 
 Usage:
     python scripts/check_prd_doc.py PRD.md
 
-The checker is intentionally simple. It catches missing handoff/next-step fields and common vague next-step wording.
+The checker is intentionally simple. It catches missing handoff/next-step
+fields, old terminal contract labels, invalid PRD next_step_type values, and
+common vague next-step wording.
 """
 
 from __future__ import annotations
@@ -45,9 +47,17 @@ ALLOWED_NEXT_TYPES = {
     "STOP_AND_ESCALATE",
 }
 
+OLD_TERMINAL_LABELS = [
+    "Immediate Next Step",
+    "Continuation Prompt",
+    "Recommended Follow-up",
+    "Recommended Follow Up",
+]
+
 VAGUE_PHRASES = [
     "continue development",
     "proceed as needed",
+    "proceed to next phase",
     "review later",
     "update docs",
     "implement the feature",
@@ -57,7 +67,7 @@ VAGUE_PHRASES = [
 
 def main() -> int:
     if len(sys.argv) != 2:
-        print("Usage: check_prd_doc.py <PRD.md>")
+        print("Usage: check_prd_doc.py <path-to-prd-or-prd-output.md>")
         return 2
 
     path = Path(sys.argv[1])
@@ -72,9 +82,20 @@ def main() -> int:
         if section not in text:
             errors.append(f"Missing required section: {section}")
 
+    concrete_count = len(re.findall(r"^## Concrete Next Step\s*$", text, flags=re.MULTILINE))
+    if concrete_count != 1:
+        errors.append(f"Expected exactly one '## Concrete Next Step' block, found {concrete_count}")
+
     for field in REQUIRED_NEXT_FIELDS:
         if field not in text:
             errors.append(f"Missing required next-step field: {field}")
+
+    for label in OLD_TERMINAL_LABELS:
+        if label in text:
+            errors.append(f"Old terminal contract label detected: {label!r}")
+
+    if re.search(r"^\s*-\s*`?next_step`?\s*:", text, flags=re.IGNORECASE | re.MULTILINE):
+        errors.append("Loose 'next_step' field detected; use the normalized Concrete Next Step fields")
 
     type_match = re.search(r"`next_step_type`\s*:\s*([A-Z_]+)", text)
     if type_match and type_match.group(1) not in ALLOWED_NEXT_TYPES:

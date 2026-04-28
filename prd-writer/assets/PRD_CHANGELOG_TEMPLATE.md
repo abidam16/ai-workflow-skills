@@ -1,4 +1,4 @@
-# PRD_CHANGELOG.md
+# PRD Change Log Entry
 
 ## Change Log Entry
 
@@ -12,4 +12,12 @@
 - `adr_impact`:
 - `roadmap_impact`:
 - `plan_readiness`:
-- `next_step`:
+
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

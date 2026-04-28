@@ -10,7 +10,7 @@
 
 | Artifact | Path / Section | Impact |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ## Architecture Readiness Change
 
@@ -22,7 +22,7 @@
 
 | Section | Change | Reason |
 |---|---|---|
-|  |  |  |
+| | | |
 
 ## Scope Impact
 

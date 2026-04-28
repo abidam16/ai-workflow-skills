@@ -1,310 +1,107 @@
 ---
 name: implement-task
-description: Execute exactly one approved PLAN.md with strict plan fidelity, architecture/ADR constraint checks, scope control, validation, deviation reporting, and a concrete next-step handoff. Use only when the next step is implementation for one bounded task. Do not use for brainstorm, PRD, architecture, ADR, roadmap, plan creation, review, or multi-task execution.
+description: Execute exactly one approved PLAN.md with strict plan fidelity, source-artifact checks, scope control, validation, deviation reporting, and concrete next-step handoff. Use only when the next step is implementation for one bounded task. Do not use for brainstorm, PRD, architecture, ADR, roadmap, plan creation, review, or multi-task execution.
 ---
 
 # Implement Task
 
-## Shared workflow docs
+## Shared workflow policy
 
-Use these shared repo docs as cross-skill sources of truth:
+Apply these shared docs instead of restating their rules here:
 
-- `docs/workflow/ARTIFACT_DECISION_MATRIX.md` for artifact routing and create-vs-update decisions across phases
-- `docs/workflow/HANDOFF_CONTRACTS.md` for the minimum required input/output fields between phases
+- `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
+- `docs/workflow/HANDOFF_CONTRACTS.md`
+- `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
+- `docs/workflow/NEXT_STEP_TYPES.md`
+- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
 
-Do not duplicate those shared rules here. Apply them, then focus this skill on implementation.
+Shared docs define artifact authority, handoff payloads, conflict handling, and the required final next-step block.
 
 ## Purpose
 
-Implement exactly one approved task from one existing `PLAN.md` or equivalent single-task plan.
+Use this skill to implement exactly one approved task from one `PLAN.md` or equivalent single-task plan.
 
-This skill is the execution layer. It must not invent product intent, architecture decisions, ADR decisions, delivery sequencing, or review criteria. It implements the approved plan while preserving upstream source-of-truth constraints.
+Implementation is plan-bound, but not allowed to knowingly violate relevant upstream product, architecture, ADR, or roadmap constraints.
 
 ## Non-negotiable rules
 
-### Rule 1: one plan, one task
+1. Execute one plan only.
+2. Do not expand scope silently.
+3. Do not redesign product, architecture, ADRs, roadmap, or plan during implementation.
+4. If the plan conflicts with relevant upstream artifacts, stop or report a deviation.
+5. Every run must end with `## Concrete Next Step`.
 
-Execute one approved implementation plan only.
+## Use this skill when
 
-If the request contains multiple independent tasks, stop with `BLOCKED_REQUIRES_PLAN_SPLIT` and identify the separate task candidates.
+Use this skill when:
 
-### Rule 2: plan-bound, but not plan-blind
+- one approved implementation plan exists
+- the plan is sufficiently specific to execute
+- the current job is code/config/test/documentation changes required by that plan
+- validation can be performed or clearly reported as unavailable
 
-The plan is the immediate execution contract, but implementation must not knowingly violate relevant upstream artifacts.
+## Do not use this skill when
 
-If `PLAN.md` conflicts with relevant `ARCHITECTURE.md`, initiative architecture, ADRs, PRD, or roadmap constraints, do not silently choose. Stop or report a deviation using the deviation protocol.
+Route elsewhere when implementation is not ready:
 
-### Rule 3: architecture is optional to create, but binding when present and relevant
+- task is still ambiguous -> `plan-writer`
+- multiple tasks are mixed together -> `plan-writer`
+- product truth changed -> `prd-writer`
+- architecture must be created or changed -> `architecture-writer`
+- one technical decision must be recorded -> `adr-writer`
+- delivery order is unclear -> `roadmap-planner`
+- completed work should be judged -> `review-phase`
 
-Do not create or redesign architecture in this skill.
+## Inputs expected
 
-But if the task touches any architecture-sensitive area, read and enforce the relevant architecture sections before coding:
+Required:
 
-- component/module/service boundaries
-- data ownership or source of truth
-- runtime flow
-- API or integration boundary
-- sync/async behavior
-- event/message flow
-- transaction boundary
-- consistency model
-- authorization/security rule
-- observability/runtime/deployment assumption
-- ADR links that affect implementation
+- one `PLAN.md` or equivalent approved single-task plan
+- relevant codebase files
+- validation commands or expected test strategy, if available
 
-### Rule 4: no hidden deviations
+Also read relevant upstream artifacts when the plan or task references them.
 
-A deviation is allowed only when required for correctness, safety, repository constraints, or to resolve an explicit contradiction. Every deviation must be reported with impact and next-step routing.
+If required sources are missing or contradictory, produce a blocker report rather than coding through ambiguity.
 
-### Rule 5: every run ends with a concrete next step
+## Procedure
 
-Do not end with “implementation done”, “review completed”, “continue”, or similar vague wording.
+1. Read the plan and extract obligations.
+2. Check for source-artifact conflicts using the shared decision matrix and handoff contracts.
+3. Identify scope, non-goals, files, validation, and risks.
+4. Implement the smallest complete change that satisfies the plan.
+5. Run or describe validation.
+6. Report deviations, blockers, and changed files.
+7. End with `## Concrete Next Step`.
 
-Every implementation summary or blocker report must end with a `Concrete Next Step` block.
+## Deviation handling
 
-## When to use
+A deviation must be reported when implementation:
 
-Use this skill when all of the following are true:
+- changes scope
+- changes behavior not requested by the plan
+- encounters a source-artifact conflict
+- requires architecture, ADR, roadmap, or PRD changes
+- cannot validate required behavior
+- discovers the plan is incorrect or incomplete
 
-- one existing `PLAN.md` or equivalent single-task plan exists
-- the plan is approved enough to implement
-- the current job is coding / implementation
-- the work should stay tightly aligned to the plan
-- upstream architecture/ADR/product constraints are either already embedded in the plan or available to verify when relevant
+Do not hide deviations inside the implementation summary.
 
-## Do not use
+## Output requirements
 
-Do not use this skill when:
-
-- the task is still ambiguous or under-specified -> use `plan-writer`
-- the work spans more than one task -> use `plan-writer` to split or create separate plans
-- the plan needs to be created, rewritten, or split first -> use `plan-writer`
-- product behavior must be decided -> use `prd-writer`
-- system shape, boundaries, data ownership, runtime model, or integration design must be created or changed -> use `architecture-writer`
-- one technical decision must be evaluated and recorded -> use `adr-writer`
-- delivery sequencing is unclear -> use `roadmap-planner`
-- completed work should be judged independently -> use `review-phase`
-
-## Source-of-truth order
-
-Before coding, read the narrowest valid source chain.
-
-### Required minimum
-
-1. `PLAN.md`
-2. Relevant existing code and repository conventions
-3. Tests or validation commands referenced by the plan
-
-### Required when architecture-sensitive
-
-1. `PLAN.md`
-2. Relevant `ARCHITECTURE.md` or `docs/architecture/<initiative>-architecture.md` sections
-3. Relevant ADRs linked by the plan or architecture
-4. Relevant PRD section when product behavior/business rules affect implementation
-5. Relevant roadmap section when phase/scope sequencing affects implementation
-6. Existing code and repository conventions
-
-### Conflict rule
-
-If artifacts conflict:
-
-- PRD governs product behavior.
-- `ARCHITECTURE.md` governs system shape, boundaries, data ownership, runtime flows, and cross-cutting constraints.
-- ADRs govern the specific technical decisions they record.
-- `ROADMAP.md` governs sequencing and phase scope.
-- `PLAN.md` governs the current implementation task only.
-
-If the plan conflicts with a relevant upstream source, do not silently proceed. Use one of:
-
-- `BLOCKED_REQUIRES_PLAN_CLARIFICATION`
-- `BLOCKED_REQUIRES_ARCHITECTURE_CLARIFICATION`
-- `BLOCKED_REQUIRES_ADR_DECISION`
-- `BLOCKED_REQUIRES_UPSTREAM_DECISION`
-- `IMPLEMENTED_WITH_REPORTED_DEVIATION`, only when a minimal safe deviation was necessary and fully reported
-
-## Required execution flow
-
-### 1. Read and extract the plan
-
-Before changing code, extract:
-
-- task summary
-- objective
-- in-scope items
-- out-of-scope items
-- detailed specification obligations
-- files/components expected to change
-- files/components that must not change
-- binding product constraints
-- binding architecture constraints
-- binding ADR constraints
-- roadmap or sequencing constraints
-- validation expectations
-- test expectations
-- review checklist expectations
-- known risks or trade-offs
-
-If the plan lacks enough information to implement safely, stop and produce a blocker report.
-
-### 2. Determine architecture sensitivity
-
-Classify the task:
-
-- `architecture_sensitive`: yes / no
-- `architecture_sources_checked`: list source paths or “not relevant”
-- `architecture_constraints`: extracted concrete constraints
-- `architecture_conflicts`: none or list conflicts
-
-A task is architecture-sensitive when it touches:
-
-- module/service/package boundaries
-- data ownership/source of truth
-- database schema or persistence rules
-- API contracts or integration boundaries
-- authorization/security logic
-- event publishing, messaging, async workers, schedulers, retries, idempotency
-- transaction boundaries or consistency behavior
-- observability, audit, deployment, runtime configuration
-
-### 3. Scope lock
-
-Before coding, state the intended scope:
-
-- what will be changed
-- what will not be changed
-- assumptions used
-- source artifacts checked
-
-If the plan implies multiple independent tasks, stop and route to `plan-writer` for split.
-
-### 4. Pre-implementation safety check
-
-Stop before coding if any of these are true:
-
-- plan is internally inconsistent
-- plan conflicts with relevant architecture or ADRs
-- plan requires a product behavior not defined in PRD
-- plan requires an architecture change not approved by architecture
-- plan depends on an undecided technical choice that deserves ADR
-- implementation would require broader scope than the plan allows
-- validation cannot be performed or cannot prove correctness
-
-### 5. Implement
-
-Implement only the approved task.
-
-During implementation:
-
-- preserve relevant architecture constraints
-- follow ADR decisions
-- keep changes minimal and local
-- do not add unrelated abstractions
-- do not perform opportunistic cleanup
-- do not silently change contracts
-- do not bypass source-of-truth data ownership
-- do not introduce new sync/async boundaries unless approved
-- do not modify unrelated files to make tests pass
-- follow repository conventions and `AGENTS.md`
-- follow `EXECUTION_PROTOCOL.md` if present for non-trivial execution behavior
-
-### 6. Validate
-
-Validate against both the plan and relevant upstream constraints.
-
-Check:
-
-- objective achieved
-- all in-scope items covered
-- out-of-scope respected
-- detailed specification fulfilled
-- expected files/components changed appropriately
-- architecture constraints preserved
-- ADR constraints preserved
-- product behavior preserved
-- roadmap phase/scope respected
-- tests added/updated/run as required
-- validation evidence collected
-- review checklist conditions satisfied
-
-If validation cannot be run, state why and classify the residual risk.
-
-### 7. Self-check before reporting
-
-Before final output, perform this self-check:
-
-- Did I implement exactly one task?
-- Did I stay inside scope?
-- Did I avoid unrelated refactors?
-- Did I check architecture if the task was architecture-sensitive?
-- Did I preserve source-of-truth ownership?
-- Did I preserve transaction/consistency/security rules?
-- Did I report every deviation?
-- Did I run or explain validation?
-- Is the next step concrete and routed?
-
-## Output statuses
-
-End with exactly one status:
-
-- `IMPLEMENTED`
-- `IMPLEMENTED_WITH_REPORTED_DEVIATION`
-- `BLOCKED_REQUIRES_PLAN_CLARIFICATION`
-- `BLOCKED_REQUIRES_PLAN_SPLIT`
-- `BLOCKED_REQUIRES_ARCHITECTURE_CLARIFICATION`
-- `BLOCKED_REQUIRES_ARCHITECTURE_UPDATE`
-- `BLOCKED_REQUIRES_ADR_DECISION`
-- `BLOCKED_REQUIRES_UPSTREAM_DECISION`
-- `BLOCKED_BY_CONFLICTING_SOURCES`
-- `BLOCKED_BY_VALIDATION_FAILURE`
-
-## Mandatory reporting behavior
-
-Always report:
-
-- outcome status
-- plan used
-- source artifacts checked
-- architecture sensitivity result
-- architecture/ADR constraints enforced or “not relevant”
-- what was implemented
-- files changed
-- validation/tests performed
-- plan sections fulfilled
-- deviations, if any
-- remaining gaps classified by urgency
-- concrete next step
-
-If blocked, do not produce a vague partial summary. Use `assets/BLOCKER_REPORT_TEMPLATE.md`.
-
-If implemented, use `assets/IMPLEMENTATION_SUMMARY_TEMPLATE.md`.
-
-If deviation occurred, include the deviation details from `assets/DEVIATION_REPORT_TEMPLATE.md` inside the implementation summary.
-
-## Deviation rule
-
-A deviation is allowed only when one of the following is true:
-
-- the plan is internally inconsistent
-- the plan is incomplete in a way that blocks safe implementation
-- following the plan literally would break correctness, safety, architecture constraints, ADR decisions, or repository constraints
-- a minimal implementation adjustment is required to satisfy the stated objective
-
-If deviating:
-
-- state the exact deviation
-- identify the source artifact affected
-- explain why it was necessary
-- state the implementation impact
-- state the review impact
-- state whether the plan, architecture, ADR, or roadmap should be updated
-
-Never hide a deviation.
-
-## Concrete next step requirement
-
-Every output must end with:
+Every implementation summary or blocker report must include:
 
 ```md
+## Implementation Summary
+
+- Plan executed:
+- Status:
+- Files changed:
+- Behavior changed:
+- Validation performed:
+- Deviations:
+- Blockers:
+
 ## Concrete Next Step
 
 - `next_step_type`:
@@ -315,31 +112,15 @@ Every output must end with:
 - `suggested_prompt`:
 ```
 
-Allowed `next_step_type` values:
+Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
-- `RUN_REVIEW`
-- `RUN_VALIDATION`
-- `APPLY_MINOR_FIX`
-- `UPDATE_PLAN`
-- `UPDATE_ARCHITECTURE`
-- `CREATE_OR_UPDATE_ADR`
-- `UPDATE_ROADMAP`
-- `UPDATE_PRD`
-- `SPLIT_PLAN`
-- `REQUEST_MISSING_SOURCE_ARTIFACT`
-- `RESOLVE_SOURCE_CONFLICT`
-- `STOP_AND_ESCALATE`
+## Quality bar
 
-## Additional guidance
+A good implementation is:
 
-For deeper rules, consult:
-
-- `references/SOURCE_OF_TRUTH_GUIDE.md`
-- `references/ARCHITECTURE_AWARE_IMPLEMENTATION_GUIDE.md`
-- `references/EXECUTION_FLOW_GUIDE.md`
-- `references/DEVIATION_PROTOCOL.md`
-- `references/SCOPE_AND_SPLIT_RULES.md`
-- `references/VALIDATION_GUIDE.md`
-- `references/COMPLETION_REPORT_GUIDE.md`
-- `references/QUALITY_BAR.md`
-- `references/NEXT_STEP_ROUTING_GUIDE.md`
+- faithful to one plan
+- minimal but complete
+- source-artifact aware
+- validated or honest about missing validation
+- explicit about deviations
+- ready for `review-phase`

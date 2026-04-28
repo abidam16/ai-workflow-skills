@@ -2,6 +2,23 @@
 
 Every roadmap output must end with exactly one concrete next step.
 
+## Required Block Shape
+
+Use the exact terminal block below:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+The block must appear exactly once in the final output. It must be the final section. Do not also include `Immediate Next Step`, `Continuation Prompt`, loose `next_step`, or loose `follow_up`.
+
 ## Allowed Next Step Types
 
 ### CREATE_PLAN

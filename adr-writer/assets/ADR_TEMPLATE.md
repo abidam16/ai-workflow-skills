@@ -4,115 +4,130 @@
 
 Proposed / Accepted / Rejected / Superseded
 
-## Date
+## Decision Date
 
 YYYY-MM-DD
 
-## Decision Owner
+## Decision Boundary
 
-<owner or team>
+### This ADR decides
+
+-
+
+### This ADR does not decide
+
+-
 
 ## Source Artifacts
 
-| Artifact | Path / Reference | Relevance |
-|---|---|---|
-| PRD | `PRD.md` | <product constraint or behavior driving this decision> |
-| Architecture | `ARCHITECTURE.md` | <system-shape context> |
-| Initiative Architecture | `docs/architecture/<initiative>-architecture.md` | <if relevant> |
-| Roadmap | `ROADMAP.md` | <if relevant> |
-| Plan / Review | `<path>` | <if decision was discovered downstream> |
-
-## Decision Boundary
-
-### Decides
-
-- <what this ADR decides>
-
-### Does Not Decide
-
-- <related but excluded topics>
+- Brainstorm:
+- PRD:
+- Architecture:
+- Initiative Architecture:
+- Related ADRs:
+- Roadmap:
+- Plan / Review evidence:
 
 ## Context / Problem
 
-<Explain the technical or architectural problem that requires a decision.>
+Describe the problem that forces a durable technical or architectural decision.
 
 ## Decision Drivers
 
-- <driver 1: reliability, consistency, operability, delivery speed, cost, maintainability, etc.>
-- <driver 2>
-- <driver 3>
+- Driver 1:
+- Driver 2:
+- Driver 3:
 
 ## Considered Options
 
 | Option | Summary | Benefits | Costs / Risks | Fit |
 |---|---|---|---|---|
-| Option A | <summary> | <benefits> | <costs> | <fit> |
-| Option B | <summary> | <benefits> | <costs> | <fit> |
-| Option C | <summary> | <benefits> | <costs> | <fit> |
+| Option A |  |  |  |  |
+| Option B |  |  |  |  |
 
 ## Decision
 
-Chosen option: **<Option>**
+Chosen option:
 
-<Explain why this option best fits the decision drivers.>
+Rationale:
 
 ## Consequences
 
 ### Positive
 
-- <positive consequence>
+-
 
 ### Negative / Trade-offs
 
-- <negative consequence or accepted trade-off>
+-
 
-### Implementation Constraints
+### Migration / Compatibility Implications
 
-- <constraint future plans and implementations must obey>
+-
 
-### Operational / Runtime Implications
+### Operational Implications
 
-- <logging, monitoring, deployment, recovery, migration, or support implication>
+-
 
 ## Architecture Linkage
 
-- `architecture_linkage`: NONE / ARCHITECTURE_CONTEXT_ONLY / ADD_ADR_INDEX_ENTRY / UPDATE_ROOT_ARCHITECTURE / UPDATE_INITIATIVE_ARCHITECTURE / UPDATE_ROOT_AND_INITIATIVE_ARCHITECTURE / ARCHITECTURE_CONFLICT_FOUND / ARCHITECTURE_MISSING
-- Affected architecture document(s): `<path>`
-- Affected section(s): `<section names>`
-- Required architecture update: <none / add ADR index entry / update constraints / update runtime flow / update component boundary / update data ownership / other>
+- `architecture_linkage`:
+- Architecture document:
+- Architecture sections affected:
+- ADR index update required:
+- Architecture conflict found:
+
+Allowed `architecture_linkage` values:
+
+- `NONE`
+- `ARCHITECTURE_CONTEXT_ONLY`
+- `ADD_ADR_INDEX_ENTRY`
+- `UPDATE_ROOT_ARCHITECTURE`
+- `UPDATE_INITIATIVE_ARCHITECTURE`
+- `UPDATE_ROOT_AND_INITIATIVE_ARCHITECTURE`
+- `ARCHITECTURE_CONFLICT_FOUND`
+- `ARCHITECTURE_MISSING`
+
+## Implementation Constraints
+
+Future plans and implementations must obey:
+
+-
+
+## Review Implications
+
+Review must verify:
+
+-
 
 ## Downstream Impact
 
-- PRD Impact: none / check assumptions / update PRD
-- Architecture Impact: none / add ADR link / update architecture / resolve conflict
-- Roadmap Impact: none / update sequencing / unblock roadmap
-- Plan Impact: none / create plan / revise plan constraints
-- Review Impact: none / add review criterion / revisit previous review
+- Architecture Impact:
+- Roadmap Impact:
+- Plan Impact:
+- Review Impact:
 
-## Review Criteria
+## Non-Goals / Not Addressed
 
-Future review should verify:
-
-- <criterion 1>
-- <criterion 2>
-- <criterion 3>
+-
 
 ## Related Artifacts
 
-- PRD: `<path>`
-- Architecture: `<path>`
-- Related ADRs: `<paths>`
-- Roadmap: `<path>`
-- Plan(s): `<paths>`
+- PRD:
+- Architecture:
+- ADRs:
+- Roadmap:
+- Plans:
+- Review reports:
 
 ## Supersession
 
-- Supersedes: `<ADR path or none>`
-- Superseded by: `<ADR path or none>`
+- Supersedes:
+- Superseded by:
 
 ## Open Questions
 
-- <question, owner/status, expected next artifact>
+-
 
 ## Concrete Next Step
 

@@ -11,12 +11,12 @@
 
 | Artifact | Path / Section | Used For | Result |
 |---|---|---|---|
-| PLAN |  | Execution scope |  |
-| PRD |  | Product behavior |  |
-| Architecture |  | System-shape constraints |  |
-| ADR |  | Technical decision constraints |  |
-| Roadmap |  | Sequencing / phase scope |  |
-| AGENTS / repo rules |  | Local conventions |  |
+| PLAN | | Execution scope | |
+| PRD | | Product behavior | |
+| Architecture | | System-shape constraints | |
+| ADR | | Technical decision constraints | |
+| Roadmap | | Sequencing / phase scope | |
+| AGENTS / repo rules | | Local conventions | |
 
 ## Architecture Sensitivity
 
@@ -47,13 +47,13 @@
 
 | File | Change | Reason | Source artifact |
 |---|---|---|---|
-|  |  |  |  |
+| | | | |
 
 ## Plan Fulfillment
 
 | Plan Obligation | Status | Evidence |
 |---|---|---|
-|  | fulfilled / partial / not applicable |  |
+| | fulfilled / partial / not applicable | |
 
 ## Architecture / ADR Compliance
 
@@ -61,13 +61,13 @@
 
 | Constraint | Status | Evidence |
 |---|---|---|
-|  | satisfied / not relevant / deviated |  |
+| | satisfied / not relevant / deviated | |
 
 ### ADR Constraints
 
 | Constraint | Status | Evidence |
 |---|---|---|
-|  | satisfied / not relevant / deviated |  |
+| | satisfied / not relevant / deviated | |
 
 ## Validation and Tests
 
@@ -85,7 +85,7 @@
 
 - `not_run_reason`:
 - `risk`:
-- `recommended_follow_up`:
+- `recommended_validation_follow_up`:
 
 ## Deviations
 
@@ -99,7 +99,7 @@ If none:
 
 | Gap | Urgency | Recommended owner / phase |
 |---|---|---|
-|  | critical / high / medium / low / none |  |
+| | critical / high / medium / low / none | |
 
 ## Concrete Next Step
 
@@ -107,5 +107,5 @@ If none:
 - `target`: implementation diff and this implementation summary
 - `action`: Run `review-phase` against the implementation, `PLAN.md`, relevant architecture, ADRs, and validation evidence.
 - `why_this_is_next`: Implementation is complete enough to be independently checked against approved artifacts.
-- `blocking_condition`: None if validation passed; otherwise describe validation gap.
+- `blocking_condition`: None if validation passed; otherwise describe the validation gap.
 - `suggested_prompt`: "Use review-phase to review this implementation against `PLAN.md`, relevant `ARCHITECTURE.md` sections, ADRs, and validation evidence. Classify findings and provide one concrete next step."

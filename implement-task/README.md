@@ -1,44 +1,47 @@
 # implement-task
 
-Architecture-aware Codex skill for executing one approved `PLAN.md` with strict plan fidelity.
+Executes exactly one approved implementation plan with strict plan fidelity, architecture/ADR constraint checks, validation, deviation reporting, and a normalized `Concrete Next Step` handoff.
 
-## Purpose
+## This patch scope
 
-This skill implements exactly one bounded task from an approved plan while preserving upstream durable artifacts:
+This update only normalizes the terminal next-step contract for `implement-task`.
 
-```text
-BRAINSTORM.md -> PRD.md -> ARCHITECTURE.md -> ADRs -> ROADMAP.md -> PLAN.md -> IMPLEMENT -> REVIEW
+It preserves:
+
+- one-plan-one-task execution
+- architecture-aware implementation checks
+- plan-bound execution behavior
+- blocker/deviation reporting
+- validation and review handoff behavior
+
+## Required terminal block
+
+Every implementation summary, blocker report, or deviation-bearing report must end with exactly one:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
 ```
 
-## Key behavior
+Do not use:
 
-- Executes one plan only.
-- Checks relevant architecture/ADR constraints before coding.
-- Preserves scope and avoids opportunistic refactors.
-- Reports plan, architecture, ADR, roadmap, or validation blockers explicitly.
-- Produces an implementation summary ready for `review-phase`.
-- Forces a concrete next step after every run.
+- `Immediate Next Step`
+- `Continuation Prompt`
+- loose `next_step`
+- loose `follow_up`
 
-## Install
+## Typical next step
 
-Copy this folder to either:
+For successful implementation, the usual next step is:
 
-```text
-<repo>/.agents/skills/implement-task
+```md
+- `next_step_type`: RUN_REVIEW
 ```
 
-or:
-
-```text
-$HOME/.agents/skills/implement-task
-```
-
-## Optional validation
-
-Run:
-
-```bash
-python scripts/check_implementation_report.py IMPLEMENTATION_SUMMARY.md
-```
-
-The script checks for required reporting sections and a concrete next-step block.
+For blocked implementation, route to the artifact or decision that must be fixed first.

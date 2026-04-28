@@ -2,67 +2,64 @@
 
 ## 1. Request Classification
 
-- Mode:
-- Trigger:
-- Primary problem/opportunity:
+- `mode`:
+- `trigger`:
+- `primary_problem_or_opportunity`:
 
 ## 2. Problem and Value Assessment
 
-- Problem statement:
-- Who is affected:
-- Why it matters:
-- Current workaround or alternative:
-- Expected value if solved:
-- Evidence strength:
+- `problem_statement`:
+- `who_is_affected`:
+- `why_it_matters`:
+- `current_workaround_or_alternative`:
+- `expected_value_if_solved`:
+- `evidence_strength`:
 
 ## 3. Options and Trade-offs
 
-- Option A:
-- Option B:
-- Recommended direction:
-- Main trade-offs:
+- `option_a`:
+- `option_b`:
+- `recommended_direction`:
+- `main_trade_offs`:
 
 ## 4. Constraints, Risks, and Open Questions
 
-- Constraints:
-- Risks:
-- Open questions that matter now:
+- `constraints`:
+- `risks`:
+- `open_questions_that_matter_now`:
 
 ## 5. Decision
 
-Decision: `<choose exactly one allowed decision>`
+- `decision`:
+- `artifact_action`: `CHAT_ONLY_NO_ARTIFACT`
 
-## 6. Artifact Action
+## 6. Why This Decision
 
-Artifact action: `CHAT_ONLY_NO_ARTIFACT`
+- `reason_1`:
+- `reason_2`:
+- `reason_3`:
 
-## 7. Why This Decision
+## 7. What Will Be Carried Forward
 
-- Reason 1:
-- Reason 2:
-- Reason 3:
+- `intent`:
+- `scope_boundary`:
+- `important_constraints`:
+- `risks_or_open_questions_for_next_phase`:
 
-## 8. What Will Be Carried Forward
+## 8. What Is Explicitly Not Needed Next
 
-- Intent:
-- Scope boundary:
-- Important constraints:
-- Risks/open questions for next phase:
+- `not_next_artifact`:
+- `reason_not_next`:
 
-## 9. What Is Explicitly Not Needed Next
+## 9. Stop Condition
 
-- Not `<artifact>` because:
+If the final decision is `REJECT_OR_DEFER`, say exactly what is missing and what would reopen the idea.
 
-## 10. Immediate Next Step
+## Concrete Next Step
 
-`Proceed to ...`
-
-## 11. Continuation Prompt
-
-`Proceed to ... based on this brainstorm output.`
-
-## 12. Stop Condition
-
-If the final decision is `REJECT_OR_DEFER`, say exactly what is missing and state:
-
-`Stop here and revisit after stronger evidence or clearer constraints exist.`
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

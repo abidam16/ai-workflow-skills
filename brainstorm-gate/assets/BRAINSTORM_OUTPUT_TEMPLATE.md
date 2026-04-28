@@ -1,137 +1,97 @@
-# BRAINSTORM-XXX: <short-title>
+# BRAINSTORM OUTPUT
 
-```yaml
-artifact_id: BRAINSTORM-XXX
-artifact_type: BRAINSTORM_OUTPUT
-artifact_status: DRAFT
-source_skill: brainstorm-gate
-created_at: YYYY-MM-DD
-updated_at: YYYY-MM-DD
-decision: <REJECT_OR_DEFER | NEW_PRD | PRD_UPDATE | NEW_ARCHITECTURE | ARCHITECTURE_UPDATE | NEW_ADR | ADR_UPDATE | NEW_PRODUCT_ROADMAP | PRODUCT_ROADMAP_UPDATE | NEW_INITIATIVE_ROADMAP | INITIATIVE_ROADMAP_UPDATE | NEW_DOCUMENT_PLAN | DOCUMENT_PLAN_UPDATE>
-output_mode: DURABLE_BRAINSTORM_OUTPUT
-durable_artifact_path: docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
-source_artifacts:
-  - <path-or-none>
-next_step: <exact next step>
-```
+## 1. Artifact Metadata
 
-## 1. Request Classification
+- `artifact_type`: BRAINSTORM_OUTPUT
+- `artifact_status`:
+- `artifact_path`:
+- `created_or_updated_at`:
+- `source_request`:
 
-- Mode:
-- Trigger:
-- Primary problem/opportunity:
-- Existing product/artifact context:
-- Source artifacts used:
+## 2. Request Classification
 
-## 2. Problem / Opportunity
+- `mode`:
+- `trigger`:
+- `primary_problem_or_opportunity`:
+- `affected_users_actors_systems_or_stakeholders`:
 
-- Problem statement:
-- Who is affected:
-- Why it matters:
-- Current workaround or alternative:
-- Evidence strength:
+## 3. Problem and Value Assessment
 
-## 3. Value Assessment
+- `problem_statement`:
+- `who_is_affected`:
+- `why_it_matters`:
+- `current_workaround_or_alternative`:
+- `expected_value_if_solved`:
+- `evidence_strength`:
 
-- Expected value if solved:
-- Cost of doing nothing:
-- Urgency:
-- Confidence level:
-- Why this is worth or not worth pursuing now:
+## 4. Options and Trade-offs
 
-## 4. Options Considered
+- `option_a`:
+- `option_b`:
+- `option_c_if_relevant`:
+- `recommended_direction`:
+- `main_trade_offs`:
 
-### Option A: <name>
+## 5. Key Constraints, Risks, and Open Questions
 
-- Summary:
-- Benefits:
-- Costs / risks:
-- When this option makes sense:
+- `constraints`:
+- `risks`:
+- `open_questions_that_matter_now`:
 
-### Option B: <name>
+## 6. Decision
 
-- Summary:
-- Benefits:
-- Costs / risks:
-- When this option makes sense:
-
-### Recommended Direction
-
-- Recommended option:
-- Reason:
-- Main trade-offs accepted:
-
-## 5. Constraints, Risks, and Open Questions
-
-### Constraints
-
-- <constraint>
-
-### Risks
-
-- <risk>
-
-### Open Questions That Matter Now
-
-- <question>
-
-## 6. Final Decision
-
-Decision: `<choose exactly one>`
+- `final_decision`: `CHOOSE EXACTLY ONE`
+- `artifact_action`: `CREATE_DURABLE_BRAINSTORM_ARTIFACT` / `UPDATE_EXISTING_BRAINSTORM_ARTIFACT` / `CHAT_ONLY_NO_ARTIFACT`
+- `durable_artifact_path`:
 
 ## 7. Why This Decision
 
-- Reason 1:
-- Reason 2:
-- Reason 3:
+- `reason_1`:
+- `reason_2`:
+- `reason_3`:
 
 ## 8. What Will Be Carried Forward
 
-- Business/product/technical intent:
-- Scope boundary:
-- Important constraints:
-- Important risks:
-- Open questions for the next phase:
+- `business_or_technical_intent`:
+- `scope_boundary`:
+- `important_constraints`:
+- `risks_or_open_questions_for_next_phase`:
 
 ## 9. What Is Explicitly Not Needed Next
 
-- Not `<artifact>` because:
-- Not `<artifact>` because:
+- `not_next_artifact`:
+- `reason_not_next`:
 
 ## 10. Next Artifact Handoff Payload
 
-Use the payload shape from `references/HANDOFF_PAYLOADS.md` that matches the final decision.
-
-Do not include a full PRD, Architecture document, ADR, roadmap, document plan, or implementation plan here.
-
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
-artifact_status: DRAFT
-decision: <same as final decision>
-why: <compact rationale>
+artifact_status:
+decision:
 source_artifacts:
-  - <this brainstorm artifact path>
-next_step: <exact next step>
+  -
+concrete_next_step:
+  next_step_type:
+  target:
+  action:
+  why_this_is_next:
+  blocking_condition:
+  suggested_prompt:
 ```
 
-## 11. Immediate Next Step
+Replace the generic payload above with the specific payload shape from `references/HANDOFF_PAYLOADS.md`.
 
-`Proceed to ...`
+Do not write downstream artifact sections here.
 
-## 12. Continuation Prompt
+## 11. Stop Condition
 
-`Proceed to ... based on docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md.`
+If the final decision is `REJECT_OR_DEFER`, say exactly what is missing and state what would reopen the idea.
 
-## 13. Stop Condition
+## Concrete Next Step
 
-If the final decision is `REJECT_OR_DEFER`, state:
-
-```text
-Stop here and revisit after stronger evidence or clearer constraints exist.
-```
-
-Also state:
-
-- why forward progress should stop
-- what is missing or conflicting
-- what would reopen the idea
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

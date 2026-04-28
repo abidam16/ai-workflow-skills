@@ -2,9 +2,7 @@
 
 Architecture-aware PRD writer skill for Codex.
 
-This skill creates or updates `PRD.md` as the product-truth artifact in an AI-driven development workflow.
-
-It is designed to sit before architecture, ADR, roadmap, plan, implementation, and review.
+This skill creates or updates `PRD.md` as the product-truth artifact in an AI-driven development workflow. It is designed to sit before architecture, ADR, roadmap, plan, implementation, and review.
 
 ## Core responsibility
 
@@ -35,7 +33,7 @@ This lets PRD hand off cleanly to `architecture-writer` when product behavior im
 
 ## Required final output
 
-Every response must end with:
+Every response must end with exactly one block:
 
 ```md
 ## Concrete Next Step
@@ -47,6 +45,8 @@ Every response must end with:
 - `blocking_condition`:
 - `suggested_prompt`:
 ```
+
+Do not use `Immediate Next Step`, `Continuation Prompt`, or a loose `next_step` field.
 
 ## Install
 

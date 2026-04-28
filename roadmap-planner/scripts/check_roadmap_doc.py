@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Lightweight validator for architecture-aware roadmap documents.
 
-This script intentionally checks structure only. It does not judge roadmap quality.
+This script checks structural consistency only. It does not judge roadmap quality.
 """
 from __future__ import annotations
 
@@ -41,6 +41,22 @@ ALLOWED_NEXT_STEP_TYPES = {
     "STOP_AND_ESCALATE",
 }
 
+OLD_TERMINAL_PATTERNS = [
+    r"^#+\s+Immediate Next Step\b",
+    r"^#+\s+Continuation Prompt\b",
+    r"`?next_step`?\s*:",
+    r"`?follow_up`?\s*:",
+]
+
+PLACEHOLDER_PATTERNS = [
+    r"`?next_step_type`?\s*:\s*$",
+    r"`?target`?\s*:\s*(<.*?>)?\s*$",
+    r"`?action`?\s*:\s*(<.*?>)?\s*$",
+    r"`?why_this_is_next`?\s*:\s*(<.*?>)?\s*$",
+    r"`?blocking_condition`?\s*:\s*(<.*?>)?\s*$",
+    r"`?suggested_prompt`?\s*:\s*(<.*?>)?\s*$",
+]
+
 VAGUE_ACTIONS = [
     "continue development",
     "implement roadmap",
@@ -48,6 +64,9 @@ VAGUE_ACTIONS = [
     "fix issues",
     "review later",
     "do next step",
+    "continue",
+    "move forward",
+    "update docs as needed",
 ]
 
 
@@ -69,8 +88,15 @@ def main() -> int:
         if re.search(rf"^#+\s+.*{re.escape(section)}", text, re.MULTILINE | re.IGNORECASE) is None:
             errors.append(f"Missing required section: {section}")
 
+    cns_matches = re.findall(r"^##\s+Concrete Next Step\s*$", text, re.MULTILINE)
+    if len(cns_matches) == 0:
+        errors.append("Missing exact section heading: ## Concrete Next Step")
+    elif len(cns_matches) > 1:
+        errors.append("Multiple ## Concrete Next Step sections found; exactly one is allowed")
+
     for field in NEXT_STEP_FIELDS:
-        if re.search(rf"`?{re.escape(field)}`?\s*:", text, re.IGNORECASE) is None:
+        matches = re.findall(rf"`?{re.escape(field)}`?\s*:", text, re.IGNORECASE)
+        if not matches:
             errors.append(f"Missing Concrete Next Step field: {field}")
 
     match = re.search(r"`?next_step_type`?\s*:\s*`?([A-Z_]+)`?", text)
@@ -80,6 +106,14 @@ def main() -> int:
             errors.append(f"Invalid next_step_type: {value}")
     else:
         errors.append("Could not parse next_step_type value")
+
+    for pattern in OLD_TERMINAL_PATTERNS:
+        if re.search(pattern, text, re.MULTILINE | re.IGNORECASE):
+            errors.append(f"Old or loose terminal field is not allowed: {pattern}")
+
+    for pattern in PLACEHOLDER_PATTERNS:
+        if re.search(pattern, text, re.MULTILINE | re.IGNORECASE):
+            errors.append(f"Placeholder or empty Concrete Next Step value found: {pattern}")
 
     lower = text.lower()
     for phrase in VAGUE_ACTIONS:

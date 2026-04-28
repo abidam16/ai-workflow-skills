@@ -2,18 +2,32 @@
 
 Architecture-aware review skill for the AI-driven development workflow.
 
-Use this skill after implementation to produce a decision-ready review report. The skill reviews implementation against the correct source-of-truth chain:
+Use this skill after implementation to produce a decision-ready implementation review report, or before implementation to check whether durable artifacts are mutually consistent enough for safe execution.
 
-1. PRD for product truth
-2. Architecture for system-shape truth
-3. ADRs for decision truth
-4. Roadmap for sequencing truth
-5. PLAN for one-task execution truth
-6. Implementation summary, diffs, tests, and validation evidence for actual delivery
+## Review modes
+
+- `TASK_REVIEW`: review one implementation against one approved `PLAN.md`.
+- `ROADMAP_IMPLEMENTATION_REVIEW`: review multiple completed tasks against one roadmap or roadmap slice.
+- `ARTIFACT_CONSISTENCY_REVIEW`: review PRD, architecture, ADRs, roadmap, and plans before implementation or before continuing execution.
 
 ## Main improvement
 
-The skill now treats `ARCHITECTURE.md` and initiative architecture documents as first-class review authorities. It also requires every report to end with exactly one concrete next step.
+This version adds `ARTIFACT_CONSISTENCY_REVIEW`, a pre-implementation consistency mode for catching PRD / architecture / ADR / roadmap / plan contradictions before Codex writes code.
+
+The skill still treats `ARCHITECTURE.md` and initiative architecture documents as first-class review authorities and requires every report to end with exactly one `Concrete Next Step`.
+
+## Expected shared workflow docs
+
+This skill expects these docs when available:
+
+```text
+docs/workflow/ARTIFACT_DECISION_MATRIX.md
+docs/workflow/HANDOFF_CONTRACTS.md
+docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md
+docs/workflow/NEXT_STEP_TYPES.md
+```
+
+If the docs are absent, the skill still works from its local instructions, but the review report should mention that shared workflow docs were not found.
 
 ## Install
 
@@ -25,14 +39,3 @@ $HOME/.agents/skills/review-phase
 ```
 
 Restart Codex if the updated skill is not detected.
-
-## Expected shared workflow docs
-
-This skill expects these docs when available:
-
-```text
-docs/workflow/ARTIFACT_DECISION_MATRIX.md
-docs/workflow/HANDOFF_CONTRACTS.md
-```
-
-If the docs are absent, the skill still works from its local instructions, but the review report should mention that shared workflow docs were not found.

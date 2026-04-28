@@ -1,6 +1,6 @@
 interface:
   display_name: "Review Phase"
   short_description: "Architecture-aware review against PRD, architecture, ADR, roadmap, plan, implementation, and validation evidence."
-  default_prompt: "Use the review-phase skill to review the implemented work against the approved artifacts and end with one concrete next step."
+  default_prompt: "Use the review-phase skill to review the implemented work against the approved artifacts and end with one normalized Concrete Next Step."
 policy:
   allow_implicit_invocation: true

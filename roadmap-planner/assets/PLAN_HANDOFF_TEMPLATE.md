@@ -1,5 +1,7 @@
 # Plan Handoff Candidate
 
+Use this template for a standalone roadmap-to-plan handoff. If this candidate is embedded inside a full roadmap document, include the candidate fields below and keep only the roadmap document's final `## Concrete Next Step` block.
+
 - `task_name`:
 - `task_objective`:
 - `why_it_is_one_task`:

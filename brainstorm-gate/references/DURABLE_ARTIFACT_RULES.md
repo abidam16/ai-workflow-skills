@@ -16,6 +16,8 @@ Create a durable brainstorm artifact when the brainstorm result must become a st
 - the idea is weak and not likely to be revisited
 - no later AI agent needs to consume the result
 
+A chat-only result must still end with the normalized `Concrete Next Step` block.
+
 ## Use `DURABLE_BRAINSTORM_OUTPUT` When
 
 - the brainstorm will feed PRD, Architecture, ADR, roadmap, document plan, implementation, or review
@@ -31,7 +33,7 @@ Create a durable brainstorm artifact when the brainstorm result must become a st
 Default path:
 
 ```text
-docs/brainstorm/BRAINSTORM-<sequence>-<short-slug>.md
+docs/brainstorm/BRAINSTORM-<sequence>-<slug>.md
 ```
 
 Examples:
@@ -66,8 +68,7 @@ Default to `DRAFT` unless the user explicitly approves the conclusion or the dec
 - compact carry-forward context
 - explicit non-next artifacts
 - next artifact handoff payload
-- immediate next step
-- continuation prompt
+- `Concrete Next Step` block
 
 ## Durable Artifact Must Not Include
 
@@ -91,3 +92,20 @@ A rejected or deferred idea can still have a durable brainstorm artifact when:
 - there are clear reopen conditions
 
 For lightweight rejection, use chat-only output.
+
+## Terminal Contract
+
+Both chat-only and durable outputs must end with:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+Do not end with only `Immediate next step` or `Continuation prompt`.

@@ -1,64 +1,76 @@
-# PRD.md
+# PRD
 
 ## 1. Document Status
 
 - `status`: Draft / Approved / Deprecated
-- `prd_decision`: CREATE_PRD / UPDATE_PRD
-- `last_updated`:
 - `owner`:
-- `source_artifacts`:
+- `last_updated`:
+- `related_brainstorm`:
+- `related_architecture`:
+- `related_adrs`:
+- `related_roadmap`:
 
-## 2. Product Summary
+## 2. Product Overview
 
-<!-- One short summary of what the product/feature is and why it exists. -->
+### Purpose
+
+[What the product/change is, who it serves, and why it exists.]
 
 ## 3. Problem Statement
 
-<!-- What problem is being solved? Who experiences it? Why does it matter now? -->
+### Purpose
 
-## 4. Goals
+[What problem exists today and why it matters.]
 
--
+## 4. Product Goals
 
-## 5. Non-Goals
+### Purpose
 
--
+[What the product is trying to achieve now.]
 
-## 6. Users, Actors, and Roles
+## 5. Product Non-Goals
 
-| Actor / Role | Description | Key Needs / Permissions |
-|---|---|---|
-|  |  |  |
+### Purpose
+
+[What is intentionally out of scope right now.]
+
+## 6. Users, Roles, and Actors
+
+### Purpose
+
+[Who acts in the system and what authority or responsibility they have.]
 
 ## 7. Current Behavior
 
-<!-- Current product/system behavior from the user/business perspective. -->
+### Purpose
+
+[How the system behaves today, including temporary or legacy behavior.]
 
 ## 8. Target Behavior
 
-<!-- Desired product/system behavior from the user/business perspective. -->
+### Purpose
+
+[What should become true relative to current behavior.]
 
 ## 9. Core User Flows
 
-### Flow 1: <!-- Name -->
+### Purpose
 
-1.
-2.
-3.
+[Most important end-to-end product flows.]
 
 ## 10. Product Rules
 
-| Rule | Description | Priority |
-|---|---|---|
-|  |  | Must / Should / Could |
+### Purpose
+
+[Business/product rules that must remain true.]
 
 ## 11. Product Constraints
 
-<!-- Product-level constraints only. Avoid technical design unless it materially affects product behavior. -->
+### Purpose
 
--
+[Product-level constraints, compliance needs, limits, or assumptions.]
 
-## 12. Scope
+## 12. Scope Boundaries
 
 ### In Scope
 
@@ -70,9 +82,9 @@
 
 ## 13. Success Criteria
 
-| Criterion | Measurement / Evidence |
-|---|---|
-|  |  |
+### Purpose
+
+[What makes the product change successful.]
 
 ## 14. Architecture Impact
 
@@ -92,8 +104,6 @@
 
 - `roadmap_impact`: NONE / CREATE_ROADMAP / UPDATE_ROADMAP / CHECK_EXISTING_ROADMAP / ROADMAP_BLOCKED_BY_PRODUCT_QUESTIONS
 - `reason`:
-- `sequencing_notes`:
-  -
 
 ## 17. Implementation Plan Readiness
 
@@ -102,13 +112,11 @@
 
 ## 18. Open Product Questions
 
-| Question | Why It Matters | Required To Proceed To |
-|---|---|---|
-|  |  | Architecture / ADR / Roadmap / Plan |
+-
 
 ## 19. PRD Handoff Summary
 
-- `prd_decision`:
+- `prd_decision`: CREATE_PRD / UPDATE_PRD / PRD_DELTA_ONLY / ROUTE_ELSEWHERE
 - `target_prd`:
 - `sections_created_or_changed`:
 - `architecture_impact`:

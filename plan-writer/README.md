@@ -16,7 +16,24 @@ BRAINSTORM.md -> PRD.md -> ARCHITECTURE.md -> ADRs -> ROADMAP.md -> PLAN.md -> I
 - Extracts binding constraints from source artifacts.
 - Treats architecture as binding when present and relevant.
 - Blocks planning when architecture/ADR/product decisions are missing or conflicting.
-- Forces a concrete next step after every run.
+- Forces exactly one normalized `Concrete Next Step` block after every run.
+
+## Normalized terminal contract
+
+Every generated plan, plan delta, split response, or blocker response must end with:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+Do not use `Immediate Next Step`, `Continuation Prompt`, loose `next_step`, or loose `follow_up` fields.
 
 ## Install
 
@@ -40,4 +57,4 @@ Run:
 python scripts/check_plan_doc.py PLAN.md
 ```
 
-The script checks for required sections and a concrete next-step block.
+The script checks required plan sections and validates that exactly one normalized `Concrete Next Step` block is present.

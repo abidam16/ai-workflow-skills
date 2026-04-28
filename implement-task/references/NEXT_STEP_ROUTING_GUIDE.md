@@ -1,54 +1,114 @@
 # Next Step Routing Guide
 
-Every implementation output must end with exactly one concrete next step.
+Every `implement-task` output must end with exactly one normalized `## Concrete Next Step` block.
 
-## Allowed next step types
-
-| next_step_type | Use when |
-|---|---|
-| `RUN_REVIEW` | Implementation is complete enough for independent review |
-| `RUN_VALIDATION` | Code changes are made but required validation still needs to be run |
-| `APPLY_MINOR_FIX` | A small in-scope issue remains before review |
-| `UPDATE_PLAN` | Plan was wrong, incomplete, or contradicted upstream artifacts |
-| `UPDATE_ARCHITECTURE` | Implementation revealed stale/missing architecture guidance |
-| `CREATE_OR_UPDATE_ADR` | A lasting technical decision is required or changed |
-| `UPDATE_ROADMAP` | Sequencing/scope changed beyond the current phase |
-| `UPDATE_PRD` | Product behavior or requirement ambiguity blocks completion |
-| `SPLIT_PLAN` | Work must be broken into multiple implementation tasks |
-| `REQUEST_MISSING_SOURCE_ARTIFACT` | Required source artifact is missing or inaccessible |
-| `RESOLVE_SOURCE_CONFLICT` | Source artifacts conflict and cannot be safely reconciled in implementation |
-| `STOP_AND_ESCALATE` | Safe progress is blocked by unresolved risk or authority conflict |
-
-## Good examples
+## Required block
 
 ```md
 ## Concrete Next Step
 
-- `next_step_type`: RUN_REVIEW
-- `target`: implementation diff, `PLAN.md`, `ARCHITECTURE.md`, and this summary
-- `action`: Run `review-phase` to verify plan fulfillment, architecture compliance, and validation evidence.
-- `why_this_is_next`: Implementation is complete and validation passed.
-- `blocking_condition`: None.
-- `suggested_prompt`: "Use review-phase to review the current implementation against the approved plan, relevant architecture sections, ADRs, and validation results."
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
 ```
 
-```md
-## Concrete Next Step
+## Selection rule
 
-- `next_step_type`: UPDATE_PLAN
-- `target`: `PLAN.md`
-- `action`: Revise the plan to resolve the conflict with `ARCHITECTURE.md` data ownership rules.
-- `why_this_is_next`: The current plan requires using a read model as source of truth, which architecture forbids.
-- `blocking_condition`: Implementation must not proceed until the plan is corrected or architecture is changed.
-- `suggested_prompt`: "Use plan-writer to update `PLAN.md` so it follows the source-of-truth rules in `ARCHITECTURE.md`."
-```
+Choose the one next action that unblocks the workflow first.
 
-## Bad examples
+Do not list several next steps. If multiple follow-ups are useful, mention only the most immediate one in the block and explain secondary follow-up only when needed in `why_this_is_next`.
 
-Avoid:
+## Allowed local next_step_type values
 
-- `action`: Continue.
-- `action`: Review done.
-- `action`: Fix issues.
-- `action`: Proceed to next task.
-- `suggested_prompt`: Do the next step.
+| `next_step_type` | Use when | Typical target |
+|---|---|---|
+| `RUN_REVIEW` | Implementation is complete enough for independent review. | Implementation diff, summary, `PLAN.md`, architecture/ADR evidence |
+| `RUN_VALIDATION` | Implementation is complete but validation was not run or needs to be rerun before review. | Test command, build command, validation suite |
+| `APPLY_MINOR_FIX` | A small implementation correction is needed before review. | Specific file/function/change |
+| `UPDATE_PLAN` | The plan is incomplete, unclear, or no longer matches the safe implementation path. | `PLAN.md` |
+| `UPDATE_ARCHITECTURE` | The implementation exposes a required architecture update or an architecture conflict. | `ARCHITECTURE.md` or `docs/architecture/<initiative>-architecture.md` |
+| `CREATE_OR_UPDATE_ADR` | A technical decision is required or changed. | `docs/adr/<decision>.md` |
+| `UPDATE_ROADMAP` | Delivery sequencing or phase scope must change. | `ROADMAP.md` |
+| `UPDATE_PRD` | Product behavior or business rule must be clarified or changed. | `PRD.md` |
+| `SPLIT_PLAN` | The implementation request contains multiple independent tasks. | `PLAN.md` or new plan candidates |
+| `REQUEST_MISSING_SOURCE_ARTIFACT` | Required source artifact is missing. | Missing PRD / architecture / ADR / roadmap / plan |
+| `RESOLVE_SOURCE_CONFLICT` | Source artifacts conflict and implementation cannot safely proceed. | Conflicting artifacts |
+| `STOP_AND_ESCALATE` | The issue cannot be safely resolved by this workflow step. | Specific blocker or decision owner |
+
+## Preferred mappings
+
+### Successful implementation
+
+Use `RUN_REVIEW` when:
+
+- implementation is complete
+- validation is either passed or the residual validation gap is clearly reported
+- no blocking source-artifact conflict remains
+
+### Validation gap
+
+Use `RUN_VALIDATION` when:
+
+- implementation is likely complete
+- tests/builds were not run
+- running validation is the most immediate useful next step
+
+### Small known implementation defect
+
+Use `APPLY_MINOR_FIX` when:
+
+- a localized issue remains
+- the fix is still inside the same plan scope
+- review would be premature before applying it
+
+### Plan problem
+
+Use `UPDATE_PLAN` when:
+
+- the plan is incomplete
+- the plan is internally inconsistent
+- the plan does not include necessary architecture/ADR constraints
+- the actual safe implementation path differs from the approved plan
+
+### Architecture problem
+
+Use `UPDATE_ARCHITECTURE` when:
+
+- the implementation exposes an architecture gap
+- the plan requires structural change not approved by architecture
+- source-of-truth/data ownership/runtime-flow rules are unclear
+
+### ADR problem
+
+Use `CREATE_OR_UPDATE_ADR` when:
+
+- a non-trivial technical decision blocks implementation
+- implementation requires changing or superseding an accepted decision
+
+### Source conflict
+
+Use `RESOLVE_SOURCE_CONFLICT` when:
+
+- PRD, architecture, ADR, roadmap, and/or plan conflict
+- the agent cannot safely determine which source to follow within this skill
+
+## Anti-patterns
+
+Do not use vague actions such as:
+
+- continue
+- continue development
+- fix issues
+- update docs as needed
+- review later
+- implementation complete
+
+Do not use old terminal fields:
+
+- `Immediate Next Step`
+- `Continuation Prompt`
+- loose `next_step`
+- loose `follow_up`

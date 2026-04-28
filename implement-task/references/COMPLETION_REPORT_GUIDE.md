@@ -1,49 +1,81 @@
 # Completion Report Guide
 
-## Good implementation summary
+An `implement-task` completion report must tell the user what was done, what was checked, what remains uncertain, and exactly what should happen next.
 
-A good summary lets `review-phase` evaluate the work without reconstructing every action from scratch.
+## Required completion report qualities
 
-It includes:
+A good completion report is:
 
-- exact outcome status
-- source artifacts checked
-- architecture sensitivity result
-- files changed and reasons
-- obligations fulfilled
-- tests/validation and results
-- deviations and impacts
-- remaining gaps
-- concrete next step
+- tied to one approved plan
+- explicit about source artifacts checked
+- explicit about architecture sensitivity
+- clear about files changed
+- clear about validation performed or not performed
+- honest about deviations and residual risk
+- ended by exactly one normalized `## Concrete Next Step` block
 
-## Bad implementation summary
+## Required terminal block
+
+All implementation summaries and blocker reports must end with:
+
+```md
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+The final block must be the last section in the report.
+
+## Good examples
+
+```md
+## Concrete Next Step
+
+- `next_step_type`: RUN_REVIEW
+- `target`: implementation diff, `PLAN.md`, `ARCHITECTURE.md#Notification Flow`, and validation output
+- `action`: Run `review-phase` to check this implementation against the approved plan and relevant architecture constraints.
+- `why_this_is_next`: The implementation is complete and validation passed; independent review is now the correct enforcement step.
+- `blocking_condition`: None.
+- `suggested_prompt`: "Use review-phase to review this implementation against `PLAN.md`, relevant architecture sections, ADRs, and validation evidence. Classify findings and provide one concrete next step."
+```
+
+```md
+## Concrete Next Step
+
+- `next_step_type`: UPDATE_PLAN
+- `target`: `PLAN.md`
+- `action`: Revise the plan to resolve the conflicting persistence requirements before implementation continues.
+- `why_this_is_next`: The current plan conflicts with the architecture source-of-truth rule for membership ownership.
+- `blocking_condition`: Implementation must not continue until the plan and architecture agree on the source of truth.
+- `suggested_prompt`: "Use plan-writer to update `PLAN.md` so it respects the membership source-of-truth rule in `ARCHITECTURE.md`, then produce one implementation-ready task plan."
+```
+
+## Bad examples
 
 Avoid:
 
-- “Implemented successfully.”
-- “All done.”
-- “Tests pass.”
-- “Review the code.”
-- “Continue to next phase.”
+```md
+Next step: continue development.
+```
 
-These are too vague for workflow handoff.
+Avoid:
 
-## Evidence format
+```md
+Immediate Next Step: review this later.
+Continuation Prompt: continue.
+```
 
-Prefer tables when connecting files, obligations, and source artifacts.
+Avoid:
 
-Example:
+```md
+## Concrete Next Step
+- `next_step_type`: RUN_REVIEW
+- `action`: fix issues
+```
 
-| File | Change | Reason | Source artifact |
-|---|---|---|---|
-| `InvitationService.kt` | Add acceptance validation | Plan obligation: validate pending invitation | `PLAN.md`, `ARCHITECTURE.md` |
-
-## Next-step clarity
-
-The next step must say:
-
-- which phase/tool should run next
-- what target artifact/diff it should use
-- why that is the next action
-- what blocks that action, if anything
-- suggested prompt
+The last example is invalid because required fields are missing and the action is vague.

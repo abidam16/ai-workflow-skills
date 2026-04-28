@@ -1,29 +1,67 @@
 # Review Mode Guide
 
-## TASK_REVIEW
+Select exactly one mode for each review.
 
-Use when reviewing one implementation against one approved plan.
+## `TASK_REVIEW`
 
-Good examples:
+Use when reviewing one implemented task against one approved `PLAN.md`.
 
-- "Review this task implementation against PLAN.md."
-- "Check whether this PR satisfies the plan for invitation acceptance."
-- "Review the changed files and implementation summary for this single task."
+Primary question:
 
-Do not use task review for multiple unrelated tasks or roadmap-level completion.
+> Did this implementation fulfill the approved plan while obeying PRD, architecture, ADR, and roadmap constraints?
 
-## ROADMAP_IMPLEMENTATION_REVIEW
+Inputs:
 
-Use when reviewing multiple tasks against one roadmap slice or initiative.
+- one plan
+- implementation summary
+- diffs/changed files
+- tests or validation evidence
+- relevant upstream artifacts
 
-Good examples:
+## `ROADMAP_IMPLEMENTATION_REVIEW`
 
-- "Review whether phase 1 of the notification roadmap is complete."
-- "Check cross-task integration for this initiative."
-- "Review all completed plans under this roadmap slice."
+Use when reviewing multiple completed tasks under one roadmap or initiative slice.
 
-Do not use roadmap implementation review to replace detailed task review when the implementation evidence is too broad or incomplete.
+Primary question:
 
-## Ambiguous requests
+> Does the completed implementation set fulfill the roadmap slice and integrate correctly?
 
-If a request includes one task and one roadmap, default to `TASK_REVIEW` unless the user clearly asks for cross-task or roadmap fulfillment review.
+Inputs:
+
+- roadmap or slice
+- relevant PRD
+- relevant architecture
+- relevant ADRs
+- multiple plans
+- multiple implementation summaries or diffs
+- integration evidence
+
+## `ARTIFACT_CONSISTENCY_REVIEW`
+
+Use before implementation or before continuing implementation when the artifact chain itself must be checked.
+
+Primary question:
+
+> Are PRD, architecture, ADRs, roadmap, and PLAN mutually consistent enough for safe implementation?
+
+Inputs:
+
+- PRD
+- architecture
+- ADRs
+- roadmap
+- one or more plans or plan candidates
+- shared workflow docs, if present
+
+This mode should not judge code unless implementation evidence is included only to expose artifact drift.
+
+## Selection rules
+
+| Situation | Mode |
+|---|---|
+| One implementation against one plan | `TASK_REVIEW` |
+| Multiple completed tasks against roadmap | `ROADMAP_IMPLEMENTATION_REVIEW` |
+| PRD/architecture/ADR/roadmap/plan consistency before coding | `ARTIFACT_CONSISTENCY_REVIEW` |
+| Ambiguous or mixed review target | Choose `SPLIT_REVIEW_SCOPE` as the concrete next step |
+
+Do not silently merge modes.
