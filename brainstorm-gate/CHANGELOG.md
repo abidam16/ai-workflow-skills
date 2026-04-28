@@ -4,8 +4,7 @@
 
 ### Added
 
-- `NEW_ARCHITECTURE` and `ARCHITECTURE_UPDATE` as first-class final decisions.
-- `NEW_DOCUMENT_PLAN` and `DOCUMENT_PLAN_UPDATE` as first-class final decisions.
+- canonical `CREATE_*` and `UPDATE_*` routing decisions from `docs/workflow/NEXT_STEP_TYPES.md`.
 - Brainstorm → Architecture handoff payload.
 - Brainstorm → Document Plan handoff payload.
 - Architecture vs ADR boundary rules.

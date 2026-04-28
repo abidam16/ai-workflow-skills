@@ -11,6 +11,15 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import (
+    extract_next_step_field,
+    phase_next_step_types,
+    validate_concrete_next_step,
+)
+
 REQUIRED_SECTIONS = [
     "Task Summary",
     "Plan Status",
@@ -34,19 +43,6 @@ NEXT_STEP_FIELDS = [
     "blocking_condition",
     "suggested_prompt",
 ]
-
-ALLOWED_NEXT_STEP_TYPES = {
-    "IMPLEMENT_PLAN",
-    "SPLIT_INTO_PLANS",
-    "UPDATE_PRD",
-    "CREATE_OR_UPDATE_ARCHITECTURE",
-    "CREATE_OR_UPDATE_ADR",
-    "UPDATE_ROADMAP",
-    "REVISE_PLAN",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "RETURN_TO_REVIEW",
-    "STOP_AND_ESCALATE",
-}
 
 ALLOWED_READINESS = {"NOT_RELEVANT", "READY", "PARTIAL", "MISSING", "CONFLICTING"}
 
@@ -116,32 +112,18 @@ def main() -> int:
         if not section_exists(text, section):
             errors.append(f"Missing required section: {section}")
 
-    concrete_count = count_section(text, "Concrete Next Step")
-    if concrete_count == 0:
-        errors.append("Missing required section: Concrete Next Step")
-    elif concrete_count > 1:
-        errors.append(f"Expected exactly one Concrete Next Step section, found {concrete_count}")
-
-    for pattern in OLD_TERMINAL_PATTERNS:
-        if re.search(pattern, text, flags=re.MULTILINE | re.IGNORECASE):
-            errors.append(f"Old or loose next-step field still present: {pattern}")
-
-    for field in NEXT_STEP_FIELDS:
-        value = extract_field(text, field)
-        if value is None:
-            errors.append(f"Missing Concrete Next Step field: {field}")
-        elif is_placeholder(value):
-            errors.append(f"Concrete Next Step field is empty or placeholder: {field}")
-
-    next_step_type = extract_field(text, "next_step_type")
-    if next_step_type and next_step_type not in ALLOWED_NEXT_STEP_TYPES:
-        errors.append(f"Invalid next_step_type: {next_step_type}")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("plan-writer"),
+        )
+    )
 
     readiness = extract_field(text, "architecture_readiness")
     if readiness and readiness not in ALLOWED_READINESS:
         errors.append(f"Invalid architecture_readiness: {readiness}")
 
-    action = extract_field(text, "action")
+    action = extract_next_step_field(text, "action")
     if action and is_vague_action(action):
         errors.append(f"Concrete Next Step action is too vague: {action}")
 

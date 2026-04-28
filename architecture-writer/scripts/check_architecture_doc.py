@@ -12,6 +12,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED_NEXT_STEP_FIELDS = [
     "next_step_type",
     "target",
@@ -71,18 +76,12 @@ def main() -> int:
     errors: list[str] = []
     warnings: list[str] = []
 
-    if "## Concrete Next Step" not in text:
-        errors.append("Missing required section: ## Concrete Next Step")
-    else:
-        section = extract_section(text, "Concrete Next Step") or ""
-        for field in REQUIRED_NEXT_STEP_FIELDS:
-            if f"`{field}`" not in section:
-                errors.append(f"Missing Concrete Next Step field: `{field}`")
-
-        lowered = section.lower()
-        for vague in VAGUE_NEXT_STEP_VALUES:
-            if vague in lowered:
-                warnings.append(f"Concrete Next Step may be vague: {vague!r}")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("architecture-writer"),
+        )
+    )
 
     if "## Architecture Handoff Summary" not in text:
         warnings.append("Missing recommended section: ## Architecture Handoff Summary")

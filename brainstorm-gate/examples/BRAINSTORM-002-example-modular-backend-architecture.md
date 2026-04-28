@@ -7,11 +7,10 @@ artifact_status: DRAFT
 source_skill: brainstorm-gate
 created_at: 2026-04-28
 updated_at: 2026-04-28
-decision: NEW_ARCHITECTURE
+decision: CREATE_ARCHITECTURE
 output_mode: DURABLE_BRAINSTORM_OUTPUT
 durable_artifact_path: docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md
 source_artifacts: []
-next_step: Proceed to NEW_ARCHITECTURE.
 ```
 
 ## 1. Request Classification
@@ -81,7 +80,7 @@ next_step: Proceed to NEW_ARCHITECTURE.
 
 ## 6. Final Decision
 
-Decision: `NEW_ARCHITECTURE`
+Decision: `CREATE_ARCHITECTURE`
 
 ## 7. Why This Decision
 
@@ -109,7 +108,7 @@ Decision: `NEW_ARCHITECTURE`
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
 artifact_status: DRAFT
-decision: NEW_ARCHITECTURE
+decision: CREATE_ARCHITECTURE
 architecture_scope: Backend application architecture
 system_or_repo_context: The backend needs a durable explanation of modules, boundaries, integration patterns, runtime assumptions, and cross-cutting rules.
 why_architecture_is_needed_now: Multiple future decisions and implementation tasks depend on shared system-level context.
@@ -139,17 +138,24 @@ open_questions:
   - Which modules and integrations are stable enough to document now?
 source_artifacts:
   - docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md
-next_step: Proceed to NEW_ARCHITECTURE.
+concrete_next_step:
+  next_step_type: CREATE_ARCHITECTURE
+  target: ARCHITECTURE.md
+  action: Create a root backend architecture document from this brainstorm handoff.
+  why_this_is_next: Shared system structure, boundaries, integrations, and cross-cutting rules are needed before ADRs, roadmap, or implementation plans.
+  blocking_condition: Stop if product intent or repository context is too unclear to define system shape responsibly.
+  suggested_prompt: Use `architecture-writer` to create `ARCHITECTURE.md` from `docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md`.
 ```
 
-## 11. Immediate Next Step
-
-`Proceed to NEW_ARCHITECTURE.`
-
-## 12. Continuation Prompt
-
-`Proceed to create the architecture document based on docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md.`
-
-## 13. Stop Condition
+## 11. Stop Condition
 
 Not applicable. The idea should proceed to Architecture.
+
+## Concrete Next Step
+
+- `next_step_type`: CREATE_ARCHITECTURE
+- `target`: `ARCHITECTURE.md`
+- `action`: Create a root backend architecture document from this brainstorm handoff.
+- `why_this_is_next`: Shared system structure, boundaries, integrations, and cross-cutting rules are needed before ADRs, roadmap, or implementation plans.
+- `blocking_condition`: Stop if product intent or repository context is too unclear to define system shape responsibly.
+- `suggested_prompt`: Use `architecture-writer` to create `ARCHITECTURE.md` from `docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md`.

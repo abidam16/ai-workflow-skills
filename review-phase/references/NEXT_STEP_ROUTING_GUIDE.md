@@ -1,52 +1,46 @@
 # Next Step Routing Guide
 
-Every review must end with exactly one concrete next step.
+Every review must end with exactly one concrete next step. Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
-Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md` when available. This local guide includes compatibility values for repos that have not yet adopted the shared enum file.
+## Common Routes
 
-## Allowed next step types
+Use `REQUEST_MISSING_EVIDENCE` when diff, test result, implementation summary, or validation evidence is needed for fair review.
 
-- `MERGE_OR_CLOSE_TASK`
-- `APPLY_MINOR_FIXES`
-- `RETURN_TO_IMPLEMENTATION`
-- `RUN_IMPLEMENTATION`
-- `RUN_REVIEW`
-- `CREATE_PLAN`
-- `UPDATE_PLAN`
-- `CREATE_ARCHITECTURE`
-- `UPDATE_ARCHITECTURE`
-- `CREATE_ADR`
-- `UPDATE_ADR`
-- `CREATE_OR_UPDATE_ADR`
-- `UPDATE_ROADMAP`
-- `UPDATE_PRD`
-- `REQUEST_MISSING_EVIDENCE`
-- `REQUEST_MISSING_SOURCE_ARTIFACT`
-- `SPLIT_REVIEW_SCOPE`
-- `START_NEXT_PLAN`
-- `STOP_AND_ESCALATE`
+Use `REQUEST_MISSING_SOURCE_ARTIFACT` when PRD, architecture, ADR, roadmap, plan, or workflow source evidence is missing.
 
-## Selection algorithm
+Use `UPDATE_PRD` when product truth is wrong, missing, or contradicted.
 
-1. Missing diff, test result, implementation summary, or validation evidence needed for fair implementation review -> `REQUEST_MISSING_EVIDENCE`.
-2. Missing PRD, architecture, ADR, roadmap, plan, or workflow source needed for artifact review -> `REQUEST_MISSING_SOURCE_ARTIFACT`.
-3. Review request mixes unrelated tasks, multiple roadmaps, or too many scopes -> `SPLIT_REVIEW_SCOPE`.
-4. Product truth is wrong, missing, or contradicted -> `UPDATE_PRD`.
-5. Architecture is missing and required for safe implementation -> `CREATE_ARCHITECTURE`.
-6. Architecture is outdated, contradicted, or insufficient -> `UPDATE_ARCHITECTURE`.
-7. One important technical decision is missing -> `CREATE_ADR`.
-8. An accepted decision is contradicted or stale -> `UPDATE_ADR`.
-9. Roadmap sequencing or exit criteria are wrong -> `UPDATE_ROADMAP`.
-10. PLAN is incomplete, contradictory, too broad, or no longer valid -> `UPDATE_PLAN`.
-11. Artifact chain is consistent and no plan exists -> `CREATE_PLAN`.
-12. Artifact chain is consistent and a valid plan exists -> `RUN_IMPLEMENTATION`.
-13. Implementation has required fixes but upstream artifacts are valid -> `RETURN_TO_IMPLEMENTATION`.
-14. Implementation is acceptable but small fixes should be made first -> `APPLY_MINOR_FIXES`.
-15. Implementation is accepted and the current branch/task should be closed -> `MERGE_OR_CLOSE_TASK`.
-16. Current task is accepted and the next roadmap slice should be planned -> `START_NEXT_PLAN`.
-17. No safe next action is available -> `STOP_AND_ESCALATE`.
+Use `CREATE_ARCHITECTURE` when required architecture is missing.
 
-## Concrete next step format
+Use `UPDATE_ARCHITECTURE` when architecture is outdated, contradicted, or insufficient.
+
+Use `CREATE_ADR` or `UPDATE_ADR` when one important decision is missing, stale, or contradicted.
+
+Use `UPDATE_ROADMAP` when roadmap sequencing or exit criteria are wrong.
+
+Use `CREATE_PLAN` when the artifact chain is consistent and no executable plan exists.
+
+Use `UPDATE_PLAN` or `UPDATE_LIGHTWEIGHT_PLAN` when a plan is incomplete, contradictory, too broad, or no longer valid.
+
+Use `SPLIT_INTO_PLANS` when reviewed work must be decomposed into multiple bounded plans.
+
+Use `RUN_ARTIFACT_CONSISTENCY_REVIEW` when durable artifacts need a consistency check before implementation continues.
+
+Use `IMPLEMENT_PLAN` or `IMPLEMENT_LIGHTWEIGHT_PLAN` when artifact review confirms a valid plan is ready to execute.
+
+Use `RETURN_TO_IMPLEMENTATION` when implementation has required fixes but upstream artifacts are valid.
+
+Use `APPLY_MINOR_FIXES` when implementation is acceptable but small local fixes should be made first.
+
+Use `MERGE_OR_CLOSE_TASK` when the reviewed implementation is accepted and the current branch or task should be closed.
+
+Use `START_NEXT_PLAN` when the current task is accepted and the next roadmap slice should be planned.
+
+Use `ESCALATE_TO_FULL_WORKFLOW` when a lightweight task review discovers product, architecture, ADR, or roadmap work is needed.
+
+Use `STOP_AND_ESCALATE` when no safe next action is available.
+
+## Concrete Next Step Format
 
 ```md
 ## Concrete Next Step
@@ -56,17 +50,9 @@ Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md` when available. Thi
 - `action`: Revise the plan so membership creation and invitation acceptance happen in the same transaction.
 - `why_this_is_next`: The artifact chain is otherwise coherent, but the current plan violates architecture's transaction boundary.
 - `blocking_condition`: Do not implement until the plan is revised and rechecked.
-- `suggested_prompt`: "Use plan-writer to update the invitation acceptance PLAN.md based on the artifact consistency review findings."
+- `suggested_prompt`: Use `plan-writer` to update the invitation acceptance PLAN.md based on the review findings.
 ```
 
-## Bad next steps
+## Bad Next Steps
 
-Do not write:
-
-- "The review is done."
-- "Fix the issues."
-- "Continue development."
-- "Proceed if desired."
-- "The next step depends."
-
-Make the next step executable.
+Do not write "the review is done", "fix the issues", "continue development", "proceed if desired", or "the next step depends".

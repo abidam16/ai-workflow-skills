@@ -193,11 +193,12 @@ Every lightweight output must end with the shared Concrete Next Step block:
 
 Common `next_step_type` values:
 
-- `CREATE_PLAN`
-- `IMPLEMENT_PLAN`
-- `RUN_REVIEW`
-- `UPDATE_PLAN`
+- `CREATE_LIGHTWEIGHT_PLAN`
+- `IMPLEMENT_LIGHTWEIGHT_PLAN`
+- `RUN_LIGHTWEIGHT_REVIEW`
+- `UPDATE_LIGHTWEIGHT_PLAN`
 - `UPDATE_ARCHITECTURE`
 - `CREATE_ADR`
 - `UPDATE_PRD`
+- `ESCALATE_TO_FULL_WORKFLOW`
 - `STOP_AND_ESCALATE`

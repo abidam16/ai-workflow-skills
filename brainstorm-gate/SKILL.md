@@ -26,27 +26,27 @@ Use local references only when shared docs are absent.
 Every run must end with exactly one decision:
 
 - `REJECT_OR_DEFER`
-- `USE_LIGHTWEIGHT_MODE`
-- `NEW_PRD`
-- `PRD_UPDATE`
-- `NEW_ARCHITECTURE`
-- `ARCHITECTURE_UPDATE`
-- `NEW_ADR`
-- `ADR_UPDATE`
-- `NEW_PRODUCT_ROADMAP`
-- `PRODUCT_ROADMAP_UPDATE`
-- `NEW_INITIATIVE_ROADMAP`
-- `INITIATIVE_ROADMAP_UPDATE`
-- `NEW_DOCUMENT_PLAN`
-- `DOCUMENT_PLAN_UPDATE`
+- `CREATE_LIGHTWEIGHT_PLAN`
+- `CREATE_PRD`
+- `UPDATE_PRD`
+- `CREATE_ARCHITECTURE`
+- `UPDATE_ARCHITECTURE`
+- `CREATE_ADR`
+- `UPDATE_ADR`
+- `CREATE_ROADMAP`
+- `UPDATE_ROADMAP`
+- `CREATE_PLAN`
+- `UPDATE_PLAN`
+- `REQUEST_CLARIFICATION`
+- `STOP_AND_ESCALATE`
 
 Do not end with multiple competing next steps.
 
 ## 4. Lightweight Mode Gate
 
-Before routing to PRD, Architecture, ADR, Roadmap, or Document Plan, check if the work is eligible for lightweight mode.
+Before routing to PRD, Architecture, ADR, Roadmap, or Plan, check if the work is eligible for lightweight mode.
 
-Choose `USE_LIGHTWEIGHT_MODE` only when all are true:
+Choose `CREATE_LIGHTWEIGHT_PLAN` only when all are true:
 
 - one primary objective
 - small/local change
@@ -70,7 +70,7 @@ Use ADR when the main unresolved issue is one lasting technical or architectural
 
 Use Roadmap when intent and relevant architecture/ADR constraints are stable enough and the next need is staged delivery sequencing.
 
-Use Document Plan when the accepted work is about producing or refactoring bounded durable documents.
+Use Plan when exactly one bounded implementation task is ready and product, architecture, ADR, and sequencing questions are clear enough.
 
 Use Reject/Defer when the idea is weak, premature, low-value, or missing material evidence.
 
@@ -94,7 +94,7 @@ Use when the request should proceed directly to a lightweight plan. Include the 
 
 ## 7. Required Lightweight Classification
 
-When choosing `USE_LIGHTWEIGHT_MODE`, include:
+When choosing `CREATE_LIGHTWEIGHT_PLAN`, include:
 
 ```md
 ## Lightweight Classification
@@ -127,7 +127,7 @@ Every output must end with exactly one:
 
 For lightweight mode, use:
 
-- `next_step_type`: `CREATE_PLAN`
+- `next_step_type`: `CREATE_LIGHTWEIGHT_PLAN`
 - `target`: the lightweight plan path or planned path
 - `action`: create a lightweight single-task plan
 - `blocking_condition`: the escalation trigger that would exit lightweight mode

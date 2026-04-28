@@ -8,6 +8,15 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import (
+    extract_next_step_field,
+    phase_next_step_types,
+    validate_concrete_next_step,
+)
+
 REQUIRED_NEXT_STEP_FIELDS = [
     "next_step_type",
     "target",
@@ -19,6 +28,7 @@ REQUIRED_NEXT_STEP_FIELDS = [
 
 VALID_MODES = {
     "TASK_REVIEW",
+    "LIGHTWEIGHT_TASK_REVIEW",
     "ROADMAP_IMPLEMENTATION_REVIEW",
     "ARTIFACT_CONSISTENCY_REVIEW",
 }
@@ -31,28 +41,6 @@ VALID_STATUSES = {
     "CONSISTENT",
     "CONSISTENT_WITH_MINOR_GAPS",
     "NEEDS_ARTIFACT_REVISION",
-}
-
-VALID_NEXT_STEP_TYPES = {
-    "MERGE_OR_CLOSE_TASK",
-    "APPLY_MINOR_FIXES",
-    "RETURN_TO_IMPLEMENTATION",
-    "RUN_IMPLEMENTATION",
-    "RUN_REVIEW",
-    "CREATE_PLAN",
-    "UPDATE_PLAN",
-    "CREATE_ARCHITECTURE",
-    "UPDATE_ARCHITECTURE",
-    "CREATE_ADR",
-    "UPDATE_ADR",
-    "CREATE_OR_UPDATE_ADR",
-    "UPDATE_ROADMAP",
-    "UPDATE_PRD",
-    "REQUEST_MISSING_EVIDENCE",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "SPLIT_REVIEW_SCOPE",
-    "START_NEXT_PLAN",
-    "STOP_AND_ESCALATE",
 }
 
 OLD_TERMS = [
@@ -94,6 +82,12 @@ MODE_REQUIRED_SECTIONS = {
         "Roadmap / Source Artifacts ↔ PLAN Consistency",
         "Handoff Contract Check",
     ],
+    "LIGHTWEIGHT_TASK_REVIEW": [
+        "Lightweight Eligibility Check",
+        "Findings",
+        "Validation Assessment",
+        "Acceptance Decision",
+    ],
 }
 
 
@@ -110,50 +104,41 @@ def _extract_field(text: str, field: str) -> str | None:
 def validate(text: str) -> list[str]:
     errors: list[str] = []
 
-    if text.count("## Concrete Next Step") != 1:
-        errors.append("Report must contain exactly one '## Concrete Next Step' section.")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("review-phase"),
+        )
+    )
 
-    for old in OLD_TERMS:
-        if old in text:
-            errors.append(f"Report contains deprecated terminal wording: {old!r}.")
+    next_step_type = extract_next_step_field(text, "next_step_type")
 
-    for field in REQUIRED_NEXT_STEP_FIELDS:
-        value = _extract_field(text, field)
-        if value is None:
-            errors.append(f"Concrete Next Step missing required field: {field}.")
-        elif value.strip() in {"", "-", "TBD", "TODO", "<target>", "<action>"}:
-            errors.append(f"Concrete Next Step field has placeholder value: {field}.")
-
-    next_step_type = _extract_field(text, "next_step_type")
-    if next_step_type and next_step_type not in VALID_NEXT_STEP_TYPES:
-        errors.append(f"Invalid next_step_type: {next_step_type}.")
-
-    action = _extract_field(text, "action") or ""
+    action = extract_next_step_field(text, "action") or ""
     normalized_action = action.lower().strip(' .')
     for pattern in VAGUE_ACTION_PATTERNS:
         if re.search(pattern, normalized_action):
             errors.append(f"Concrete Next Step action is too vague: {action!r}.")
             break
 
-    mode_match = re.search(r"Review mode:\s*`?([A-Z_]+)`?", text)
-    if not mode_match:
+    mode_match = re.search(r"Review mode:\s*`?([A-Z_]+)`?", text, flags=re.IGNORECASE)
+    mode = mode_match.group(1) if mode_match else _extract_field(text, "mode")
+    if not mode:
         errors.append("Review mode is missing or not machine-readable.")
-        mode = None
     else:
-        mode = mode_match.group(1)
         if mode not in VALID_MODES:
             errors.append(f"Invalid review mode: {mode}.")
 
-    status_match = re.search(r"Final status:\s*`?([A-Z_]+)`?", text)
-    if status_match and status_match.group(1) not in VALID_STATUSES:
-        errors.append(f"Invalid final status: {status_match.group(1)}.")
+    status_match = re.search(r"Final status:\s*`?([A-Z_]+)`?", text, flags=re.IGNORECASE)
+    status = status_match.group(1) if status_match else _extract_field(text, "status")
+    if status and status not in VALID_STATUSES:
+        errors.append(f"Invalid final status: {status}.")
 
     if mode in MODE_REQUIRED_SECTIONS:
         for section in MODE_REQUIRED_SECTIONS[mode]:
             if section not in text:
                 errors.append(f"{mode} report missing required section: {section}.")
 
-    if next_step_type in {"MERGE_OR_CLOSE_TASK", "RUN_IMPLEMENTATION", "START_NEXT_PLAN"}:
+    if next_step_type in {"MERGE_OR_CLOSE_TASK", "START_NEXT_PLAN"}:
         if "HIGH_URGENCY" in text and not re.search(r"HIGH_URGENCY\s*\|\s*(?:$|\s*\|\s*\|)", text):
             errors.append(
                 "High-urgency findings appear incompatible with the selected next_step_type."

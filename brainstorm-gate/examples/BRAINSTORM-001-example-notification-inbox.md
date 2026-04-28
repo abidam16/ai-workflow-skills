@@ -7,11 +7,10 @@ artifact_status: DRAFT
 source_skill: brainstorm-gate
 created_at: 2026-04-28
 updated_at: 2026-04-28
-decision: NEW_PRD
+decision: CREATE_PRD
 output_mode: DURABLE_BRAINSTORM_OUTPUT
 durable_artifact_path: docs/brainstorm/BRAINSTORM-001-notification-inbox.md
 source_artifacts: []
-next_step: Proceed to NEW_PRD.
 ```
 
 ## 1. Request Classification
@@ -82,7 +81,7 @@ next_step: Proceed to NEW_PRD.
 
 ## 6. Final Decision
 
-Decision: `NEW_PRD`
+Decision: `CREATE_PRD`
 
 ## 7. Why This Decision
 
@@ -109,7 +108,7 @@ Decision: `NEW_PRD`
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT
 artifact_status: DRAFT
-decision: NEW_PRD
+decision: CREATE_PRD
 problem_statement: Users need a clear notification inbox that shows actionable invitations and relevant status changes without ambiguous UI logic.
 target_users_or_actors:
   - invited users
@@ -138,17 +137,24 @@ known_constraints:
 reason_prd_is_needed: Product behavior, user-facing rules, and lifecycle semantics must be established before ADR, roadmap, or implementation.
 source_artifacts:
   - docs/brainstorm/BRAINSTORM-001-notification-inbox.md
-next_step: Proceed to NEW_PRD.
+concrete_next_step:
+  next_step_type: CREATE_PRD
+  target: PRD.md
+  action: Create the initial notification inbox PRD from this brainstorm handoff.
+  why_this_is_next: Product behavior, user-facing rules, and lifecycle semantics must be established before architecture, ADR, roadmap, or implementation.
+  blocking_condition: Stop if notification lifecycle, unread semantics, or MVP notification types cannot be resolved enough for PRD drafting.
+  suggested_prompt: Use `prd-writer` to create `PRD.md` for the notification inbox from `docs/brainstorm/BRAINSTORM-001-notification-inbox.md`.
 ```
 
-## 11. Immediate Next Step
-
-`Proceed to NEW_PRD.`
-
-## 12. Continuation Prompt
-
-`Proceed to create the PRD based on docs/brainstorm/BRAINSTORM-001-notification-inbox.md.`
-
-## 13. Stop Condition
+## 11. Stop Condition
 
 Not applicable. The idea should proceed to PRD.
+
+## Concrete Next Step
+
+- `next_step_type`: CREATE_PRD
+- `target`: `PRD.md`
+- `action`: Create the initial notification inbox PRD from this brainstorm handoff.
+- `why_this_is_next`: Product behavior, user-facing rules, and lifecycle semantics must be established before architecture, ADR, roadmap, or implementation.
+- `blocking_condition`: Stop if notification lifecycle, unread semantics, or MVP notification types cannot be resolved enough for PRD drafting.
+- `suggested_prompt`: Use `prd-writer` to create `PRD.md` for the notification inbox from `docs/brainstorm/BRAINSTORM-001-notification-inbox.md`.

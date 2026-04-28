@@ -39,4 +39,4 @@ Route to `UPDATE_PLAN` or `UPDATE_ARCHITECTURE`, depending on which artifact is 
 
 If implementation follows the plan but contradicts an accepted ADR, the review must classify it as `ADR_CONFLICT`.
 
-Route to `RETURN_TO_IMPLEMENTATION`, `UPDATE_PLAN`, or `CREATE_OR_UPDATE_ADR` depending on whether the ADR remains valid.
+Route to `RETURN_TO_IMPLEMENTATION`, `UPDATE_PLAN`, `CREATE_ADR`, or `UPDATE_ADR` depending on whether the ADR remains valid.

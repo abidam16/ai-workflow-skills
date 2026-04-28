@@ -27,7 +27,7 @@ The PRD should be clear enough to guide architecture, ADRs, roadmap sequencing, 
 
 Use this skill when:
 
-- brainstorm selected `NEW_PRD` or `PRD_UPDATE`
+- brainstorm selected `CREATE_PRD` or `UPDATE_PRD`
 - a new initiative needs product-level source of truth
 - product intent, user roles, flows, business rules, constraints, or success criteria changed
 - architecture, roadmap, plan, implementation, or review is blocked by unclear product truth

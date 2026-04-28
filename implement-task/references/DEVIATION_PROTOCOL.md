@@ -52,6 +52,6 @@ Every deviation must include:
 |---|---|
 | Plan missing detail | `UPDATE_PLAN` if material; otherwise `RUN_REVIEW` with reported deviation |
 | Architecture conflict | `UPDATE_ARCHITECTURE` or `UPDATE_PLAN` |
-| ADR conflict | `CREATE_OR_UPDATE_ADR` or `UPDATE_PLAN` |
-| Multi-task expansion | `SPLIT_PLAN` |
+| ADR conflict | `CREATE_ADR`, `UPDATE_ADR`, or `UPDATE_PLAN` |
+| Multi-task expansion | `SPLIT_INTO_PLANS` |
 | Product ambiguity | `UPDATE_PRD` |

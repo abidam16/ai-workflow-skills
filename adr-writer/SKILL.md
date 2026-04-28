@@ -27,7 +27,7 @@ An ADR is narrow but durable. It explains one accepted decision; it does not rep
 
 Use this skill when:
 
-- brainstorm selected `NEW_ADR` or `ADR_UPDATE`
+- brainstorm selected `CREATE_ADR` or `UPDATE_ADR`
 - architecture identified an ADR candidate
 - PRD requirements imply a technical choice with meaningful alternatives
 - roadmap or plan-writing is blocked by one unresolved decision

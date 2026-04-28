@@ -103,8 +103,8 @@ Choose the next step by highest-authority unresolved issue:
 6. Sequencing issue -> `UPDATE_ROADMAP`
 7. Execution-contract issue -> `UPDATE_PLAN`
 8. Missing source -> `REQUEST_MISSING_SOURCE_ARTIFACT`
-9. Scope too broad -> `SPLIT_REVIEW_SCOPE`
-10. Safe to implement -> `RUN_IMPLEMENTATION`
+9. Scope too broad -> `UPDATE_PLAN` or `SPLIT_INTO_PLANS`
+10. Safe to implement -> `IMPLEMENT_PLAN`
 11. Safe to plan next task -> `CREATE_PLAN`
 
 ## Good next-step examples
@@ -123,7 +123,7 @@ Choose the next step by highest-authority unresolved issue:
 ```md
 ## Concrete Next Step
 
-- `next_step_type`: RUN_IMPLEMENTATION
+- `next_step_type`: IMPLEMENT_PLAN
 - `target`: `PLAN.md` task "Add invitation acceptance endpoint"
 - `action`: Implement the approved plan without changing product behavior, architecture boundaries, ADR decisions, or roadmap scope.
 - `why_this_is_next`: PRD, architecture, ADR, roadmap, and plan are consistent enough for safe execution.

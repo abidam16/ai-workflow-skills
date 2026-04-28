@@ -15,6 +15,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED_SECTIONS = [
     "## 14. Architecture Impact",
     "## 15. ADR Impact",
@@ -32,20 +37,6 @@ REQUIRED_NEXT_FIELDS = [
     "`blocking_condition`",
     "`suggested_prompt`",
 ]
-
-ALLOWED_NEXT_TYPES = {
-    "CREATE_OR_UPDATE_ARCHITECTURE",
-    "CREATE_OR_UPDATE_ADR",
-    "CREATE_OR_UPDATE_ROADMAP",
-    "CREATE_OR_UPDATE_PLAN",
-    "RETURN_TO_BRAINSTORM",
-    "REQUEST_PRODUCT_DECISION",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "REVISE_PRD",
-    "START_IMPLEMENTATION",
-    "RETURN_TO_REVIEW",
-    "STOP_AND_ESCALATE",
-}
 
 OLD_TERMINAL_LABELS = [
     "Immediate Next Step",
@@ -82,13 +73,12 @@ def main() -> int:
         if section not in text:
             errors.append(f"Missing required section: {section}")
 
-    concrete_count = len(re.findall(r"^## Concrete Next Step\s*$", text, flags=re.MULTILINE))
-    if concrete_count != 1:
-        errors.append(f"Expected exactly one '## Concrete Next Step' block, found {concrete_count}")
-
-    for field in REQUIRED_NEXT_FIELDS:
-        if field not in text:
-            errors.append(f"Missing required next-step field: {field}")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("prd-writer"),
+        )
+    )
 
     for label in OLD_TERMINAL_LABELS:
         if label in text:
@@ -96,10 +86,6 @@ def main() -> int:
 
     if re.search(r"^\s*-\s*`?next_step`?\s*:", text, flags=re.IGNORECASE | re.MULTILINE):
         errors.append("Loose 'next_step' field detected; use the normalized Concrete Next Step fields")
-
-    type_match = re.search(r"`next_step_type`\s*:\s*([A-Z_]+)", text)
-    if type_match and type_match.group(1) not in ALLOWED_NEXT_TYPES:
-        errors.append(f"Invalid next_step_type: {type_match.group(1)}")
 
     lowered = text.lower()
     for phrase in VAGUE_PHRASES:

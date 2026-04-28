@@ -11,7 +11,6 @@ decision: <decision>
 output_mode: DURABLE_BRAINSTORM_OUTPUT
 durable_artifact_path: docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
 source_artifacts: []
-next_step: <exact next step>
 ```
 
 ## Context
@@ -35,9 +34,13 @@ decision: <decision>
 why: <compact rationale>
 source_artifacts:
   - docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
-next_step: <exact next step>
 ```
 
-## Continuation Prompt
+## Concrete Next Step
 
-`Proceed to ... based on docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md.`
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

@@ -4,6 +4,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED = [
     "## Lightweight Classification",
     "`mode`",
@@ -30,13 +35,14 @@ def main(path: str) -> int:
     text = Path(path).read_text(encoding="utf-8")
     errors = [f"Missing required marker: {m}" for m in REQUIRED if m not in text]
     errors += [f"Old terminal wording is not allowed: {m}" for m in OLD if m in text]
-    if text.count("## Concrete Next Step") != 1:
-        errors.append("Expected exactly one ## Concrete Next Step block")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("brainstorm-gate"),
+        )
+    )
     if "USE_LIGHTWEIGHT_MODE" in text and "LIGHTWEIGHT_TASK" not in text:
         errors.append("USE_LIGHTWEIGHT_MODE requires mode: LIGHTWEIGHT_TASK")
-    vague = re.search(r"`action`:\s*(continue|fix issues|do it|proceed)\b", text, re.I)
-    if vague:
-        errors.append("Concrete Next Step action is too vague")
     if errors:
         for e in errors:
             print(f"ERROR: {e}")

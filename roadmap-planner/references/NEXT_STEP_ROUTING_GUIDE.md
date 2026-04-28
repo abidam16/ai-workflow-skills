@@ -1,10 +1,8 @@
 # Next Step Routing Guide
 
-Every roadmap output must end with exactly one concrete next step.
+Every roadmap output must end with exactly one concrete next step. Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
 ## Required Block Shape
-
-Use the exact terminal block below:
 
 ```md
 ## Concrete Next Step
@@ -17,58 +15,32 @@ Use the exact terminal block below:
 - `suggested_prompt`:
 ```
 
-The block must appear exactly once in the final output. It must be the final section. Do not also include `Immediate Next Step`, `Continuation Prompt`, loose `next_step`, or loose `follow_up`.
+The block must appear exactly once in the final output and must be the final section.
 
-## Allowed Next Step Types
+## Common Routes
 
-### CREATE_PLAN
+Use `CREATE_PLAN` when one roadmap slice is ready to become a new single-task plan.
 
-Use when one roadmap slice is ready to become a new single-task plan.
+Use `UPDATE_PLAN` when an existing plan still represents the correct task but must be adjusted based on roadmap changes.
 
-### UPDATE_PLAN
+Use `SPLIT_INTO_PLANS` when the selected roadmap slice contains multiple independent implementation tasks.
 
-Use when an existing plan still represents the correct task but must be adjusted based on roadmap changes.
+Use `UPDATE_ARCHITECTURE` when sequencing depends on stale or conflicting system-shape constraints.
 
-### SPLIT_INTO_PLANS
+Use `CREATE_ADR` or `UPDATE_ADR` when sequencing depends on one unresolved or changed technical decision.
 
-Use when the selected roadmap slice contains multiple independent implementation tasks.
+Use `UPDATE_PRD` when product behavior, goals, non-goals, roles, flows, or success criteria are unclear or changed.
 
-### CREATE_OR_UPDATE_ARCHITECTURE
+Use `REVISE_ROADMAP` when the roadmap is internally inconsistent or too broad and needs another roadmap pass.
 
-Use when sequencing depends on missing, stale, or conflicting system-shape constraints.
+Use `REQUEST_MISSING_SOURCE_ARTIFACT` when necessary source artifacts are absent and cannot be found in the repo.
 
-### CREATE_OR_UPDATE_ADR
+Use `RESOLVE_SOURCE_CONFLICT` when source artifacts contradict each other and sequencing cannot safely continue.
 
-Use when sequencing depends on one unresolved technical decision with credible alternatives.
+Use `RUN_ARTIFACT_CONSISTENCY_REVIEW` when artifact consistency should be checked before implementation planning.
 
-### UPDATE_PRD
-
-Use when product behavior, goals, non-goals, roles, flows, or success criteria are unclear or changed.
-
-### REVISE_ROADMAP
-
-Use when the roadmap is internally inconsistent or too broad and needs another roadmap pass.
-
-### REQUEST_MISSING_SOURCE_ARTIFACT
-
-Use when the user did not provide necessary source artifacts and they cannot be found in repo.
-
-### RETURN_TO_REVIEW
-
-Use when roadmap was changed in response to implementation review and should be reviewed again.
-
-### STOP_AND_ESCALATE
-
-Use when forward progress would create unsafe or misleading artifacts.
+Use `STOP_AND_ESCALATE` when forward progress would create unsafe or misleading artifacts.
 
 ## Bad Next Steps
 
-Do not use vague next steps such as:
-
-- continue development
-- implement the roadmap
-- proceed as planned
-- review later
-- fix issues
-
-Name the exact next artifact or action.
+Do not use vague next steps such as "continue development", "implement the roadmap", "proceed as planned", "review later", or "fix issues".

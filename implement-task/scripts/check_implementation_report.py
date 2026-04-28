@@ -11,6 +11,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED_FIELDS = [
     "next_step_type",
     "target",
@@ -19,21 +24,6 @@ REQUIRED_FIELDS = [
     "blocking_condition",
     "suggested_prompt",
 ]
-
-ALLOWED_NEXT_STEP_TYPES = {
-    "RUN_REVIEW",
-    "RUN_VALIDATION",
-    "APPLY_MINOR_FIX",
-    "UPDATE_PLAN",
-    "UPDATE_ARCHITECTURE",
-    "CREATE_OR_UPDATE_ADR",
-    "UPDATE_ROADMAP",
-    "UPDATE_PRD",
-    "SPLIT_PLAN",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "RESOLVE_SOURCE_CONFLICT",
-    "STOP_AND_ESCALATE",
-}
 
 BANNED_TERMS = [
     "Immediate Next Step",
@@ -75,40 +65,12 @@ def main() -> int:
 
     errors: list[str] = []
 
-    count = len(re.findall(r"^## Concrete Next Step\s*$", text, flags=re.MULTILINE))
-    if count == 0:
-        errors.append("Missing required section: ## Concrete Next Step")
-    elif count > 1:
-        errors.append("Multiple ## Concrete Next Step sections found; expected exactly one")
-
-    for banned in BANNED_TERMS:
-        if banned in text:
-            errors.append(f"Banned old/loose next-step term found: {banned}")
-
-    if count == 1:
-        block = text.split("## Concrete Next Step", 1)[1]
-        for field in REQUIRED_FIELDS:
-            value = extract_field(block, field)
-            if value is None:
-                errors.append(f"Missing required field: `{field}`")
-                continue
-            normalized = value.strip().strip('"').strip("'").lower()
-            if normalized in PLACEHOLDERS:
-                errors.append(f"Field `{field}` has placeholder/empty value: {value!r}")
-
-        next_step_type = extract_field(block, "next_step_type")
-        if next_step_type:
-            next_step_type_clean = next_step_type.strip().strip("`").strip()
-            if next_step_type_clean not in ALLOWED_NEXT_STEP_TYPES:
-                errors.append(
-                    f"Invalid next_step_type: {next_step_type_clean}. "
-                    f"Allowed: {', '.join(sorted(ALLOWED_NEXT_STEP_TYPES))}"
-                )
-
-        action = extract_field(block, "action") or ""
-        for pattern in VAGUE_ACTION_PATTERNS:
-            if re.match(pattern, action, flags=re.IGNORECASE):
-                errors.append(f"Vague action wording is not allowed: {action!r}")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("implement-task"),
+        )
+    )
 
     if errors:
         print("Concrete Next Step validation failed:", file=sys.stderr)

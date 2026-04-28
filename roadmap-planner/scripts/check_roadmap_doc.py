@@ -9,6 +9,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED_SECTIONS = [
     "Source Artifacts",
     "Delivery Objective",
@@ -27,19 +32,6 @@ NEXT_STEP_FIELDS = [
     "blocking_condition",
     "suggested_prompt",
 ]
-
-ALLOWED_NEXT_STEP_TYPES = {
-    "CREATE_PLAN",
-    "UPDATE_PLAN",
-    "SPLIT_INTO_PLANS",
-    "CREATE_OR_UPDATE_ARCHITECTURE",
-    "CREATE_OR_UPDATE_ADR",
-    "UPDATE_PRD",
-    "REVISE_ROADMAP",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "RETURN_TO_REVIEW",
-    "STOP_AND_ESCALATE",
-}
 
 OLD_TERMINAL_PATTERNS = [
     r"^#+\s+Immediate Next Step\b",
@@ -88,24 +80,12 @@ def main() -> int:
         if re.search(rf"^#+\s+.*{re.escape(section)}", text, re.MULTILINE | re.IGNORECASE) is None:
             errors.append(f"Missing required section: {section}")
 
-    cns_matches = re.findall(r"^##\s+Concrete Next Step\s*$", text, re.MULTILINE)
-    if len(cns_matches) == 0:
-        errors.append("Missing exact section heading: ## Concrete Next Step")
-    elif len(cns_matches) > 1:
-        errors.append("Multiple ## Concrete Next Step sections found; exactly one is allowed")
-
-    for field in NEXT_STEP_FIELDS:
-        matches = re.findall(rf"`?{re.escape(field)}`?\s*:", text, re.IGNORECASE)
-        if not matches:
-            errors.append(f"Missing Concrete Next Step field: {field}")
-
-    match = re.search(r"`?next_step_type`?\s*:\s*`?([A-Z_]+)`?", text)
-    if match:
-        value = match.group(1).strip()
-        if value not in ALLOWED_NEXT_STEP_TYPES:
-            errors.append(f"Invalid next_step_type: {value}")
-    else:
-        errors.append("Could not parse next_step_type value")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("roadmap-planner"),
+        )
+    )
 
     for pattern in OLD_TERMINAL_PATTERNS:
         if re.search(pattern, text, re.MULTILINE | re.IGNORECASE):

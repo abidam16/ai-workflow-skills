@@ -4,7 +4,7 @@
 
 - `artifact_type`: ROADMAP_DELTA
 - `artifact_status`: DRAFT | UPDATED | BLOCKED
-- `decision`: PRODUCT_ROADMAP_UPDATE | INITIATIVE_ROADMAP_UPDATE | HOLD
+- `decision`: UPDATE_ROADMAP | HOLD
 - `target_roadmap`:
 - `last_updated`:
 

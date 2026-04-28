@@ -11,6 +11,15 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import (
+    extract_next_step_field,
+    phase_next_step_types,
+    validate_concrete_next_step,
+)
+
 REQUIRED_HEADINGS = [
     "Status",
     "Decision Boundary",
@@ -33,21 +42,6 @@ REQUIRED_NEXT_STEP_FIELDS = [
     "blocking_condition",
     "suggested_prompt",
 ]
-
-ALLOWED_NEXT_STEP_TYPES = {
-    "UPDATE_ARCHITECTURE",
-    "CREATE_OR_UPDATE_ROADMAP",
-    "CREATE_OR_UPDATE_PLAN",
-    "RETURN_TO_PRD",
-    "RETURN_TO_ARCHITECTURE",
-    "REVISE_ADR",
-    "CREATE_SUPERSEDING_ADR",
-    "REQUEST_MISSING_SOURCE_ARTIFACT",
-    "REQUEST_DECISION_INPUT",
-    "RETURN_TO_REVIEW",
-    "START_IMPLEMENTATION",
-    "STOP_AND_ESCALATE",
-}
 
 ALLOWED_ARCHITECTURE_LINKAGE = {
     "NONE",
@@ -126,30 +120,14 @@ def main() -> int:
         if not heading_exists(text, heading):
             errors.append(f"Missing required heading: ## {heading}")
 
-    concrete_next_step_count = count_heading(text, "Concrete Next Step")
-    if concrete_next_step_count == 0:
-        errors.append("Missing required section: ## Concrete Next Step")
-    elif concrete_next_step_count > 1:
-        errors.append("Multiple ## Concrete Next Step sections found; expected exactly one")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("adr-writer"),
+        )
+    )
 
     section = extract_concrete_next_step_section(text)
-    for field in REQUIRED_NEXT_STEP_FIELDS:
-        value = extract_field(section, field)
-        if value is None:
-            errors.append(f"Missing Concrete Next Step field: `{field}`")
-        elif value.strip() in PLACEHOLDERS:
-            errors.append(f"Concrete Next Step field `{field}` is empty or placeholder")
-
-    next_step_type = extract_field(section, "next_step_type")
-    if next_step_type and next_step_type not in ALLOWED_NEXT_STEP_TYPES:
-        errors.append(
-            f"Invalid next_step_type `{next_step_type}`. "
-            f"Allowed: {', '.join(sorted(ALLOWED_NEXT_STEP_TYPES))}"
-        )
-
-    for pattern in FORBIDDEN_TERMINAL_PATTERNS:
-        if re.search(pattern, text, flags=re.MULTILINE | re.IGNORECASE):
-            errors.append(f"Found legacy or loose terminal field matching: {pattern}")
 
     linkage_matches = re.findall(r"`architecture_linkage`\s*:\s*([A-Z_]+)", text)
     if linkage_matches:
@@ -162,7 +140,7 @@ def main() -> int:
     elif heading_exists(text, "Architecture Linkage"):
         warnings.append("Architecture Linkage section exists but no explicit `architecture_linkage` field was found")
 
-    action = extract_field(section, "action") or ""
+    action = extract_next_step_field(section, "action") or ""
     for pattern in VAGUE_ACTION_PATTERNS:
         if re.search(pattern, action, flags=re.IGNORECASE):
             warnings.append(f"Concrete action may be vague: `{action}`")

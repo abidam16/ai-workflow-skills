@@ -29,7 +29,7 @@ It should guide many implementation tasks without becoming an implementation pla
 
 Use this skill when:
 
-- brainstorm selected `NEW_ARCHITECTURE` or `ARCHITECTURE_UPDATE`
+- brainstorm selected `CREATE_ARCHITECTURE` or `UPDATE_ARCHITECTURE`
 - PRD is stable enough but implementation needs system-shape guidance
 - multiple modules, services, layers, data models, integrations, or runtime flows are affected
 - roadmap or plan-writing is unsafe without boundary or ownership decisions

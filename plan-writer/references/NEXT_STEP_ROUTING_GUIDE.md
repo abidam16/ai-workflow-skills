@@ -1,88 +1,51 @@
 # Next Step Routing Guide
 
-Use this guide only to complete the final `## Concrete Next Step` block.
+Use this guide only to complete the final `## Concrete Next Step` block. Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
-The next step must route to one concrete action. Do not use vague wording such as "continue development", "fix issues", "move forward", or "the plan is ready".
+## Required block
 
-## Allowed `next_step_type` values
+```md
+## Concrete Next Step
 
-### `IMPLEMENT_PLAN`
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
 
-Use when the plan is executable and no blocking upstream artifact is missing.
+## Common Routes
 
-- `target`: the plan path, usually `PLAN.md`
-- `action`: implement the plan exactly as scoped
-- `blocking_condition`: `None`
+Use `IMPLEMENT_PLAN` when a full plan is executable and no blocking upstream artifact is missing.
 
-### `SPLIT_INTO_PLANS`
+Use `IMPLEMENT_LIGHTWEIGHT_PLAN` when a lightweight plan is executable and its lightweight assumptions are explicit.
 
-Use when the requested work contains multiple independently reviewable tasks.
+Use `UPDATE_PLAN` or `UPDATE_LIGHTWEIGHT_PLAN` when the existing plan remains the correct artifact but needs clearer scope, constraints, files, validation, or review criteria.
 
-- `target`: the current planning request or source artifact section
-- `action`: create separate single-task plans for the listed plan candidates
-- `blocking_condition`: current request is too broad for one plan
+Use `SPLIT_INTO_PLANS` when the requested work contains multiple independently reviewable tasks.
 
-### `UPDATE_PRD`
+Use `UPDATE_PRD` when product behavior, business rules, user flow, or acceptance criteria are insufficient or contradictory.
 
-Use when product behavior, business rules, user flow, or acceptance criteria are insufficient or contradictory.
+Use `UPDATE_ARCHITECTURE` when implementation is architecture-sensitive and system-shape guidance is missing, partial, or conflicting.
 
-- `target`: `PRD.md` or the relevant PRD section
-- `action`: update product truth before planning implementation
+Use `CREATE_ADR` or `UPDATE_ADR` when one significant technical decision must be resolved before implementation can be planned safely.
 
-### `CREATE_OR_UPDATE_ARCHITECTURE`
+Use `UPDATE_ROADMAP` when sequencing or phase boundaries are unclear.
 
-Use when implementation is architecture-sensitive and system-shape guidance is missing, partial, or conflicting.
+Use `REQUEST_MISSING_SOURCE_ARTIFACT` when a required upstream artifact cannot be found or is not provided.
 
-- `target`: `ARCHITECTURE.md` or `docs/architecture/<initiative>-architecture.md`
-- `action`: create or update architecture before writing an executable plan
+Use `RESOLVE_SOURCE_CONFLICT` when source artifacts contradict each other.
 
-### `CREATE_OR_UPDATE_ADR`
+Use `RUN_ARTIFACT_CONSISTENCY_REVIEW` when durable artifacts should be checked for consistency before implementation starts.
 
-Use when one significant technical decision must be made before implementation can be planned safely.
+Use `STOP_AND_ESCALATE` when sources are contradictory, unsafe, or impossible to reconcile within this skill.
 
-- `target`: `docs/adr/<decision>.md`
-- `action`: create or update the ADR before planning implementation
+## Required Field Quality
 
-### `UPDATE_ROADMAP`
-
-Use when sequencing or phase boundaries are unclear.
-
-- `target`: `ROADMAP.md` or relevant roadmap section
-- `action`: update delivery sequencing before task planning
-
-### `REVISE_PLAN`
-
-Use when an existing plan remains the correct artifact but needs clearer scope, constraints, files, validation, or review criteria.
-
-- `target`: the existing plan path
-- `action`: revise the plan before implementation
-
-### `REQUEST_MISSING_SOURCE_ARTIFACT`
-
-Use when a required upstream artifact cannot be found or is not provided.
-
-- `target`: the missing artifact path or section
-- `action`: provide or create the missing source artifact
-
-### `RETURN_TO_REVIEW`
-
-Use when the plan update is complete and the correct next action is to review whether the plan resolves previous findings.
-
-- `target`: the review report or finding identifier
-- `action`: run review against the revised plan or evidence
-
-### `STOP_AND_ESCALATE`
-
-Use when the sources are contradictory, unsafe, or impossible to reconcile within this skill.
-
-- `target`: the conflicting artifacts or unresolved decision
-- `action`: stop and escalate the conflict instead of writing an unsafe plan
-
-## Required field quality
-
-- `next_step_type`: one of the allowed values above.
+- `next_step_type`: one canonical value allowed for `plan-writer`.
 - `target`: specific artifact, path, section, finding, or task.
 - `action`: concrete imperative action.
 - `why_this_is_next`: explain why this action is next instead of another artifact.
-- `blocking_condition`: `None` if unblocked; otherwise name the precise blocker.
+- `blocking_condition`: `none` if unblocked; otherwise name the precise blocker.
 - `suggested_prompt`: directly usable as the next user instruction.

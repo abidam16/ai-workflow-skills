@@ -62,6 +62,6 @@ This mode should not judge code unless implementation evidence is included only 
 | One implementation against one plan | `TASK_REVIEW` |
 | Multiple completed tasks against roadmap | `ROADMAP_IMPLEMENTATION_REVIEW` |
 | PRD/architecture/ADR/roadmap/plan consistency before coding | `ARTIFACT_CONSISTENCY_REVIEW` |
-| Ambiguous or mixed review target | Choose `SPLIT_REVIEW_SCOPE` as the concrete next step |
+| Ambiguous or mixed review target | Choose `REQUEST_MISSING_EVIDENCE`, `UPDATE_PLAN`, or `STOP_AND_ESCALATE` based on what makes the review actionable |
 
 Do not silently merge modes.

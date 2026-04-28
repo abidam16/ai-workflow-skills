@@ -4,6 +4,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED = [
     "## Review Mode",
     "LIGHTWEIGHT_TASK_REVIEW",
@@ -31,10 +36,12 @@ REQUIRED = [
 def main(path: str) -> int:
     text = Path(path).read_text(encoding="utf-8")
     errors = [f"Missing required marker: {m}" for m in REQUIRED if m not in text]
-    if text.count("## Concrete Next Step") != 1:
-        errors.append("Expected exactly one ## Concrete Next Step block")
-    if re.search(r"Immediate Next Step|Continuation Prompt|\bnext_step\b|\bfollow_up\b", text):
-        errors.append("Old/loose next-step wording is not allowed")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("review-phase"),
+        )
+    )
     if errors:
         for e in errors:
             print(f"ERROR: {e}")

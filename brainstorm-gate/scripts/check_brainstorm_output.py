@@ -11,6 +11,11 @@ import re
 import sys
 from pathlib import Path
 
+REPO_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(REPO_ROOT / "scripts"))
+
+from workflow_contracts import phase_next_step_types, validate_concrete_next_step
+
 REQUIRED_FIELDS = [
     "next_step_type",
     "target",
@@ -48,19 +53,12 @@ def main() -> int:
     text = path.read_text(encoding="utf-8")
     errors: list[str] = []
 
-    if "## Concrete Next Step" not in text:
-        errors.append("Missing required section: ## Concrete Next Step")
-    else:
-        # Validate only the final Concrete Next Step block.
-        section = text.rsplit("## Concrete Next Step", 1)[-1]
-        for field in REQUIRED_FIELDS:
-            pattern = rf"-\s*`{re.escape(field)}`\s*:"
-            if not re.search(pattern, section):
-                errors.append(f"Missing required Concrete Next Step field: `{field}`")
-
-        for phrase in VAGUE_PHRASES:
-            if phrase in section.lower():
-                errors.append(f"Vague next-step wording found: {phrase!r}")
+    errors.extend(
+        validate_concrete_next_step(
+            text,
+            allowed_next_step_types=phase_next_step_types("brainstorm-gate"),
+        )
+    )
 
     for old_field in OLD_TERMINAL_FIELDS:
         if old_field in text:

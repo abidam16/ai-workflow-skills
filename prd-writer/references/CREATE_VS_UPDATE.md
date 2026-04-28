@@ -3,7 +3,7 @@
 ## Create a new PRD when
 
 - no PRD exists for the product/initiative
-- brainstorm selected `NEW_PRD`
+- brainstorm selected `CREATE_PRD`
 - the initiative is product-distinct from existing PRDs
 - existing documents are notes, brainstorms, or architecture/roadmap/plan artifacts but no product-truth document exists
 

@@ -9,6 +9,8 @@ import re
 import sys
 from pathlib import Path
 
+from workflow_contracts import validate_concrete_next_step
+
 COMMON_NEXT_STEP = [
     "## Concrete Next Step",
     "`next_step_type`",
@@ -35,8 +37,7 @@ def main(path: str) -> int:
     for marker in COMMON_NEXT_STEP + LIGHTWEIGHT_MARKERS:
         if marker not in text:
             errors.append(f"Missing required marker: {marker}")
-    if text.count("## Concrete Next Step") != 1:
-        errors.append("Expected exactly one ## Concrete Next Step block")
+    errors.extend(validate_concrete_next_step(text))
     for marker in FORBIDDEN:
         if marker in text:
             errors.append(f"Forbidden old/loose terminal wording: {marker}")

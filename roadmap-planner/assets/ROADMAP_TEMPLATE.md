@@ -5,7 +5,7 @@
 - `artifact_type`: ROADMAP
 - `artifact_status`: DRAFT | APPROVED | UPDATED | BLOCKED
 - `roadmap_mode`: PRODUCT | INITIATIVE
-- `decision`: NEW_PRODUCT_ROADMAP | PRODUCT_ROADMAP_UPDATE | NEW_INITIATIVE_ROADMAP | INITIATIVE_ROADMAP_UPDATE
+- `decision`: CREATE_ROADMAP | UPDATE_ROADMAP
 - `owner`:
 - `last_updated`:
 

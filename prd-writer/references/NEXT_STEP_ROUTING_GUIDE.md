@@ -1,8 +1,8 @@
 # Next Step Routing Guide
 
-Every PRD run must end with exactly one normalized `## Concrete Next Step` block.
+Every PRD run must end with exactly one normalized `## Concrete Next Step` block. Use canonical values from `docs/workflow/NEXT_STEP_TYPES.md`.
 
-Required shape:
+## Required block
 
 ```md
 ## Concrete Next Step
@@ -15,74 +15,25 @@ Required shape:
 - `suggested_prompt`:
 ```
 
-Do not use older terminal fields such as `Immediate Next Step`, `Continuation Prompt`, `Next Step`, `Recommended Follow-up`, or a loose `next_step` field.
+## Common Routes
 
-## Allowed next step types
+Use `CREATE_ARCHITECTURE` or `UPDATE_ARCHITECTURE` when product truth is stable enough but system shape must be created, checked, or updated before roadmap or plan.
 
-### `CREATE_OR_UPDATE_ARCHITECTURE`
+Use `CREATE_ADR` or `UPDATE_ADR` when one lasting technical decision is required and product truth is stable enough.
 
-Use when product truth is stable enough but system shape must be created, checked, or updated before roadmap or plan.
+Use `CREATE_ROADMAP` or `UPDATE_ROADMAP` when product truth and necessary architecture/ADR context are stable enough and the next problem is sequencing.
 
-Target examples:
+Use `CREATE_PLAN` or `UPDATE_PLAN` when the next action is one executable implementation contract.
 
-- `ARCHITECTURE.md`
-- `docs/architecture/notification-system-architecture.md`
+Use `REVISE_PRD` when this PRD output is incomplete or internally weak.
 
-### `CREATE_OR_UPDATE_ADR`
+Use `RETURN_TO_PRD` when product truth is still missing or conflicting and must be resolved before downstream work.
 
-Use when one lasting technical decision is required and product truth is stable enough.
+Use `REQUEST_MISSING_SOURCE_ARTIFACT` when an expected input artifact is absent and must be provided or created first.
 
-Target examples:
+Use `STOP_AND_ESCALATE` when sources conflict in a way that cannot be resolved by one artifact update.
 
-- `docs/adr/0003-use-outbox-for-invitation-events.md`
-
-### `CREATE_OR_UPDATE_ROADMAP`
-
-Use when product truth and necessary architecture/ADR context are stable enough and the next problem is sequencing.
-
-Target examples:
-
-- `ROADMAP.md`
-- `docs/roadmap/notification-system-roadmap.md`
-
-### `CREATE_OR_UPDATE_PLAN`
-
-Use when the next action is one executable implementation contract.
-
-Target examples:
-
-- `PLAN.md`
-- `docs/plans/accept-invitation-endpoint-plan.md`
-
-### `RETURN_TO_BRAINSTORM`
-
-Use when product truth is not ready because the idea itself still needs exploration or artifact routing.
-
-### `REQUEST_PRODUCT_DECISION`
-
-Use when PRD cannot proceed because a product question needs a decision.
-
-### `REQUEST_MISSING_SOURCE_ARTIFACT`
-
-Use when an expected input artifact is absent and must be provided or created first.
-
-### `REVISE_PRD`
-
-Use when this run produced findings or a partial delta, but the PRD itself still needs a targeted update.
-
-### `RETURN_TO_REVIEW`
-
-Use when the PRD was updated as a review fix and the next step is to rerun review.
-
-### `START_IMPLEMENTATION`
-
-Use only when a valid plan already exists and the PRD update does not require architecture, ADR, roadmap, or plan changes.
-
-### `STOP_AND_ESCALATE`
-
-Use when sources conflict in a way that cannot be resolved by one artifact update.
-
-## Required field quality
+## Required Field Quality
 
 Each next step must include:
 
@@ -95,25 +46,19 @@ Each next step must include:
 
 The `target` must name a concrete artifact or action, not a vague phase.
 
-## Vague wording to avoid
+## Vague Wording To Avoid
 
-Do not write:
-
-- continue development
-- proceed to next phase
-- update docs
-- implement feature
-- review if needed
+Do not write "continue development", "proceed to next phase", "update docs", "implement feature", or "review if needed".
 
 Write:
 
 ```md
 ## Concrete Next Step
 
-- `next_step_type`: CREATE_OR_UPDATE_ARCHITECTURE
+- `next_step_type`: CREATE_ARCHITECTURE
 - `target`: `ARCHITECTURE.md`
 - `action`: Create architecture for invitation, membership, and notification boundaries based on this PRD.
 - `why_this_is_next`: The PRD defines target behavior, but source-of-truth and transaction boundaries must be durable before roadmap or plan.
 - `blocking_condition`: Cannot create implementation plan until architecture defines membership ownership and notification sync/async behavior.
-- `suggested_prompt`: Use $architecture-writer to create ARCHITECTURE.md for invitation acceptance, membership ownership, and notification read model using PRD.md as source.
+- `suggested_prompt`: Use `architecture-writer` to create `ARCHITECTURE.md` for invitation acceptance, membership ownership, and notification read model using `PRD.md` as source.
 ```
