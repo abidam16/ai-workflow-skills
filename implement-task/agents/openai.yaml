@@ -1,4 +1,6 @@
-name: implement-task
-version: 1
-allow_implicit_invocation: false
-summary: Execute one approved plan-bound task with strict scope control, self-check, and deviation/blocker reporting.
+interface:
+  display_name: "Implement Task"
+  short_description: "Executes one approved PLAN.md with architecture-aware scope control and reporting."
+  default_prompt: "Use implement-task to implement the approved PLAN.md exactly as scoped, enforcing relevant architecture and ADR constraints."
+policy:
+  allow_implicit_invocation: true

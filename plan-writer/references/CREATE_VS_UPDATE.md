@@ -1,18 +1,32 @@
 # Create vs Update
 
-## Create a new plan when:
-- the task does not already have its own plan
-- the task identity is new
+## Create a new plan
+
+Create a new plan when:
+
+- no plan exists for this task
+- task identity is new
+- implementation can be reviewed independently
+- upstream roadmap/architecture/ADR creates a new work item
+- review finding requires a distinct corrective task
+- previous plan should remain historical
+
+## Update an existing plan
+
+Update an existing plan when:
+
+- task identity remains the same
+- objective remains the same
+- upstream source artifact changed only to clarify constraints
+- architecture constraints must be added to an otherwise valid plan
+- review feedback only tightens scope/validation
+
+## Do not update
+
+Do not update when:
+
+- the plan would become multi-task
 - the objective changed materially
-- the work was previously bundled and now needs to be split
-- a prior plan is too broad to remain valid
-
-## Update an existing plan when:
-- the task identity is unchanged
-- only scope boundaries, detailed spec, files, validation, review checks, or risks need refinement
-- the plan remains single-task and internally coherent
-
-## Split required when:
-- the work contains more than one real task
-- parts could be implemented or reviewed independently
-- one plan would create ambiguity during implementation
+- the existing plan was already implemented/reviewed and should remain historical
+- a new ADR superseded the basis of the old plan
+- roadmap sequencing changed enough that the task identity changed

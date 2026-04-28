@@ -1,17 +1,52 @@
 # ADR Review Checklist
 
-Use this checklist before accepting an ADR:
+Before finalizing an ADR, verify:
 
-- Is this truly ADR-worthy?
-- Does the ADR contain exactly one decision?
-- Is the decision boundary explicit?
-- Is the context/problem clear?
-- Are the decision drivers concrete?
-- Are the options credible and non-strawman?
-- Is the chosen option stated clearly?
-- Is the rationale explicit?
-- Are positive and negative consequences both documented?
-- Is the scope/impact clear?
-- Are non-goals stated?
-- Are related artifacts linked?
-- Should this supersede a prior ADR instead of editing it?
+## Routing
+
+- [ ] The request is actually ADR-worthy.
+- [ ] The issue is not better handled by PRD, architecture, roadmap, plan, implementation, or review.
+
+## Boundary
+
+- [ ] The ADR records one decision only.
+- [ ] The decision boundary is explicit.
+- [ ] Non-goals are clear.
+
+## Context
+
+- [ ] Source artifacts are listed.
+- [ ] Product constraints are not invented.
+- [ ] Architecture context is checked when relevant.
+- [ ] Existing ADRs are checked for conflict or duplication.
+
+## Options
+
+- [ ] Credible alternatives are listed.
+- [ ] Alternatives are not strawmen.
+- [ ] Decision drivers are explicit.
+
+## Decision
+
+- [ ] The chosen option is clear.
+- [ ] Rationale maps to decision drivers.
+- [ ] Consequences include trade-offs.
+
+## Architecture linkage
+
+- [ ] Architecture linkage is classified.
+- [ ] Affected architecture documents and sections are identified.
+- [ ] Required architecture follow-up is explicit.
+
+## Downstream impact
+
+- [ ] Roadmap impact is stated.
+- [ ] Plan impact is stated.
+- [ ] Review implications are stated.
+
+## Next step
+
+- [ ] `Concrete Next Step` is present.
+- [ ] `next_step_type` uses an allowed value.
+- [ ] The action is specific and executable.
+- [ ] The suggested prompt is concrete enough for the next agent run.

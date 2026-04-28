@@ -1,46 +1,124 @@
-# ADR: [Decision Title]
+# ADR-NNNN: <Decision Title>
 
-## 1. Status
-[Proposed | Accepted | Rejected | Superseded]
+## Status
 
-## 2. Context and Problem Statement
-[What problem or pressure made this decision necessary?]
+Proposed / Accepted / Rejected / Superseded
 
-## 3. Decision Drivers
-- [Driver 1]
-- [Driver 2]
-- [Driver 3]
+## Date
 
-## 4. Considered Options
-- [Option A]
-- [Option B]
-- [Option C]
+YYYY-MM-DD
 
-## 5. Decision Outcome
-### Chosen Option
-[State the chosen option clearly.]
+## Decision Owner
 
-### Rationale
-[Why this option best fits the decision drivers.]
+<owner or team>
 
-## 6. Consequences
+## Source Artifacts
+
+| Artifact | Path / Reference | Relevance |
+|---|---|---|
+| PRD | `PRD.md` | <product constraint or behavior driving this decision> |
+| Architecture | `ARCHITECTURE.md` | <system-shape context> |
+| Initiative Architecture | `docs/architecture/<initiative>-architecture.md` | <if relevant> |
+| Roadmap | `ROADMAP.md` | <if relevant> |
+| Plan / Review | `<path>` | <if decision was discovered downstream> |
+
+## Decision Boundary
+
+### Decides
+
+- <what this ADR decides>
+
+### Does Not Decide
+
+- <related but excluded topics>
+
+## Context / Problem
+
+<Explain the technical or architectural problem that requires a decision.>
+
+## Decision Drivers
+
+- <driver 1: reliability, consistency, operability, delivery speed, cost, maintainability, etc.>
+- <driver 2>
+- <driver 3>
+
+## Considered Options
+
+| Option | Summary | Benefits | Costs / Risks | Fit |
+|---|---|---|---|---|
+| Option A | <summary> | <benefits> | <costs> | <fit> |
+| Option B | <summary> | <benefits> | <costs> | <fit> |
+| Option C | <summary> | <benefits> | <costs> | <fit> |
+
+## Decision
+
+Chosen option: **<Option>**
+
+<Explain why this option best fits the decision drivers.>
+
+## Consequences
+
 ### Positive
-- [Benefit]
 
-### Negative
-- [Cost / trade-off]
+- <positive consequence>
 
-### Follow-up / Neutral
-- [Implication / later work]
+### Negative / Trade-offs
 
-## 7. Scope and Impact
-[Which systems, modules, teams, workflows, or constraints are affected?]
+- <negative consequence or accepted trade-off>
 
-## 8. Non-Goals / Not Addressed
-- [What this ADR does not decide]
+### Implementation Constraints
 
-## 9. Related Artifacts
-- PRD: [link or reference]
-- Roadmap: [link or reference]
-- Plans: [link or reference]
-- Prior ADRs: [link or reference]
+- <constraint future plans and implementations must obey>
+
+### Operational / Runtime Implications
+
+- <logging, monitoring, deployment, recovery, migration, or support implication>
+
+## Architecture Linkage
+
+- `architecture_linkage`: NONE / ARCHITECTURE_CONTEXT_ONLY / ADD_ADR_INDEX_ENTRY / UPDATE_ROOT_ARCHITECTURE / UPDATE_INITIATIVE_ARCHITECTURE / UPDATE_ROOT_AND_INITIATIVE_ARCHITECTURE / ARCHITECTURE_CONFLICT_FOUND / ARCHITECTURE_MISSING
+- Affected architecture document(s): `<path>`
+- Affected section(s): `<section names>`
+- Required architecture update: <none / add ADR index entry / update constraints / update runtime flow / update component boundary / update data ownership / other>
+
+## Downstream Impact
+
+- PRD Impact: none / check assumptions / update PRD
+- Architecture Impact: none / add ADR link / update architecture / resolve conflict
+- Roadmap Impact: none / update sequencing / unblock roadmap
+- Plan Impact: none / create plan / revise plan constraints
+- Review Impact: none / add review criterion / revisit previous review
+
+## Review Criteria
+
+Future review should verify:
+
+- <criterion 1>
+- <criterion 2>
+- <criterion 3>
+
+## Related Artifacts
+
+- PRD: `<path>`
+- Architecture: `<path>`
+- Related ADRs: `<paths>`
+- Roadmap: `<path>`
+- Plan(s): `<paths>`
+
+## Supersession
+
+- Supersedes: `<ADR path or none>`
+- Superseded by: `<ADR path or none>`
+
+## Open Questions
+
+- <question, owner/status, expected next artifact>
+
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

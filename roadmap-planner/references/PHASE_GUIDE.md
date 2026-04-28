@@ -1,23 +1,66 @@
 # Phase Guide
 
-A phase should represent a meaningful maturity step.
+Each phase should be an outcome slice, not a task bucket.
 
-## Foundation
-Use only when groundwork is required before MVP.
-Examples:
-- migration setup
-- observability baseline
-- infrastructure or schema groundwork
+## Required Phase Fields
 
-## MVP
-The minimum version that proves real value.
-MVP must solve the core problem for the primary user or technical objective.
+- objective
+- why this phase exists now
+- product outcome
+- architecture constraints used
+- ADR constraints used
+- key outcomes
+- in scope
+- out of scope
+- dependencies
+- risks
+- exit criteria
+- plan handoff candidates
 
-## Enhancement
-Use only when the next phase represents a meaningful increase in completeness, leverage, reliability, scale, or differentiation.
-Do not use enhancement phases as a dumping ground for leftover items.
+## Good Phase Shape
 
-Each phase should answer:
-- what becomes true after this phase
-- why this phase is now instead of later
-- what planning should derive from it
+Good:
+
+```text
+Phase 1 — Foundation: Membership Source-of-Truth and Invitation Data Model
+```
+
+Why it is good:
+
+- says what foundation is being established
+- implies dependency for later behavior
+- ties to architecture/data ownership
+
+Weak:
+
+```text
+Phase 1 — Setup
+```
+
+Why it is weak:
+
+- vague
+- not outcome-driven
+- cannot be reviewed
+
+## Phase Size
+
+A phase may contain multiple future plans, but it should have one coherent objective.
+
+If a phase contains unrelated objectives, split it.
+
+## Exit Criteria
+
+Exit criteria should prove the phase outcome is complete enough for the next phase.
+
+Good exit criteria:
+
+- membership table is authoritative for authorization checks
+- invitation acceptance updates membership transactionally
+- notification read model is eventually consistent and observable
+
+Weak exit criteria:
+
+- code is done
+- tests pass
+- feature implemented

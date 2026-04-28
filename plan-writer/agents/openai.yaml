@@ -1,3 +1,6 @@
-name: plan-writer
-description: Create or update a single-task PLAN.md that turns one approved work item into a bounded implementation contract.
-allow_implicit_invocation: false
+interface:
+  display_name: "Plan Writer"
+  short_description: "Creates architecture-aware single-task implementation plans."
+  default_prompt: "Use plan-writer to create or update one architecture-aware PLAN.md for the next bounded implementation task."
+policy:
+  allow_implicit_invocation: true

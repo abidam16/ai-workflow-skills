@@ -1,23 +1,58 @@
 # Split Rules
 
-Split into multiple plans if any of these are true:
+## Split required when
 
-- more than one primary objective exists
-- the work changes multiple unrelated user flows or domains
-- the work combines feature delivery with broad refactor or migration work
-- success would be judged by more than one unrelated validation path
-- reviewers would need to check clearly different concerns
-- the implementation would naturally produce multiple commit themes
-- the plan contains repeated “and also” scope clauses
+Split into multiple plans when the requested work has:
 
-## Practical test
+- multiple primary objectives
+- unrelated validation paths
+- unrelated file/component clusters
+- mixed feature + refactor + migration scope
+- separate frontend and backend tasks that can be validated independently
+- separate schema foundation and behavior implementation tasks
+- multiple independent ADR outcomes
+- multiple architecture boundaries changed at once
+- different review criteria for different pieces of work
 
-A plan is probably still single-task if:
-- one engineer or one implementation agent could explain the task in one sentence
-- it has one main acceptance target
-- it is reviewable as one coherent unit
+## Split output format
 
-A plan is probably too broad if:
-- it needs several “mini plans” inside the document
-- it touches unrelated bounded contexts
-- it would be easier to approve in pieces than as one whole
+When splitting is required, do not write a giant plan. Output:
+
+```md
+## Split Required
+
+### Reason
+
+### Proposed Plan 1
+- `title`:
+- `objective`:
+- `source_artifacts`:
+- `architecture_constraints`:
+- `validation`:
+
+### Proposed Plan 2
+...
+
+## Concrete Next Step
+
+- `next_step_type`: SPLIT_INTO_PLANS
+- `target`: proposed plan 1
+- `action`: Create the first single-task plan before implementation.
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+```
+
+## Split ordering
+
+Prefer this order:
+
+1. schema/data foundation
+2. domain/service behavior
+3. API boundary
+4. async/event side effect
+5. UI/client behavior
+6. observability/operational hardening
+7. cleanup/refactor
+
+Use roadmap order when it already exists and does not conflict with architecture.

@@ -1,46 +1,114 @@
-# PLAN
+# PLAN.md
 
-## 1. Task Summary
-- Task:
-- Why this task exists:
+## Task Summary
 
-## 2. Objective
-- Objective:
+<!-- One paragraph. What exactly will be implemented? -->
 
-## 3. Scope
+## Plan Status
+
+- `plan_status`: NEW_PLAN
+- `task_identity`:
+- `created_from`:
+
+## Source Artifacts
+
+| Artifact | Path / Section | Status | Used For |
+|---|---|---|---|
+| PRD |  |  |  |
+| Architecture |  |  |  |
+| ADR |  |  |  |
+| Roadmap |  |  |  |
+| Review Report |  |  |  |
+
+## Architecture Readiness
+
+- `architecture_readiness`: NOT_RELEVANT / READY / PARTIAL / MISSING / CONFLICTING
+- `architecture_sensitive`: yes / no
+- `reason`:
+
+## Objective
+
+<!-- One primary objective only. -->
+
+## Scope
+
 ### In Scope
-- 
+
+-
 
 ### Out of Scope
-- 
 
-## 4. Detailed Specification
-- Required behavior:
-- Important constraints:
-- Expected integration points:
-- Assumptions:
+-
 
-## 5. Files / Components to Change
+## Binding Constraints
+
+### Product / PRD Constraints
+
+-
+
+### Architecture Constraints
+
+-
+
+### ADR Constraints
+
+-
+
+### Roadmap / Sequencing Constraints
+
+-
+
+### Review-Fix Constraints
+
+-
+
+## Detailed Specification
+
+-
+
+## Files / Components to Change
+
 ### Expected Changes
-- 
+
+| Area | Expected change | Reason |
+|---|---|---|
+|  |  |  |
 
 ### Must Not Change
-- 
 
-## 6. Validation and Test
+-
+
+## Implementation Notes
+
+-
+
+## Validation and Tests
+
 ### Validation
-- 
+
+-
 
 ### Tests
-- 
 
-## 7. Review Checklist
-- 
-- 
-- 
+-
 
-## 8. Trade-offs and Risks
-- 
+## Review Checklist
 
-## 9. Future Improvements
-- 
+-
+
+## Trade-offs and Risks
+
+-
+
+## Deferred Items / Future Improvements
+
+-
+
+## Concrete Next Step
+
+- `next_step_type`: IMPLEMENT_PLAN
+- `target`: `PLAN.md`
+- `action`: Implement this plan as one bounded task.
+- `why_this_is_next`:
+- `blocking_condition`: None.
+- `suggested_prompt`: "Use implement-task to implement `PLAN.md` exactly as scoped. Report any deviation before changing scope."

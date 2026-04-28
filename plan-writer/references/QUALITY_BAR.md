@@ -1,41 +1,42 @@
 # Quality Bar
 
-A good `PLAN.md` is a concise, single-task implementation contract.
+A good plan is:
 
-It is good when it is:
-- focused on exactly one task
-- specific enough to implement without inventing missing logic
-- bounded enough to prevent scope drift
-- explicit enough to review objectively
-- short enough to scan quickly
+- single-task only
+- architecture-aware when relevant
+- bounded
+- executable
+- testable
+- reviewable
+- explicit about what must not change
+- clear about the immediate next action
 
-## Required qualities
+## Must pass
 
-### 1. Single-task only
-There must be one primary objective and one coherent deliverable.
+The plan must answer:
 
-### 2. Sharp boundaries
-In-scope and out-of-scope must be explicit.
+1. What exactly is being implemented?
+2. Why is this one task?
+3. Which upstream artifacts constrain it?
+4. Is architecture relevant, ready, missing, or conflicting?
+5. What architecture constraints must implementation obey?
+6. What is in scope?
+7. What is out of scope?
+8. What files/components are expected to change?
+9. What must not change?
+10. How will correctness be validated?
+11. What should review check?
+12. What is the concrete next step?
 
-### 3. Concrete specification
-The plan must say what behavior or implementation result must exist, not just vague aspirations.
+## Fail conditions
 
-### 4. Validation-ready
-It must be possible to tell whether the task is done.
+The plan is not acceptable if it:
 
-### 5. Review-ready
-A reviewer should be able to compare implementation against the plan without guessing.
-
-### 6. Portable
-The structure should work across frontend, backend, platform, internal tools, finance, healthcare, and general software projects.
-
-## Anti-patterns
-
-Reject or split the plan if it:
-- includes multiple independent objectives
-- contains a full milestone instead of one task
-- duplicates roadmap or PRD content
-- has vague scope
-- lacks validation or tests
-- hides risk or trade-offs
-- cannot identify expected files/components to change
+- bundles multiple independent tasks
+- invents product or architecture decisions
+- omits relevant architecture constraints
+- ignores ADR constraints
+- uses vague validation criteria
+- has no explicit next step
+- says “continue implementation” without target/action
+- cannot be reviewed against source artifacts

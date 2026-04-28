@@ -1,51 +1,57 @@
 # Section Guide
 
-## 1. Task Summary
-A brief statement of the task and why it exists.
-Keep it short. Do not repeat the whole roadmap.
+## Task Summary
 
-## 2. Objective
-One sentence describing what must become true after this task is implemented.
+One short paragraph. State what will be implemented and why this is one task.
 
-## 3. Scope
-### In Scope
-List what this task includes.
+## Plan Status
 
-### Out of Scope
-List what this task explicitly does not include.
-This is critical for AI execution quality.
+Use one allowed status. Explain whether this is new, an update, split-required, or blocked.
 
-## 4. Detailed Specification
-Describe the required behavior, important constraints, expected integration points, and relevant assumptions.
-Do not write a full architecture document.
+## Source Artifacts
 
-## 5. Files / Components to Change
-### Expected Changes
-List files, modules, directories, services, UI areas, schemas, or tests likely to change.
+List only the source artifacts actually used. Include file path and relevant section when possible.
 
-### Must Not Change
-List high-risk or unrelated areas that should remain untouched unless the task absolutely requires otherwise.
+## Architecture Readiness
 
-## 6. Validation and Test
-### Validation
-Describe what outcomes must be verified.
+Required for every plan. Use `NOT_RELEVANT` only when justified.
 
-### Tests
-List the tests to add, update, or run.
+## Objective
 
-## 7. Review Checklist
-Give the reviewer concrete items to verify.
-Example categories:
-- objective met
-- scope respected
-- detailed spec followed
-- tests adequate
-- no unrelated refactor
-- patterns consistent
+One primary outcome. If there are two unrelated outcomes, split the plan.
 
-## 8. Trade-offs and Risks
-Document important compromises, limitations, or risk areas.
+## Scope
 
-## 9. Future Improvements
-List explicitly deferred improvements or follow-up opportunities.
-Keep this short and separate from the current task.
+Scope must be enforceable. Out-of-scope items are as important as in-scope items.
+
+## Binding Constraints
+
+Extract implementation constraints from upstream artifacts. Avoid generic restatement.
+
+## Detailed Specification
+
+Describe the required behavior and implementation expectation at task level. Do not write code unless necessary to remove ambiguity.
+
+## Files / Components to Change
+
+Expected changes may include likely files, modules, components, packages, migrations, tests, or config. Avoid fake precision when the exact path is unknown; use component-level targeting instead.
+
+## Must Not Change
+
+Use this to protect architecture boundaries, product scope, existing behavior, or unrelated modules.
+
+## Validation and Tests
+
+Validation must prove the objective and constraints, not only compile success.
+
+## Review Checklist
+
+Write checks the review-phase skill can directly use.
+
+## Risks
+
+Name risks that affect implementation or review. Avoid vague risks like “bugs may happen.”
+
+## Concrete Next Step
+
+Must be explicit and routed. The user should know the next command/prompt/action.

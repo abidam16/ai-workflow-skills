@@ -1,8 +1,11 @@
-# PLAN CHANGELOG ENTRY
+# PLAN_CHANGELOG.md
 
-- Date:
-- Plan:
-- Change type: Create / Update / Split
-- Summary:
-- Reason:
-- Next step:
+## Change Log Entry
+
+- `date`:
+- `plan`:
+- `change_type`: created / updated / split / blocked
+- `reason`:
+- `source_artifacts`:
+- `architecture_impact`:
+- `next_step`:

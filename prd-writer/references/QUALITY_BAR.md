@@ -1,25 +1,46 @@
-# PRD Quality Bar
+# Quality Bar
 
-A good PRD is a concise, stable, product-level decision document that is clear enough for roadmap, plan, implementation, and review.
+A PRD is good enough when it is useful as product truth for architecture, ADRs, roadmap, plan, implementation, and review.
 
-A good PRD must:
-- define the problem/product truth clearly
-- identify who the product serves
-- state current goals
-- state explicit non-goals
-- capture important users/roles/actors
-- describe key domains and core user flows
-- define business/product rules that must remain true
-- separate current behavior from target behavior
-- state known product problems or gaps
-- define success criteria
-- preserve unresolved uncertainty in open questions
-- defer future directions explicitly rather than hiding them in scope
+## Required qualities
 
-A weak PRD usually:
-- mixes product requirements with implementation details
-- omits non-goals
-- lacks current behavior or target behavior
-- hides uncertainty
-- lists features without explaining why they matter
-- duplicates roadmap or ADR content
+- Product-level, not implementation-level
+- Concrete enough to test and review
+- Concise enough to reload often
+- Explicit goals and non-goals
+- Clear users, actors, and role semantics
+- Current and target behavior separated
+- Business/product rules are testable
+- Architecture impact is classified
+- ADR impact is classified
+- Roadmap impact is classified
+- Plan readiness is classified
+- Open questions are explicit and routed
+- Concrete next step is mandatory
+
+## Red flags
+
+- PRD contains class names, table schemas, implementation steps, package paths, or migration details without product necessity
+- PRD chooses a technical option that belongs in ADR
+- PRD designs component boundaries that belong in architecture
+- PRD sequences delivery phases that belong in roadmap
+- PRD creates task instructions that belong in PLAN.md
+- PRD leaves “next step” vague
+- PRD says “TBD” without explaining what it blocks
+- PRD repeats brainstorm uncertainty after decisions are settled
+
+## Token efficiency
+
+Use dense, navigable sections. Avoid generic textbook explanation.
+
+Prefer:
+
+```text
+Rule: A pending invitation expires after its configured expiry time and can no longer be accepted.
+```
+
+Avoid:
+
+```text
+Invitations are a common product mechanism used in many collaborative applications...
+```

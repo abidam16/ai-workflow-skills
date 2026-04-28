@@ -1,36 +1,60 @@
-# BLOCKER REPORT
+# Implementation Blocker Report
 
-## 1. Outcome Status
-[BLOCKED_REQUIRES_PLAN_CLARIFICATION | BLOCKED_REQUIRES_PLAN_SPLIT | BLOCKED_REQUIRES_UPSTREAM_DECISION]
+## Outcome
 
-## 2. Plan Reference
-- Plan: [path / identifier]
-- Task: [task name]
+- `outcome_status`: BLOCKED_REQUIRES_PLAN_CLARIFICATION / BLOCKED_REQUIRES_PLAN_SPLIT / BLOCKED_REQUIRES_ARCHITECTURE_CLARIFICATION / BLOCKED_REQUIRES_ARCHITECTURE_UPDATE / BLOCKED_REQUIRES_ADR_DECISION / BLOCKED_REQUIRES_UPSTREAM_DECISION / BLOCKED_BY_CONFLICTING_SOURCES / BLOCKED_BY_VALIDATION_FAILURE
+- `plan_used`:
+- `task_identity`:
 
-## 3. Blocker Summary
-[Concise explanation of why safe execution cannot continue]
+## Blocker Summary
 
-## 4. Blocker Type
-- contradiction in plan
-- missing required detail
-- multi-task scope requiring split
-- missing upstream decision
-- repository constraint conflict
-- other: [describe]
+-
 
-## 5. Evidence
-- [relevant plan section]
-- [relevant implementation constraint]
+## Source Artifacts Checked
 
-## 6. What Cannot Be Safely Assumed
-- [item]
+| Artifact | Path / Section | Result |
+|---|---|---|
+| PLAN |  |  |
+| PRD |  |  |
+| Architecture |  |  |
+| ADR |  |  |
+| Roadmap |  |  |
 
-## 7. Recommended Resolution
-- [clarify plan]
-- [split plan]
-- [update ADR]
-- [update roadmap]
-- [make upstream decision]
+## Architecture Sensitivity
 
-## 8. Immediate Next Step
-[exact next action]
+- `architecture_sensitive`: yes / no
+- `architecture_sources_checked`:
+- `architecture_constraints_affected`:
+
+## Blocking Issue
+
+### Type
+
+- `blocker_type`: missing source / conflicting source / unsafe plan / scope too large / validation failure / missing decision / architecture conflict / ADR conflict
+
+### Details
+
+-
+
+### Why Implementation Did Not Proceed
+
+-
+
+## Required Upstream Fix
+
+| Required action | Target artifact | Reason |
+|---|---|---|
+|  |  |  |
+
+## Work Not Performed
+
+-
+
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

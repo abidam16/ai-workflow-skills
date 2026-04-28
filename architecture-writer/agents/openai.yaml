@@ -1,0 +1,6 @@
+interface:
+  display_name: "Architecture Writer"
+  short_description: "Create or update durable architecture documents for AI-driven development workflows."
+  default_prompt: "Use architecture-writer to create or update the correct architecture artifact from the approved context."
+policy:
+  allow_implicit_invocation: true

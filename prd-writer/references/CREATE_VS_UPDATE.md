@@ -1,23 +1,45 @@
-# CREATE vs UPDATE
+# Create vs Update Guide
 
 ## Create a new PRD when
-- no meaningful PRD exists yet
-- the initiative introduces a new product direction or major capability
-- current product truth is too incomplete or fragmented to update safely
+
+- no PRD exists for the product/initiative
+- brainstorm selected `NEW_PRD`
+- the initiative is product-distinct from existing PRDs
+- existing documents are notes, brainstorms, or architecture/roadmap/plan artifacts but no product-truth document exists
 
 ## Update an existing PRD when
-- the main product direction remains valid
-- only some assumptions, rules, flows, goals, target behavior, or success criteria changed
-- roadmap or implementation learning reveals product-level gaps that need revision
 
-## Do not force a PRD when
-- the work only needs sequencing or milestone planning -> roadmap
-- the decision is primarily technical/architectural -> ADR
-- the work is already product-clear and only needs single-task execution planning -> PLAN
+- product goals changed
+- target behavior changed
+- user roles or permissions changed
+- business/product rules changed
+- success criteria changed
+- open questions were resolved
+- architecture, roadmap, implementation, or review exposed stale product truth
+
+## Create only a delta when
+
+- the user asks only for a change summary
+- the repository prefers patch notes before editing the actual PRD
+- the change is small and the target PRD section is obvious
+
+## Route elsewhere when
+
+- product truth is already stable and the next gap is architecture
+- one technical decision needs ADR
+- sequencing needs roadmap
+- one implementation task needs plan
+- implementation or review is requested
 
 ## Update discipline
-When updating:
-- change only affected sections
-- preserve valid existing sections
-- call out what changed and why
-- state downstream impacts on roadmap/ADR/review
+
+Do not rewrite the whole PRD when a targeted update is enough.
+
+When updating, preserve:
+
+- existing stable product definitions
+- accepted non-goals
+- settled rules
+- existing section style if it is clear
+
+Only change what the new evidence requires.

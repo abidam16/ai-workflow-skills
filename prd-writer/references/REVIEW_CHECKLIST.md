@@ -1,13 +1,43 @@
 # PRD Review Checklist
 
-Check these before finalizing:
-- Is the PRD product-level rather than implementation-level?
+Use this checklist before finalizing PRD output.
+
+## Artifact fit
+
+- Is PRD the correct artifact?
+- Is the request actually architecture, ADR, roadmap, plan, implementation, or review?
+
+## Product clarity
+
 - Are goals and non-goals explicit?
-- Are current and target behavior clearly separated?
-- Are user roles and core flows understandable?
-- Are important business rules stated?
-- Are success criteria concrete enough to guide roadmap and review?
-- Are open questions explicit rather than hidden?
-- Does the PRD avoid roadmap sequencing and task-level detail?
-- Is the result concise and non-redundant?
-- Is the immediate next step stated clearly?
+- Are users/actors/roles defined?
+- Are current and target behavior separated?
+- Are product rules testable?
+- Are success criteria observable?
+
+## Architecture boundary
+
+- Does the PRD classify architecture impact?
+- Does it avoid designing component boundaries, schemas, runtime flows, or transaction rules?
+- Does it route to architecture when product behavior requires system-shape decisions?
+
+## ADR boundary
+
+- Does the PRD identify candidate decisions without choosing technical options?
+- Does it avoid replacing an ADR?
+
+## Roadmap boundary
+
+- Does the PRD identify sequencing impact without creating phases?
+- Does it avoid replacing a roadmap?
+
+## Plan boundary
+
+- Does the PRD avoid implementation task lists?
+- Does it classify plan readiness accurately?
+
+## Handoff
+
+- Is `PRD Handoff Summary` present?
+- Is `Concrete Next Step` present?
+- Is the next step specific, routed, and actionable?

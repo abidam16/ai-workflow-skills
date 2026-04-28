@@ -1,14 +1,27 @@
-# Review Checklist
+# Roadmap Review Checklist
 
-Check the roadmap for:
-- correct roadmap mode selected
-- outcome-driven structure
-- sequencing rationale is explicit
-- phases are bounded and meaningful
-- dependencies are visible
-- risks are visible
-- exit criteria exist for initiative phases
-- deferred work is explicit
-- not too vague
-- not too task-like
-- next planning step is explicit
+Use this checklist before finalizing a roadmap.
+
+## Source Alignment
+
+- [ ] PRD/product truth is clear enough.
+- [ ] Architecture constraints are included when relevant.
+- [ ] ADR decisions are included when relevant.
+- [ ] Conflicts between sources are not ignored.
+
+## Roadmap Quality
+
+- [ ] Roadmap mode is correct: product or initiative.
+- [ ] Phase order has rationale.
+- [ ] Each phase has clear objective and exit criteria.
+- [ ] Dependencies, risks, and deferrals are explicit.
+- [ ] Roadmap is not a task list.
+- [ ] Roadmap does not invent architecture.
+- [ ] Roadmap does not duplicate ADR rationale.
+
+## Planning Readiness
+
+- [ ] At least one plan handoff candidate exists.
+- [ ] The recommended next plan candidate is exactly one task.
+- [ ] Architecture/ADR constraints needed by the next plan are listed.
+- [ ] The final `Concrete Next Step` block is present and actionable.

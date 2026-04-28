@@ -1,3 +1,6 @@
-name: roadmap-planner
-description: Create or update product-roadmap indexes and initiative-roadmaps that turn approved intent into phased delivery structure and explicit plan handoff.
-allow_implicit_invocation: false
+interface:
+  display_name: "Roadmap Planner"
+  short_description: "Creates architecture-aware product and initiative roadmaps with concrete plan handoffs."
+  default_prompt: "Use the roadmap-planner skill to create or update the roadmap. Respect PRD, ARCHITECTURE.md, ADRs, and the shared workflow contracts."
+policy:
+  allow_implicit_invocation: true

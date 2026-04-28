@@ -1,40 +1,35 @@
-# Create vs Update ADR
+# Create vs Update
 
-## Default Rule
+## Create a new ADR when
 
-Default to **creating a new ADR** for a new decision.
+- this is a new decision
+- the decision has not been recorded before
+- the decision supersedes an accepted ADR
+- implementation or review exposed an unrecorded lasting technical choice
+- architecture identifies a new ADR candidate
 
-## Create a New ADR When
+## Supersede an ADR when
 
-Create a new ADR when:
-- the team is making a new technical or architectural decision
-- a previous ADR is being replaced by a new decision
-- the new decision could stand on its own as a separate log entry
-- the decision may later be superseded independently of other decisions
+- an accepted decision is replaced by a newer decision
+- constraints changed enough that the old rationale is no longer valid
+- production or implementation learning invalidates the old decision
 
-## Update an Existing ADR Only When
+Preferred approach:
 
-Only update an existing ADR for:
-- typo or wording corrections
-- adding missing references or metadata
-- clarifying wording without changing the actual decision
+1. Create a new ADR.
+2. Mark the old ADR as superseded.
+3. Link both ADRs.
+4. Update architecture if the stable system constraint changed.
 
-## Supersession Rule
+## Update an existing ADR when
 
-If the decision has changed materially:
-- create a new ADR
-- mark the previous ADR as `Superseded`
-- reference the previous ADR in the new one
+- fixing typos or broken links
+- adding missing related-artifact links
+- changing status from Proposed to Accepted/Rejected if the decision itself did not change
+- adding implementation outcome notes that do not alter the decision
 
-## Merge Rule
+## Do not rewrite accepted history
 
-Do **not** merge unrelated decisions into one ADR.
+Do not silently edit an accepted ADR to make it look like the new decision was always true.
 
-Grouping is acceptable only when the items are inseparable parts of the same architectural choice. If the document starts reading like multiple debates, split it.
-
-## Route Away from ADR When
-
-Use another artifact instead if the issue is primarily:
-- **PRD**: product behavior, scope, user-facing rules, business goals
-- **ROADMAP**: phased delivery sequencing, milestones, prioritization
-- **PLAN**: one bounded implementation task
+Historical decision records must remain auditable.

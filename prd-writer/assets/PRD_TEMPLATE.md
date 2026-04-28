@@ -1,53 +1,126 @@
-# PRD
+# PRD.md
 
-## 1. Product Overview
-### Purpose
-[What the product/change is, who it serves, and why it exists.]
+## 1. Document Status
 
-## 2. Product Goals
-### Purpose
-[What the product is trying to achieve now.]
+- `status`: Draft / Approved / Deprecated
+- `prd_decision`: CREATE_PRD / UPDATE_PRD
+- `last_updated`:
+- `owner`:
+- `source_artifacts`:
 
-## 3. Product Non-Goals
-### Purpose
-[What is intentionally out of scope right now.]
+## 2. Product Summary
 
-## 4. Users, Roles, and Actors
-### Purpose
-[Who acts in the system and what authority or responsibility they have.]
+<!-- One short summary of what the product/feature is and why it exists. -->
 
-## 5. Core Domains
-### Purpose
-[Main business/product areas of the system.]
+## 3. Problem Statement
 
-## 6. Core User Flows
-### Purpose
-[Most important end-to-end flows.]
+<!-- What problem is being solved? Who experiences it? Why does it matter now? -->
 
-## 7. Product Rules
-### Purpose
-[Business/product rules that must remain true.]
+## 4. Goals
 
-## 8. Current Behavior by Domain
-### Purpose
-[How the system behaves today, including temporary or legacy behavior.]
+-
 
-## 9. Target Behavior / Desired Product Direction
-### Purpose
-[What should become true relative to current behavior.]
+## 5. Non-Goals
 
-## 10. Known Product Problems
-### Purpose
-[Important behavior gaps, inconsistencies, or pain points.]
+-
 
-## 11. Success Criteria
-### Purpose
-[What makes the product change successful.]
+## 6. Users, Actors, and Roles
 
-## 12. Open Product Questions
-### Purpose
-[Important unresolved product questions.]
+| Actor / Role | Description | Key Needs / Permissions |
+|---|---|---|
+|  |  |  |
 
-## 13. Deferred Product Directions
-### Purpose
-[Future directions intentionally postponed.]
+## 7. Current Behavior
+
+<!-- Current product/system behavior from the user/business perspective. -->
+
+## 8. Target Behavior
+
+<!-- Desired product/system behavior from the user/business perspective. -->
+
+## 9. Core User Flows
+
+### Flow 1: <!-- Name -->
+
+1.
+2.
+3.
+
+## 10. Product Rules
+
+| Rule | Description | Priority |
+|---|---|---|
+|  |  | Must / Should / Could |
+
+## 11. Product Constraints
+
+<!-- Product-level constraints only. Avoid technical design unless it materially affects product behavior. -->
+
+-
+
+## 12. Scope
+
+### In Scope
+
+-
+
+### Out of Scope
+
+-
+
+## 13. Success Criteria
+
+| Criterion | Measurement / Evidence |
+|---|---|
+|  |  |
+
+## 14. Architecture Impact
+
+- `architecture_impact`: NONE / CREATE_ARCHITECTURE / UPDATE_ARCHITECTURE / CHECK_EXISTING_ARCHITECTURE / ARCHITECTURE_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+- `architecture_questions_or_constraints`:
+  -
+
+## 15. ADR Impact
+
+- `adr_impact`: NONE / CREATE_ADR / UPDATE_ADR / CHECK_EXISTING_ADR / ADR_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+- `candidate_decisions`:
+  -
+
+## 16. Roadmap Impact
+
+- `roadmap_impact`: NONE / CREATE_ROADMAP / UPDATE_ROADMAP / CHECK_EXISTING_ROADMAP / ROADMAP_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+- `sequencing_notes`:
+  -
+
+## 17. Implementation Plan Readiness
+
+- `plan_readiness`: READY_FOR_ARCHITECTURE / READY_FOR_ADR / READY_FOR_ROADMAP / READY_FOR_PLAN / NOT_READY_PRODUCT_QUESTIONS / NOT_READY_CONFLICTING_ARTIFACTS
+- `reason`:
+
+## 18. Open Product Questions
+
+| Question | Why It Matters | Required To Proceed To |
+|---|---|---|
+|  |  | Architecture / ADR / Roadmap / Plan |
+
+## 19. PRD Handoff Summary
+
+- `prd_decision`:
+- `target_prd`:
+- `sections_created_or_changed`:
+- `architecture_impact`:
+- `adr_impact`:
+- `roadmap_impact`:
+- `plan_readiness`:
+
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:

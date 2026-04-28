@@ -1,18 +1,30 @@
-# Create vs Update Rules
+# Create vs Update
 
-## Create a new product roadmap when:
-- there is no durable product-level roadmap index yet
-- the product strategy changed enough that a fresh index is clearer than heavy edits
+## Create New Roadmap
 
-## Update a product roadmap when:
-- the strategic themes remain the same
-- only active/deferred/completed initiatives or sequencing changed
+Create a new roadmap when:
 
-## Create a new initiative roadmap when:
-- the work is a new initiative with its own objective
-- it needs its own phased delivery structure
-- merging it into an old roadmap would reduce clarity
+- no roadmap exists for this product or initiative
+- the initiative objective is materially new
+- the work needs its own phased delivery stream
+- architecture constraints create a distinct delivery shape
+- updating an old roadmap would blur history
+- the existing roadmap has a different product or initiative scope
 
-## Update an initiative roadmap when:
-- the work is still the same initiative
-- only phase contents, sequencing, dependencies, risks, or deferrals changed
+## Update Existing Roadmap
+
+Update an existing roadmap when:
+
+- the roadmap still represents the same initiative or product
+- only phase order, scope, dependencies, risks, exit criteria, or handoff candidates changed
+- a PRD, architecture, or ADR update changes sequencing but not the initiative identity
+- roadmap clarity improves by keeping continuity
+
+## Prefer New Over Update
+
+Prefer a new roadmap when:
+
+- the objective changed materially
+- the old roadmap should remain historical record
+- multiple independent initiatives are being mixed
+- architecture changed so much that the old roadmap no longer describes the same delivery object

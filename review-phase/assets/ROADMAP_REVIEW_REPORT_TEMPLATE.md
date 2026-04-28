@@ -1,70 +1,126 @@
-# ROADMAP IMPLEMENTATION REVIEW REPORT
+# Roadmap Implementation Review Report
 
-## 1. Review Summary
-- Review target:
-- Review mode: ROADMAP_IMPLEMENTATION_REVIEW
-- Source artifacts used:
-- Overall verdict:
+## 1. Review Metadata
 
-## 2. What Is Good
-- 
+- Review mode: `ROADMAP_IMPLEMENTATION_REVIEW`
+- Roadmap reference:
+- Roadmap slice / initiative:
+- Implementation scope reviewed:
+- Reviewer:
+- Date:
 
-## 3. Business and Product Outcome Assessment
-- Status: FULFILLED / PARTIALLY_FULFILLED / NOT_FULFILLED / DEVIATED
-- Notes:
+## 2. Source Artifacts Used
 
-## 4. Roadmap Fulfillment Assessment
-### Phase / milestone coverage
-- Status:
-- Notes:
+| Artifact | Path / Reference | Status | Used For |
+|---|---|---|---|
+| Roadmap |  |  | delivery sequence and exit criteria |
+| PRD |  |  | product behavior / business intent |
+| Architecture |  |  | system-shape and integration constraints |
+| ADR |  |  | accepted technical decisions |
+| PLAN files |  |  | task-level execution contracts |
+| Implementation Summaries |  |  | delivered task outcomes |
+| Integration Evidence |  |  | cross-task behavior and validation |
 
-### Cross-task integration
-- Status:
-- Notes:
+## 3. Source Artifact Readiness
 
-### Sequencing readiness for next work
-- Status:
-- Notes:
+- Missing artifacts:
+- Stale or weak artifacts:
+- Conflicting artifacts:
+- Review impact:
 
-### Validation / test coverage across the slice
-- Status:
-- Notes:
+## 4. Executive Verdict
 
-## 5. Findings
+- Final status: `APPROVED | APPROVED_WITH_MINOR_IMPROVEMENTS | NEEDS_REVISION | BLOCKED`
+- Acceptance summary:
+- Blocking issue count:
+- Non-blocking issue count:
+- Main reason for status:
 
-### High Urgency
-- Title:
-  - Evidence / affected area:
-  - Why it matters:
-  - Recommended action:
+## 5. Roadmap Fulfillment Assessment
 
-### Medium Urgency
-- Title:
-  - Evidence / affected area:
-  - Why it matters:
-  - Recommended action:
+- Assessment: `PASS | PARTIAL | FAIL`
+- Phases/slices reviewed:
+- Exit criteria fulfilled:
+- Remaining delivery gaps:
+- Sequencing/dependency issues:
 
-### Low Urgency
-- Title:
-  - Evidence / affected area:
-  - Why it matters:
-  - Recommended action:
+## 6. Business / Product Alignment
 
-### Future Improvement
-- Title:
-  - Why later, not now:
-  - Suggested follow-up:
+- Assessment: `PASS | PARTIAL | FAIL | NOT_APPLICABLE`
+- Product outcomes fulfilled:
+- Product rule gaps:
+- User-flow gaps:
 
-## 6. Document Impact
-- Should roadmap be updated?
-- Should any plan documents be updated?
-- Should PRD / ADR be updated?
+## 7. Architecture Alignment
 
-## 7. Risk Assessment
-- 
+- Assessment: `PASS | PARTIAL | FAIL | NOT_APPLICABLE`
+- Architecture scope reviewed: `ROOT | INITIATIVE | BOTH | NONE`
+- Architecture path(s):
+- Component/boundary alignment:
+- Data/source-of-truth alignment:
+- Runtime/integration alignment:
+- Transaction/consistency alignment:
+- Architecture drift risks:
 
-## 8. Recommended Next Actions
-- 
+## 8. ADR / Decision Alignment
 
-## 9. Final Status
-- APPROVED / APPROVED_WITH_MINOR_IMPROVEMENTS / NEEDS_REVISION / BLOCKED
+- Assessment: `PASS | PARTIAL | FAIL | NOT_APPLICABLE`
+- ADRs reviewed:
+- Decisions respected:
+- Decision conflicts:
+- New ADRs needed:
+
+## 9. Cross-Task Alignment
+
+- Assessment: `PASS | PARTIAL | FAIL`
+- Task integration quality:
+- Duplicate or conflicting implementations:
+- Missing handoffs between tasks:
+- Hidden integration gaps:
+
+## 10. Technical Quality Summary
+
+- Strengths:
+- Risks:
+- Maintainability concerns:
+- Operational concerns:
+
+## 11. Validation and Integration Evidence
+
+- Assessment: `PASS | PARTIAL | FAIL`
+- Tests and checks reviewed:
+- Integration validation:
+- Evidence quality:
+- Remaining validation gaps:
+
+## 12. Findings
+
+| Severity | Category | Title | Description | Why It Matters | Recommended Action |
+|---|---|---|---|---|---|
+| `HIGH_URGENCY | MEDIUM_URGENCY | LOW_URGENCY | FUTURE_IMPROVEMENT` |  |  |  |  |  |
+
+## 13. Risk Assessment
+
+- Roadmap completion risk:
+- Product risk:
+- Architecture drift risk:
+- Release/integration risk:
+- Follow-up risk:
+
+## 14. Recommended Next Actions
+
+List supporting actions here, ordered by importance. This section may contain multiple recommendations, but the final `Concrete Next Step` section must choose exactly one immediate action.
+
+1.
+2.
+3.
+
+## 15. Concrete Next Step
+
+- `next_step_type`: `MERGE_OR_CLOSE_TASK | APPLY_MINOR_FIXES | RETURN_TO_IMPLEMENTATION | UPDATE_PLAN | UPDATE_ARCHITECTURE | CREATE_OR_UPDATE_ADR | UPDATE_ROADMAP | UPDATE_PRD | REQUEST_MISSING_EVIDENCE | SPLIT_REVIEW_SCOPE | START_NEXT_PLAN | STOP_AND_ESCALATE`
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
+

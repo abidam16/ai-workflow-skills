@@ -1,23 +1,84 @@
-# PRD Delta Summary
+# PRD_DELTA.md
 
-## PRD Decision
-[CREATE or UPDATE]
+## PRD Delta Summary
+
+- `prd_decision`: UPDATE_PRD / PRD_DELTA_ONLY
+- `target_prd`:
+- `reason_for_update`:
+
+## Source Artifacts Reviewed
+
+| Artifact | Path / Section | Impact |
+|---|---|---|
+|  |  |  |
 
 ## Sections Changed
-- [Section name]
-- [Section name]
 
-## Why These Changes Were Needed
-[Reason the product truth changed or needed clarification.]
+| Section | Change | Reason |
+|---|---|---|
+|  |  |  |
 
-## Product Impact
-[What product behavior, rules, scope, or success criteria changed.]
+## Product Behavior Impact
 
-## Roadmap Impact
-[None / create roadmap / update roadmap]
+### Added
+
+-
+
+### Changed
+
+-
+
+### Removed
+
+-
+
+### Still Out of Scope
+
+-
+
+## Architecture Impact
+
+- `architecture_impact`: NONE / CREATE_ARCHITECTURE / UPDATE_ARCHITECTURE / CHECK_EXISTING_ARCHITECTURE / ARCHITECTURE_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+- `architecture_questions_or_constraints`:
+  -
 
 ## ADR Impact
-[None / create ADR / update ADR]
 
-## Immediate Next Step
-[One concrete next action.]
+- `adr_impact`: NONE / CREATE_ADR / UPDATE_ADR / CHECK_EXISTING_ADR / ADR_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+- `candidate_decisions`:
+  -
+
+## Roadmap Impact
+
+- `roadmap_impact`: NONE / CREATE_ROADMAP / UPDATE_ROADMAP / CHECK_EXISTING_ROADMAP / ROADMAP_BLOCKED_BY_PRODUCT_QUESTIONS
+- `reason`:
+
+## Plan Readiness
+
+- `plan_readiness`: READY_FOR_ARCHITECTURE / READY_FOR_ADR / READY_FOR_ROADMAP / READY_FOR_PLAN / NOT_READY_PRODUCT_QUESTIONS / NOT_READY_CONFLICTING_ARTIFACTS
+- `reason`:
+
+## Open Product Questions
+
+-
+
+## PRD Handoff Summary
+
+- `prd_decision`:
+- `target_prd`:
+- `sections_created_or_changed`:
+- `architecture_impact`:
+- `adr_impact`:
+- `roadmap_impact`:
+- `plan_readiness`:
+
+## Concrete Next Step
+
+- `next_step_type`:
+- `target`:
+- `action`:
+- `why_this_is_next`:
+- `blocking_condition`:
+- `suggested_prompt`:
