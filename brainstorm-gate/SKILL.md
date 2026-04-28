@@ -1,83 +1,32 @@
 ---
 name: brainstorm-gate
-description: Route brainstorm output to exactly one next durable artifact or rejection/defer outcome. Use when an idea, discussion, or uncertainty needs classification before PRD, architecture, ADR, roadmap, plan, implementation, or review. Do not use to write the downstream artifact itself.
+description: Use as the first decision gate for ideas, feature changes, bugs, technical concerns, architecture concerns, roadmap shifts, documentation workflow changes, and product changes. It pressure-tests the request, classifies whether it can use lightweight mode, and routes to exactly one next artifact/action. Do not use it to write full PRDs, architecture docs, ADRs, roadmaps, plans, or implementation code.
 ---
 
 # Brainstorm Gate
 
-## Shared workflow policy
+## 1. Purpose
 
-Apply these shared docs instead of restating their rules here:
+This skill decides what should happen next. It preserves only the minimum context needed by the next phase.
+
+## 2. Shared Workflow Sources
+
+Use these shared workflow docs when present:
 
 - `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
 - `docs/workflow/HANDOFF_CONTRACTS.md`
 - `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
 - `docs/workflow/NEXT_STEP_TYPES.md`
-- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
+- `docs/workflow/LIGHTWEIGHT_TASK_MODE.md`
 
-Shared docs define artifact authority, routing order, create/update rules, handoff payloads, and the required final next-step block.
+Use local references only when shared docs are absent.
 
-## Purpose
+## 3. Allowed Decisions
 
-Use this skill to turn messy brainstorm discussion into one explicit routing decision.
+Every run must end with exactly one decision:
 
-The output must answer:
-
-> What is the single correct next artifact or action?
-
-This skill may summarize reasoning, but it must not create the selected PRD, architecture, ADR, roadmap, plan, implementation, or review report.
-
-## Use this skill when
-
-Use this skill when:
-
-- a new idea has been discussed but the next artifact is unclear
-- multiple possible artifacts appear useful and one must be selected
-- a user asks what durable document should be created or updated next
-- a brainstorm result needs to be preserved as compact handoff context
-- downstream work is blocked because the workflow entry point is unclear
-
-## Do not use this skill when
-
-Do not use this skill when the correct next artifact is already explicit and the user wants that artifact written.
-
-Route directly to the relevant skill:
-
-- product truth -> `prd-writer`
-- system shape -> `architecture-writer`
-- one technical decision -> `adr-writer`
-- delivery sequencing -> `roadmap-planner`
-- one executable task plan -> `plan-writer`
-- implementation -> `implement-task`
-- conformance checking -> `review-phase`
-
-## Inputs expected
-
-Prefer these inputs when available:
-
-- brainstorm notes or discussion summary
-- existing artifact paths, if any
-- known current source-of-truth documents
-- explicit user preference or constraint
-- uncertainty that must be resolved before continuing
-
-If inputs are incomplete, infer conservatively and keep uncertainty visible.
-
-## Procedure
-
-1. Extract the core idea, problem, motivation, and uncertainty.
-2. Identify which artifact type would resolve the current uncertainty.
-3. Apply the shared decision matrix.
-4. Choose exactly one immediate next artifact/action.
-5. Produce a compact handoff payload for that next skill.
-6. End with `## Concrete Next Step`.
-
-## Valid decisions
-
-Use the decision names from the shared decision matrix.
-
-Common decisions include:
-
+- `REJECT_OR_DEFER`
+- `USE_LIGHTWEIGHT_MODE`
 - `NEW_PRD`
 - `PRD_UPDATE`
 - `NEW_ARCHITECTURE`
@@ -88,28 +37,84 @@ Common decisions include:
 - `PRODUCT_ROADMAP_UPDATE`
 - `NEW_INITIATIVE_ROADMAP`
 - `INITIATIVE_ROADMAP_UPDATE`
-- `REJECT_OR_DEFER`
+- `NEW_DOCUMENT_PLAN`
+- `DOCUMENT_PLAN_UPDATE`
 
-## Output requirements
+Do not end with multiple competing next steps.
 
-Every output must include:
+## 4. Lightweight Mode Gate
+
+Before routing to PRD, Architecture, ADR, Roadmap, or Document Plan, check if the work is eligible for lightweight mode.
+
+Choose `USE_LIGHTWEIGHT_MODE` only when all are true:
+
+- one primary objective
+- small/local change
+- product behavior is clear or unaffected
+- architecture boundaries are clear or unaffected
+- no data ownership, source-of-truth, integration, async, transaction, authorization, security, observability, deployment, or performance change
+- no ADR-worthy decision
+- no roadmap sequencing need
+- validation is small and explicit
+- review can judge the result against one bounded task
+
+If any condition is uncertain, do **not** use lightweight mode. Route to the full artifact workflow.
+
+## 5. Full Routing Rules
+
+Use PRD when product intent, user-facing behavior, goals, non-goals, scope, rules, or success criteria must be defined or changed.
+
+Use Architecture when system structure, boundaries, ownership, runtime flow, integration map, or cross-cutting constraints must be made durable.
+
+Use ADR when the main unresolved issue is one lasting technical or architectural decision with meaningful alternatives.
+
+Use Roadmap when intent and relevant architecture/ADR constraints are stable enough and the next need is staged delivery sequencing.
+
+Use Document Plan when the accepted work is about producing or refactoring bounded durable documents.
+
+Use Reject/Defer when the idea is weak, premature, low-value, or missing material evidence.
+
+## 6. Output Modes
+
+### `CHAT_ONLY_BRAINSTORM`
+
+Use when no durable artifact is needed. Output a concise decision and `Concrete Next Step`.
+
+### `DURABLE_BRAINSTORM_OUTPUT`
+
+Use when the brainstorm result must be referenced by a downstream skill. Default path:
+
+```text
+docs/brainstorm/BRAINSTORM-XXX-<slug>.md
+```
+
+### `LIGHTWEIGHT_MODE_CLASSIFICATION`
+
+Use when the request should proceed directly to a lightweight plan. Include the mandatory `Lightweight Classification` section from `docs/workflow/LIGHTWEIGHT_TASK_MODE.md`.
+
+## 7. Required Lightweight Classification
+
+When choosing `USE_LIGHTWEIGHT_MODE`, include:
 
 ```md
-## Brainstorm Decision
+## Lightweight Classification
 
-- Decision:
-- Target artifact/action:
-- Why this is the correct next step:
-- What is explicitly not next:
+- `mode`: LIGHTWEIGHT_TASK
+- `reason`:
+- `scope`:
+- `why_prd_not_needed`:
+- `why_architecture_not_needed`:
+- `why_adr_not_needed`:
+- `why_roadmap_not_needed`:
+- `validation_path`:
+- `escalation_trigger`:
+```
 
-## Handoff Payload
+## 8. Mandatory Closing Behavior
 
-- Problem / idea:
-- Relevant context:
-- Key constraints:
-- Open questions:
-- Suggested next skill:
+Every output must end with exactly one:
 
+```md
 ## Concrete Next Step
 
 - `next_step_type`:
@@ -120,15 +125,13 @@ Every output must include:
 - `suggested_prompt`:
 ```
 
-Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
+For lightweight mode, use:
 
-## Quality bar
+- `next_step_type`: `CREATE_PLAN`
+- `target`: the lightweight plan path or planned path
+- `action`: create a lightweight single-task plan
+- `blocking_condition`: the escalation trigger that would exit lightweight mode
 
-A good brainstorm-gate output is:
+## 9. Quality Bar
 
-- decisive
-- short
-- explicit about why this artifact is next
-- explicit about what is not next
-- useful as handoff context
-- free of downstream artifact content
+A good brainstorm output is decision-explicit, artifact-explicit, value-aware, constraint-aware, concise, and routed to exactly one next step.

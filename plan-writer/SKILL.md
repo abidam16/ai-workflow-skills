@@ -1,113 +1,124 @@
 ---
 name: plan-writer
-description: Create or update exactly one implementation plan for exactly one bounded task. Use when product, architecture, ADR, and sequencing context are clear enough to produce an executable PLAN.md. Do not use for brainstorm, PRD, architecture, ADR, roadmap, implementation, review, or multi-task planning.
+description: Create or update one architecture-aware, single-task PLAN.md or lightweight PLAN for one small/local task. Use when the next step is exactly one implementable task with explicit scope, source artifacts, relevant constraints, validation, review checks, and concrete next action. Do not use for PRDs, architecture docs, ADRs, roadmaps, broad multi-task plans, or implementation.
 ---
 
 # Plan Writer
 
-## Shared workflow policy
+## 1. Purpose
 
-Apply these shared docs instead of restating their rules here:
+This skill creates or updates exactly one executable implementation contract.
+
+A plan may be:
+
+- `FULL_PLAN` for normal artifact-driven work
+- `LIGHTWEIGHT_PLAN` for small, local, low-risk work that passed lightweight classification
+
+One plan must cover one task only.
+
+## 2. Shared Workflow Sources
+
+Use these shared workflow docs when present:
 
 - `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
 - `docs/workflow/HANDOFF_CONTRACTS.md`
 - `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
 - `docs/workflow/NEXT_STEP_TYPES.md`
-- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
+- `docs/workflow/LIGHTWEIGHT_TASK_MODE.md`
 
-Shared docs define artifact authority, handoff payloads, next-step values, and architecture-sensitive planning rules.
+## 3. When to Use
 
-## Purpose
+Use this skill when the next action is to produce or update a bounded implementation plan.
 
-Use this skill to create one execution contract for one implementation task.
+Use `LIGHTWEIGHT_PLAN` only when the incoming request includes a valid lightweight classification or the task clearly satisfies the lightweight mode rules.
 
-A plan must be concrete enough that an implementation agent can execute without inventing product intent, architecture decisions, ADR decisions, sequencing, or review criteria.
+Use `FULL_PLAN` when the work depends on PRD, architecture, ADR, roadmap, or review findings.
 
-## Non-negotiable rule
+## 4. When Not to Use
 
-One `PLAN.md` covers one independently reviewable implementation task only.
+Do not create a plan when:
 
-If the requested work contains multiple independent tasks, stop with a split recommendation and identify separate plan candidates.
+- product behavior is unclear and needs PRD work
+- architecture constraints are missing but needed
+- one durable technical decision needs ADR
+- phased sequencing is needed before task planning
+- the task has multiple independent objectives
+- implementation is already requested against an approved plan
 
-## Use this skill when
+## 5. Lightweight Plan Gate
 
-Use this skill when:
+Before creating a lightweight plan, verify:
 
-- a roadmap phase/slice must become one implementation task
-- architecture or ADR output unlocks one bounded implementation task
-- review found an issue that needs a corrective plan
-- the next step is not coding yet, but a precise implementation contract
-- scope, constraints, files, validation, and review criteria need to be made explicit
+- one primary objective
+- small/local scope
+- product behavior clear or unaffected
+- architecture clear or unaffected
+- no ADR-worthy decision
+- no roadmap need
+- small validation path
+- explicit escalation trigger
 
-## Do not use this skill when
+If any item fails, output a blocking result and route to the correct artifact.
 
-Route elsewhere when the current uncertainty is not one implementation task:
+## 6. Required Full Plan Content
 
-- artifact routing -> `brainstorm-gate`
-- product truth -> `prd-writer`
-- system shape -> `architecture-writer`
-- one technical decision -> `adr-writer`
-- delivery sequencing -> `roadmap-planner`
-- code changes -> `implement-task`
-- conformance checking -> `review-phase`
+A full plan must include:
 
-## Inputs expected
-
-Prefer the narrowest valid source chain:
-
-- roadmap slice, architecture section, ADR, or review finding that created the task
-- relevant PRD section if product behavior matters
-- relevant architecture section if boundaries, data, flows, integrations, security, consistency, or runtime assumptions matter
-- relevant ADRs if decisions constrain implementation
-- existing `PLAN.md`, if updating
-- codebase evidence needed to scope files and validation
-
-If upstream sources conflict or are missing, stop and route to the correct artifact.
-
-## Procedure
-
-1. Validate that plan-writing is the correct phase using the shared decision matrix.
-2. Confirm one-task scope.
-3. Classify readiness and blockers.
-4. Extract binding product, architecture, ADR, and roadmap constraints.
-5. Identify affected files/components and non-goals.
-6. Define implementation steps, validation, tests, risks, and review checklist.
-7. End with `## Concrete Next Step`.
-
-## Plan requirements
-
-A plan should normally include:
-
-- status and source artifacts
-- task objective
-- scope and non-goals
-- binding constraints
+- source artifacts
+- objective
+- in scope / out of scope
+- architecture constraints when relevant
+- ADR constraints when relevant
 - affected files/components
-- implementation steps
+- implementation approach
 - validation and tests
-- risks and rollback notes, when relevant
+- risks and assumptions
 - review checklist
-- open blockers, if any
+- concrete next step
 
-Use `assets/PLAN_TEMPLATE.md` for new plans unless the repo already has a compatible structure.
+## 7. Required Lightweight Plan Content
 
-## Output requirements
-
-Every output must include:
+A lightweight plan must include:
 
 ```md
-## Plan Handoff Summary
+# PLAN: <task title>
 
-- Plan path:
-- Task scope:
-- Architecture readiness:
-- ADR readiness:
-- Implementation readiness:
-- Validation required:
+## Plan Mode
+
+- `mode`: LIGHTWEIGHT_TASK
+- `why_lightweight`: 
+- `escalation_trigger`: 
+
+## Objective
+
+## Scope
+
+### In Scope
+
+### Out of Scope
+
+## Existing Behavior
+
+## Target Behavior
+
+## Affected Files / Components
+
+## Implementation Approach
+
+## Validation Checklist
+
+## Risk Check
+
+- `product_risk`: none | low | blocked
+- `architecture_risk`: none | low | blocked
+- `adr_risk`: none | low | blocked
+- `roadmap_risk`: none | low | blocked
+
+## Review Checklist
 
 ## Concrete Next Step
 
-- `next_step_type`:
+- `next_step_type`: IMPLEMENT_PLAN
 - `target`:
 - `action`:
 - `why_this_is_next`:
@@ -115,15 +126,20 @@ Every output must include:
 - `suggested_prompt`:
 ```
 
-Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
+## 8. Split Rule
 
-## Quality bar
+Split instead of writing one plan when:
 
-A good plan is:
+- there is more than one primary objective
+- validation paths are independent
+- files/components belong to unrelated areas
+- one part can be completed without the other
+- risk or review criteria differ materially
 
-- one-task only
-- implementation-ready
-- architecture-aware when relevant
-- explicit about validation
-- strict about non-goals
-- easy for `implement-task` to execute and `review-phase` to verify
+## 9. Escalation Rule
+
+If plan creation exposes missing product truth, architecture constraints, ADR decision, roadmap sequencing, or source conflict, stop and route to the correct artifact using `Concrete Next Step`.
+
+## 10. Mandatory Closing
+
+Every output must end with exactly one `Concrete Next Step` block.

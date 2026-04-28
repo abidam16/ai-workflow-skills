@@ -1,133 +1,94 @@
 ---
 name: review-phase
-description: Review implementation or artifact-chain consistency against approved source artifacts. Use for task review, roadmap implementation review, or pre-implementation ARTIFACT_CONSISTENCY_REVIEW. Produces severity-classified findings and exactly one concrete next action. Do not use to write PRD, architecture, ADR, roadmap, plan, or implementation changes.
+description: Review completed implementation work or artifact consistency against the approved source artifacts. Supports task review, lightweight task review, roadmap implementation review, and artifact consistency review. Use to produce severity-classified findings, architecture/product/ADR/plan alignment checks, validation assessment, and one concrete next step.
 ---
 
 # Review Phase
 
-## Shared workflow policy
+## 1. Purpose
 
-Apply these shared docs instead of restating their rules here:
+This skill is the enforcement layer. It reviews implementation or artifact consistency against relevant approved sources of truth and decides one concrete next action.
+
+## 2. Shared Workflow Sources
+
+Use these shared workflow docs when present:
 
 - `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
 - `docs/workflow/HANDOFF_CONTRACTS.md`
 - `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
 - `docs/workflow/NEXT_STEP_TYPES.md`
-- `docs/workflow/ARTIFACT_CONSISTENCY_REVIEW_CONTRACT.md`
-- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
+- `docs/workflow/LIGHTWEIGHT_TASK_MODE.md`
 
-Shared docs define artifact authority, handoff payloads, artifact-consistency review rules, and the required final next-step block.
+## 3. Review Modes
 
-## Purpose
+Supported modes:
 
-Use this skill to decide whether completed work or artifact chains conform to approved source artifacts.
+- `TASK_REVIEW` — review one implementation against one full plan
+- `LIGHTWEIGHT_TASK_REVIEW` — review one lightweight implementation against one lightweight plan
+- `ROADMAP_IMPLEMENTATION_REVIEW` — review roadmap-level implementation status across multiple tasks
+- `ARTIFACT_CONSISTENCY_REVIEW` — review PRD ↔ Architecture ↔ ADR ↔ Roadmap ↔ Plan before implementation
 
-Review does not rewrite artifacts or code. It produces findings and one concrete next action.
+## 4. Lightweight Task Review
 
-## Review modes
+Use when reviewing implementation produced from a lightweight plan.
 
-Use one mode per run:
+Assess:
 
-### `TASK_REVIEW`
+- lightweight eligibility remained valid
+- one-task scope was preserved
+- implementation matches the lightweight plan
+- no hidden product decision was introduced
+- no architecture boundary/source-of-truth change was introduced
+- no ADR-worthy decision was introduced
+- no roadmap/sequencing need was introduced
+- validation evidence is sufficient
+- next step is concrete
 
-Review one implemented plan against its source artifacts, changed files, tests, and validation evidence.
+If lightweight assumptions failed, do not approve. Route to the correct full artifact or plan update.
 
-### `ROADMAP_IMPLEMENTATION_REVIEW`
+## 5. Finding Types
 
-Review whether a set of completed plans implements a roadmap phase or roadmap slice correctly.
+Use relevant finding types:
 
-### `ARTIFACT_CONSISTENCY_REVIEW`
+- `PRODUCT_ALIGNMENT`
+- `ARCHITECTURE_VIOLATION`
+- `ADR_CONFLICT`
+- `ROADMAP_ALIGNMENT`
+- `PLAN_ALIGNMENT`
+- `LIGHTWEIGHT_SCOPE_VIOLATION`
+- `LIGHTWEIGHT_ESCALATION_REQUIRED`
+- `VALIDATION_GAP`
+- `TECHNICAL_QUALITY`
+- `SOURCE_OF_TRUTH_CONFLICT`
 
-Review PRD, architecture, ADRs, roadmap, and plan consistency before implementation.
+Severity:
 
-Use this mode to catch contradictions before code is written.
+- `BLOCKER`
+- `MAJOR`
+- `MINOR`
+- `NOTE`
 
-## Use this skill when
+## 6. Review Statuses
 
-Use this skill when:
+For task and lightweight task review:
 
-- implementation is complete and needs acceptance/revision decision
-- a roadmap phase needs implementation-level verification
-- artifacts need consistency review before implementation
-- review must classify defects, drift, missing validation, or source-artifact conflicts
-- the user needs a concrete next step after review
+- `APPROVED`
+- `APPROVED_WITH_MINOR_IMPROVEMENTS`
+- `NEEDS_REVISION`
+- `BLOCKED`
 
-## Do not use this skill when
+For artifact consistency review:
 
-Route elsewhere when the task is to create or modify artifacts/code:
+- `CONSISTENT`
+- `CONSISTENT_WITH_MINOR_GAPS`
+- `NEEDS_ARTIFACT_REVISION`
+- `BLOCKED`
 
-- product truth -> `prd-writer`
-- system shape -> `architecture-writer`
-- one technical decision -> `adr-writer`
-- delivery sequencing -> `roadmap-planner`
-- one implementation task -> `plan-writer`
-- code changes -> `implement-task`
+## 7. Mandatory Closing
 
-## Inputs expected
-
-For `TASK_REVIEW`, prefer:
-
-- `PLAN.md`
-- implementation summary
-- changed files/diff
-- validation/test evidence
-- relevant PRD, architecture, ADR, and roadmap sections
-
-For `ROADMAP_IMPLEMENTATION_REVIEW`, prefer:
-
-- roadmap section
-- completed plans
-- implementation summaries
-- review reports, validation evidence, and relevant source artifacts
-
-For `ARTIFACT_CONSISTENCY_REVIEW`, prefer:
-
-- PRD
-- root or initiative architecture
-- relevant ADRs
-- roadmap
-- plan(s)
-- prior review findings, if any
-
-If critical evidence is missing, produce a missing-evidence review instead of guessing.
-
-## Procedure
-
-1. Select exactly one review mode.
-2. Identify the applicable source artifacts and evidence.
-3. Check conformance against the shared authority and handoff contracts.
-4. Classify findings by severity and type.
-5. Decide whether the work/artifact chain is acceptable, needs revision, or is blocked.
-6. Route to exactly one concrete next action.
-7. End with `## Concrete Next Step`.
-
-## Finding severity
-
-Use severity consistently:
-
-- `BLOCKER` — cannot proceed safely
-- `MAJOR` — must fix before acceptance or implementation
-- `MINOR` — should fix, but does not block core acceptance
-- `OBSERVATION` — useful note, not a required fix
-
-## Output requirements
-
-Every review report must include:
+Every review report must end with exactly one:
 
 ```md
-## Review Summary
-
-- Review mode:
-- Review status:
-- Source artifacts reviewed:
-- Evidence reviewed:
-- Overall decision:
-
-## Findings
-
-| Severity | Type | Finding | Required action |
-|---|---|---|---|
-
 ## Concrete Next Step
 
 - `next_step_type`:
@@ -138,15 +99,13 @@ Every review report must include:
 - `suggested_prompt`:
 ```
 
-Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
+Typical next steps:
 
-## Quality bar
-
-A good review is:
-
-- evidence-based
-- source-artifact aware
-- explicit about severity
-- clear about whether work can proceed
-- strict about architecture and ADR conflicts
-- never vague about the next step
+- `RUN_REVIEW` for additional required review
+- `RETURN_TO_IMPLEMENTATION` for code corrections
+- `UPDATE_PLAN` for plan correction
+- `UPDATE_PRD` for product ambiguity
+- `UPDATE_ARCHITECTURE` for architecture gap/conflict
+- `CREATE_ADR` for durable decision gap
+- `UPDATE_ROADMAP` for sequencing gap
+- `STOP_AND_ESCALATE` for unresolved conflict

@@ -1,107 +1,93 @@
 ---
 name: implement-task
-description: Execute exactly one approved PLAN.md with strict plan fidelity, source-artifact checks, scope control, validation, deviation reporting, and concrete next-step handoff. Use only when the next step is implementation for one bounded task. Do not use for brainstorm, PRD, architecture, ADR, roadmap, plan creation, review, or multi-task execution.
+description: Implement exactly one approved PLAN.md or lightweight PLAN. Use when there is a bounded implementation contract with scope, constraints, validation, and concrete next action. Preserve relevant PRD, architecture, ADR, roadmap, and plan constraints; stop instead of silently expanding scope or resolving upstream conflicts.
 ---
 
 # Implement Task
 
-## Shared workflow policy
+## 1. Purpose
 
-Apply these shared docs instead of restating their rules here:
+This skill executes one approved plan. It is plan-bound, but not plan-blind.
+
+Supported execution modes:
+
+- `FULL_PLAN_IMPLEMENTATION`
+- `LIGHTWEIGHT_PLAN_IMPLEMENTATION`
+
+## 2. Shared Workflow Sources
+
+Use these shared workflow docs when present:
 
 - `docs/workflow/ARTIFACT_DECISION_MATRIX.md`
 - `docs/workflow/HANDOFF_CONTRACTS.md`
 - `docs/workflow/CONCRETE_NEXT_STEP_CONTRACT.md`
 - `docs/workflow/NEXT_STEP_TYPES.md`
-- `docs/workflow/LOCAL_SKILL_AUTHORING_RULES.md`
+- `docs/workflow/LIGHTWEIGHT_TASK_MODE.md`
 
-Shared docs define artifact authority, handoff payloads, conflict handling, and the required final next-step block.
+## 3. Pre-Implementation Checks
 
-## Purpose
+Before editing code, extract:
 
-Use this skill to implement exactly one approved task from one `PLAN.md` or equivalent single-task plan.
+- plan mode
+- objective
+- in-scope work
+- out-of-scope work
+- affected files/components
+- architecture constraints, if relevant
+- ADR constraints, if relevant
+- validation checklist
+- escalation/deviation triggers
 
-Implementation is plan-bound, but not allowed to knowingly violate relevant upstream product, architecture, ADR, or roadmap constraints.
+If the plan conflicts with relevant PRD, architecture, ADR, roadmap, or review findings, stop and report the conflict.
 
-## Non-negotiable rules
+## 4. Lightweight Implementation Rules
 
-1. Execute one plan only.
-2. Do not expand scope silently.
-3. Do not redesign product, architecture, ADRs, roadmap, or plan during implementation.
-4. If the plan conflicts with relevant upstream artifacts, stop or report a deviation.
-5. Every run must end with `## Concrete Next Step`.
+For `LIGHTWEIGHT_PLAN_IMPLEMENTATION`, implementation must:
 
-## Use this skill when
+- preserve the one-objective scope
+- keep changes local and small
+- avoid product behavior expansion
+- avoid architecture boundary changes
+- avoid new ADR-worthy decisions
+- avoid roadmap/sequencing work
+- run or describe the explicit validation path
+- stop if the escalation trigger appears
 
-Use this skill when:
+A lightweight implementation must not silently become a full feature, migration, or architecture-sensitive refactor.
 
-- one approved implementation plan exists
-- the plan is sufficiently specific to execute
-- the current job is code/config/test/documentation changes required by that plan
-- validation can be performed or clearly reported as unavailable
+## 5. Escalation Triggers
 
-## Do not use this skill when
+Stop implementation and report a blocker when:
 
-Route elsewhere when implementation is not ready:
+- the plan is ambiguous
+- implementation requires product behavior clarification
+- implementation requires architecture boundary/source-of-truth changes
+- implementation introduces a durable technical decision
+- implementation expands beyond one task
+- validation requires broader integration than expected
+- relevant source artifacts conflict
 
-- task is still ambiguous -> `plan-writer`
-- multiple tasks are mixed together -> `plan-writer`
-- product truth changed -> `prd-writer`
-- architecture must be created or changed -> `architecture-writer`
-- one technical decision must be recorded -> `adr-writer`
-- delivery order is unclear -> `roadmap-planner`
-- completed work should be judged -> `review-phase`
+## 6. Completion Output
 
-## Inputs expected
+After implementation, produce an implementation summary.
 
-Required:
-
-- one `PLAN.md` or equivalent approved single-task plan
-- relevant codebase files
-- validation commands or expected test strategy, if available
-
-Also read relevant upstream artifacts when the plan or task references them.
-
-If required sources are missing or contradictory, produce a blocker report rather than coding through ambiguity.
-
-## Procedure
-
-1. Read the plan and extract obligations.
-2. Check for source-artifact conflicts using the shared decision matrix and handoff contracts.
-3. Identify scope, non-goals, files, validation, and risks.
-4. Implement the smallest complete change that satisfies the plan.
-5. Run or describe validation.
-6. Report deviations, blockers, and changed files.
-7. End with `## Concrete Next Step`.
-
-## Deviation handling
-
-A deviation must be reported when implementation:
-
-- changes scope
-- changes behavior not requested by the plan
-- encounters a source-artifact conflict
-- requires architecture, ADR, roadmap, or PRD changes
-- cannot validate required behavior
-- discovers the plan is incorrect or incomplete
-
-Do not hide deviations inside the implementation summary.
-
-## Output requirements
-
-Every implementation summary or blocker report must include:
+For lightweight mode, include:
 
 ```md
-## Implementation Summary
+## Lightweight Assumptions Check
 
-- Plan executed:
-- Status:
-- Files changed:
-- Behavior changed:
-- Validation performed:
-- Deviations:
-- Blockers:
+- `product_behavior_unchanged_or_clear`: true | false
+- `architecture_unchanged`: true | false
+- `no_adr_decision_introduced`: true | false
+- `no_roadmap_need_introduced`: true | false
+- `escalation_trigger_hit`: true | false
+```
 
+## 7. Mandatory Closing
+
+Every implementation summary, blocker report, or deviation report must end with exactly one:
+
+```md
 ## Concrete Next Step
 
 - `next_step_type`:
@@ -112,15 +98,4 @@ Every implementation summary or blocker report must include:
 - `suggested_prompt`:
 ```
 
-Use canonical `next_step_type` values from `docs/workflow/NEXT_STEP_TYPES.md`.
-
-## Quality bar
-
-A good implementation is:
-
-- faithful to one plan
-- minimal but complete
-- source-artifact aware
-- validated or honest about missing validation
-- explicit about deviations
-- ready for `review-phase`
+Use `RUN_REVIEW` after successful implementation. Use `UPDATE_PLAN`, `UPDATE_ARCHITECTURE`, `CREATE_ADR`, `UPDATE_PRD`, or `STOP_AND_ESCALATE` when implementation reveals upstream gaps.

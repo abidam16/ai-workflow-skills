@@ -1,10 +1,58 @@
-# Handoff Contracts
+# HANDOFF_CONTRACTS.md
 
-This document defines the minimum fields each workflow phase must pass to the next phase.
+Purpose: define minimum required input/output fields between workflow phases so each skill can hand off cleanly with low ambiguity, controlled token usage, and correct source-of-truth authority.
 
-## Universal output contract
+---
 
-Every phase output must end with exactly one `Concrete Next Step` block:
+## 1. Core Rule
+
+Each phase should pass forward only the **minimum structured payload** the next phase needs. Do not pass the entire history if a compact handoff is enough.
+
+Every handoff must include:
+
+- artifact type
+- artifact status
+- decision/routing
+- core rationale
+- references to upstream artifacts
+- constraints that materially affect the next phase
+- open issues that materially affect the next phase
+- exactly one `Concrete Next Step`
+
+Architecture is a first-class handoff artifact. Lightweight mode is a first-class shortcut only for small, local, low-risk work.
+
+---
+
+## 2. Standard Artifact Types
+
+Common values:
+
+- `BRAINSTORM_OUTPUT`
+- `PRD`
+- `PRD_DELTA`
+- `ARCHITECTURE`
+- `ARCHITECTURE_DELTA`
+- `INITIATIVE_ARCHITECTURE`
+- `INITIATIVE_ARCHITECTURE_DELTA`
+- `ADR`
+- `ADR_DELTA`
+- `ROADMAP`
+- `ROADMAP_DELTA`
+- `PLAN`
+- `PLAN_DELTA`
+- `LIGHTWEIGHT_PLAN`
+- `IMPLEMENTATION_SUMMARY`
+- `LIGHTWEIGHT_IMPLEMENTATION_SUMMARY`
+- `TASK_REVIEW_REPORT`
+- `LIGHTWEIGHT_TASK_REVIEW_REPORT`
+- `ARTIFACT_CONSISTENCY_REVIEW_REPORT`
+- `ROADMAP_REVIEW_REPORT`
+
+---
+
+## 3. Required Concrete Next Step
+
+Every handoff must end with:
 
 ```md
 ## Concrete Next Step
@@ -17,150 +65,158 @@ Every phase output must end with exactly one `Concrete Next Step` block:
 - `suggested_prompt`:
 ```
 
-Do not use loose alternatives such as `Immediate Next Step`, `Continuation Prompt`, or `next_step`.
+Do not use old terminal fields such as `Immediate Next Step`, `Continuation Prompt`, loose `next_step`, or loose `follow_up`.
 
-## Brainstorm -> Durable Artifact
+---
 
-Required handoff fields:
+## 4. Lightweight Eligibility Handoff
 
-- decision
-- target artifact/action
-- problem framing
-- explored alternatives summary
-- rationale for chosen next artifact
-- explicit non-next artifacts/actions
-- concrete next step
+Use when a phase decides that full PRD/Architecture/ADR/Roadmap work is not needed.
 
-## PRD -> Architecture
+Required fields:
 
-Required handoff fields:
+```yaml
+artifact_type: LIGHTWEIGHT_MODE_CLASSIFICATION
+artifact_status: APPROVED | REJECTED | BLOCKED
+decision: USE_LIGHTWEIGHT_MODE | ESCALATE_TO_FULL_WORKFLOW
+source_artifacts:
+  - <issue/request/brainstorm/doc/code reference>
+lightweight_classification:
+  mode: LIGHTWEIGHT_TASK
+  reason: <why the work is small/local/low-risk>
+  scope: <one objective>
+  why_prd_not_needed: <product truth already clear/unaffected>
+  why_architecture_not_needed: <system shape/boundaries unaffected>
+  why_adr_not_needed: <no durable decision required>
+  why_roadmap_not_needed: <no staged sequencing required>
+  validation_path: <small explicit validation>
+  escalation_trigger: <condition that exits lightweight mode>
+```
 
-- product behaviors requiring system-shape support
-- business rules that constrain architecture
-- user flows that cross component boundaries
-- data/source-of-truth implications
-- integration/runtime implications
-- architecture impact classification
-- concrete next step
+Consumed by:
 
-## Architecture -> ADR
+- `plan-writer` for lightweight plan creation
+- `implement-task` for lightweight implementation
+- `review-phase` for lightweight review
 
-Required handoff fields:
+---
 
-- decision pressure
-- architecture area affected
-- options that require decision record
-- consequences if unresolved
-- related architecture sections
-- concrete next step
+## 5. Lightweight Plan → Implementation
 
-## Architecture -> Roadmap
+Use when one lightweight plan is approved.
 
-Required handoff fields:
+Required output from plan writer:
 
-- architecture scope
-- component/data/integration dependencies
-- required ADRs and their status
-- sequencing constraints
-- implementation readiness
-- concrete next step
+```yaml
+artifact_type: LIGHTWEIGHT_PLAN
+artifact_status: APPROVED | DRAFT | BLOCKED
+decision: PROCEED_TO_IMPLEMENTATION | HOLD
+objective: <one primary objective>
+in_scope:
+  - <allowed work>
+out_of_scope:
+  - <excluded work>
+affected_files_or_components:
+  - <known targets, if known>
+existing_behavior: <summary>
+target_behavior: <summary>
+implementation_approach: <small local approach>
+validation_checklist:
+  - <validation step>
+risk_check:
+  product_risk: none | low | blocked
+  architecture_risk: none | low | blocked
+  adr_risk: none | low | blocked
+  roadmap_risk: none | low | blocked
+escalation_trigger: <when implementation must stop>
+```
 
-## ADR -> Architecture
+Consumed by implement-task:
 
-Required handoff fields:
-
-- ADR identifier
-- decision summary
-- architecture sections affected
-- constraints introduced or changed
-- whether root or initiative architecture must be updated
-- concrete next step
-
-## Roadmap -> Plan
-
-Required handoff fields:
-
-- selected phase/slice
 - objective
-- dependencies already satisfied
-- dependencies not satisfied
-- architecture/ADR constraints to carry into plan
-- candidate one-task plan boundary
-- concrete next step
+- scope boundary
+- files/components
+- implementation approach
+- validation checklist
+- escalation trigger
 
-## Plan -> Implementation
+Not required:
 
-Required handoff fields:
+- full PRD summary
+- full architecture prose
+- roadmap phases
+- broad alternatives
 
-- one-task objective
-- in-scope items
-- out-of-scope items
-- expected file/component changes
-- relevant PRD/architecture/ADR/roadmap constraints
-- validation requirements
-- stop conditions
-- concrete next step
+---
 
-## Implementation -> Review
+## 6. Lightweight Implementation → Review
 
-Required handoff fields:
+Required output from implement-task:
 
-- plan reference
-- implementation summary
-- changed files / diff reference
-- validations run
-- known deviations
-- architecture/ADR conflicts discovered, if any
-- concrete next step
+```yaml
+artifact_type: LIGHTWEIGHT_IMPLEMENTATION_SUMMARY
+artifact_status: COMPLETED | BLOCKED | DEVIATED
+decision: PROCEED_TO_REVIEW | ESCALATE_TO_PLAN_UPDATE | ESCALATE_TO_FULL_WORKFLOW
+plan_path: <path>
+changes_made:
+  - <compact change summary>
+files_changed:
+  - <file path>
+validation_performed:
+  - <command/check/manual validation>
+lightweight_assumptions_preserved:
+  product_behavior_unchanged_or_clear: true | false
+  architecture_unchanged: true | false
+  no_adr_decision_introduced: true | false
+  no_roadmap_need_introduced: true | false
+deviations:
+  - <none or deviation>
+escalation_trigger_hit: true | false
+```
 
-## Artifact Consistency Review Input
+Consumed by review-phase:
 
-Use this input contract for `ARTIFACT_CONSISTENCY_REVIEW`.
+- plan path
+- changes made
+- validation evidence
+- whether lightweight assumptions were preserved
+- deviations/escalation triggers
 
-Required when available:
+---
 
-- `PRD.md`
-- root `ARCHITECTURE.md` and/or initiative architecture
-- relevant ADRs
-- `ROADMAP.md` or roadmap slice
-- one or more `PLAN.md` files or plan candidates
-- shared workflow docs
+## 7. Lightweight Review Output
 
-Optional:
+Required output from review-phase:
 
-- brainstorm handoff, as historical context only
-- implementation summaries, only when they expose artifact drift
+```yaml
+artifact_type: LIGHTWEIGHT_TASK_REVIEW_REPORT
+artifact_status: APPROVED | APPROVED_WITH_MINOR_IMPROVEMENTS | NEEDS_REVISION | BLOCKED
+decision: ACCEPT | RETURN_TO_IMPLEMENTATION | UPDATE_PLAN | ESCALATE_TO_FULL_WORKFLOW
+reviewed_plan: <path>
+reviewed_implementation_summary: <path or summary>
+lightweight_eligibility_confirmed: true | false
+findings:
+  - severity: BLOCKER | MAJOR | MINOR | NOTE
+    type: SCOPE | VALIDATION | ARCHITECTURE_ESCALATION | PRODUCT_ESCALATION | ADR_ESCALATION | ROADMAP_ESCALATION | TECHNICAL_QUALITY
+    description: <finding>
+required_action: <concrete action>
+```
 
-## Artifact Consistency Review Output
+If lightweight eligibility is false, review must route to the appropriate full artifact instead of approving.
 
-The output must include:
+---
 
-- selected review mode: `ARTIFACT_CONSISTENCY_REVIEW`
-- artifacts reviewed
-- missing/stale/conflicting source artifacts
-- PRD -> Architecture consistency assessment
-- Architecture -> ADR consistency assessment
-- Architecture/ADR -> Roadmap consistency assessment
-- Source artifacts -> PLAN consistency assessment
-- handoff contract completeness assessment
-- findings with severity and category
-- final status: `CONSISTENT`, `CONSISTENT_WITH_MINOR_GAPS`, `NEEDS_ARTIFACT_REVISION`, or `BLOCKED`
-- exactly one concrete next step
+## 8. Full Workflow Handoff Rule
 
-## Review -> Next Action
+When a task is not lightweight, use the standard full workflow handoffs:
 
-Review may route to:
+- Brainstorm → PRD / Architecture / ADR / Roadmap
+- PRD → Architecture / Roadmap / Plan
+- Architecture → ADR / Roadmap / Plan
+- ADR → Architecture / Roadmap / Plan
+- Roadmap → Plan
+- Plan → Implementation
+- Implementation → Review
+- Review → next correction or approval action
 
-- merge/close task
-- apply minor fixes
-- return to implementation
-- create/update PRD
-- create/update architecture
-- create/update ADR
-- update roadmap
-- create/update plan
-- request missing evidence/source artifact
-- split review scope
-- stop and escalate
-
-The review must choose exactly one immediate next step.
+Lightweight mode must not be used as a shortcut around unresolved upstream truth.

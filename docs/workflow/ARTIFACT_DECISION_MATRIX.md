@@ -1,115 +1,236 @@
-# Artifact Decision Matrix
+# ARTIFACT_DECISION_MATRIX.md
 
-This document defines how AI workflow skills choose the next durable artifact or action.
+Purpose: define routing rules between workflow artifacts so each phase ends with one clear next step, minimal ambiguity, and correct source-of-truth authority.
 
-## Core rule
+---
 
-Do not create every artifact every time.
+## 1. Core Rule
 
-Choose exactly one immediate next artifact/action that resolves the current uncertainty.
+At any point in the workflow, choose the **single next artifact or action** that best resolves the current uncertainty or execution need.
 
-## Artifact authority model
+Preferred full workflow:
+
+```text
+Brainstorm
+-> PRD if product intent is unclear or changed
+-> Architecture if system shape, boundaries, ownership, runtime flows, or cross-cutting constraints are unclear or changed
+-> ADR if one important technical/architectural decision must be recorded
+-> Roadmap if staged delivery structure is needed
+-> Plan for one bounded implementation task
+-> Implementation
+-> Review
+```
+
+Lightweight workflow for small, local, low-risk tasks:
+
+```text
+Issue / request / brainstorm summary
+-> Lightweight Plan
+-> Implementation
+-> Lightweight Review
+```
+
+Do not create every artifact every time. Create or update exactly the artifact/action that resolves the current uncertainty.
+
+Architecture is optional to create, but authoritative when present and relevant.
+
+---
+
+## 2. Artifact Roles
+
+### Brainstorm Output
+
+Used to clarify an idea, assess value, compare options, and route to exactly one next artifact/action. Brainstorm is historical routing context, not long-term product or architecture truth once downstream artifacts supersede it.
+
+### PRD
+
+Product truth: product intent, goals, non-goals, users/roles, flows, product rules, current vs target behavior, and success criteria.
+
+### Architecture
+
+System-shape truth: repo/product architecture, initiative architecture, component/module/service boundaries, data ownership, runtime flows, integration boundaries, consistency/security/observability/deployment/performance constraints, and ADR links.
+
+### ADR
+
+Decision truth: one meaningful technical or architectural decision, options considered, chosen option, rationale, consequences, and supersession relationship.
+
+### Roadmap
+
+Sequencing truth: staged delivery structure, phases, dependencies, risks, exit criteria, and plan handoff candidates.
+
+### Plan
+
+Execution truth for one bounded task: scope, files/components, implementation approach, validation, review expectations, and constraints from relevant upstream artifacts.
+
+### Lightweight Plan
+
+A compressed plan for one small, local, low-risk task. It is allowed only when PRD, architecture, ADR, and roadmap work are not needed.
+
+### Implementation
+
+Executes one approved plan or lightweight plan. It must not silently override PRD, architecture, ADR, roadmap, or plan constraints.
+
+### Review
+
+Enforcement layer. Judges implementation and/or artifact consistency against the relevant approved sources of truth.
+
+---
+
+## 3. Authority Model
 
 | Artifact | Authority |
 |---|---|
-| `BRAINSTORM.md` | Historical exploration and routing context only |
-| `PRD.md` | Product behavior, scope, user value, business rules, success criteria |
-| `ARCHITECTURE.md` | Canonical system-shape truth for the repo/product |
-| `docs/architecture/<initiative>-architecture.md` | Deep system-shape truth for a large active initiative |
-| `docs/adr/*.md` | One accepted technical/architectural decision and its consequences |
-| `ROADMAP.md` | Delivery sequencing, phases, dependencies, exit criteria |
-| `PLAN.md` | One bounded implementation task execution contract |
-| Implementation summary | What actually changed and what validation was done |
-| Review report | Conformance assessment and exactly one concrete next step |
+| PRD | Product behavior, user value, product rules, success criteria |
+| Architecture | System shape, boundaries, ownership, runtime flows, cross-cutting constraints |
+| ADR | One recorded technical decision and its rationale/consequences |
+| Roadmap | Delivery sequence, phases, dependency ordering |
+| Plan | Scope and execution contract for one bounded task |
+| Lightweight Plan | Scope and execution contract for one small, local, low-risk task |
+| Implementation Summary | What changed, what was validated, what deviated |
+| Review Report | Acceptance decision, findings, and next action |
 
-## Preferred artifact flow
+Conflict rules:
+
+1. Do not silently resolve conflicts between artifacts.
+2. PRD governs product behavior.
+3. Architecture governs system structure and implementation constraints.
+4. ADR governs the specific decision it records.
+5. Roadmap governs sequencing but cannot redefine product or architecture truth.
+6. PLAN governs one task scope but cannot override PRD, architecture, or ADRs.
+7. Lightweight PLAN is valid only while lightweight assumptions remain true.
+8. If a downstream artifact conflicts with an upstream authority, stop and route to the correct update artifact.
+
+---
+
+## 4. Top-Level Routing Order
+
+When deciding the next artifact/action, use this order:
+
+1. Reject / defer?
+2. Is this eligible for lightweight mode?
+3. Need product intent clarified or changed?
+4. Need system shape, boundaries, ownership, runtime flow, or cross-cutting constraints documented?
+5. Need one technical/architectural decision recorded?
+6. Need staged delivery structure?
+7. Need one-task execution contract?
+8. Need implementation?
+9. Need review?
+
+This ordering allows efficient small-task execution without letting architecture-sensitive work bypass durable artifacts.
+
+---
+
+## 5. Lightweight Mode Routing Rules
+
+Use lightweight mode only when all of these are true:
+
+- one primary objective
+- small/local change
+- product behavior is already clear or unaffected
+- architecture boundaries are already clear or unaffected
+- no ADR-worthy decision is needed
+- no roadmap sequencing is needed
+- validation is small and explicit
+- review can judge the result against one bounded task
+
+Choose lightweight mode for:
+
+- local bug fix
+- small test addition
+- documentation typo or small clarification
+- local behavior-preserving refactor
+- small validation/copy/config cleanup
+
+Do not choose lightweight mode for:
+
+- new feature/capability
+- behavior ambiguity
+- boundary/data ownership/integration changes
+- async, transaction, security, authorization, deployment, observability, or performance changes
+- large refactor/migration
+- multi-task work
+- decisions with meaningful alternatives
+
+Lightweight route:
 
 ```text
-BRAINSTORM
--> PRD
--> ARCHITECTURE
--> ADR
--> ROADMAP
--> PLAN
--> IMPLEMENTATION
--> REVIEW
+CREATE_PLAN -> IMPLEMENT_PLAN -> RUN_REVIEW
 ```
 
-This order is conceptual, not mandatory. Skip artifacts that are not needed for the current uncertainty.
+If lightweight eligibility is uncertain, do not use lightweight mode. Route to the full artifact workflow.
 
-## Routing rules
+---
 
-### Route to PRD
+## 6. Full Workflow Routing Rules
 
-Choose PRD when the uncertainty is product behavior, user value, product scope, success criteria, workflow, or business rule.
+### Choose PRD when
 
-### Route to Architecture
+- product intent does not exist or changed
+- user-facing behavior, product goals, roles, flows, rules, or success criteria must be defined
 
-Choose architecture when the uncertainty is system shape, component boundaries, data ownership, runtime flow, integration boundary, transaction/consistency rule, security/authorization model, observability, deployment/runtime assumption, or architecture-sensitive UI/system boundary.
+### Choose Architecture when
 
-### Route to ADR
+- system shape, component/module/service boundaries, data ownership, runtime flow, integration model, or cross-cutting constraints must be durable before later work proceeds
 
-Choose ADR when one bounded technical or architectural decision has meaningful alternatives, durable consequences, and should be recorded for future readers.
+### Choose ADR when
 
-### Route to Roadmap
+- the next blocking question is one important technical/architectural decision with credible options and lasting consequences
 
-Choose roadmap when product, architecture, and decision intent are stable enough, and the remaining uncertainty is delivery sequencing.
+### Choose Roadmap when
 
-### Route to Plan
+- intent and relevant architecture/ADR constraints are stable enough and the next need is staged delivery structure
 
-Choose plan when one bounded implementation task is ready to be specified.
+### Choose Plan when
 
-### Route to Implementation
+- exactly one bounded task is ready for execution and relevant constraints are clear enough
 
-Choose implementation only when a valid plan exists and relevant PRD, architecture, ADR, and roadmap constraints are not missing or contradictory.
+### Choose Implementation when
 
-### Route to Review
+- one approved plan exists, scope is bounded, and validation/test expectations are clear
 
-Choose review when implementation evidence exists, or when artifact consistency must be checked before implementation continues.
+### Choose Review when
 
-## Review-mode decision matrix
+- implementation or artifact-chain consistency must be judged against approved sources of truth
 
-| Review target | Review mode |
-|---|---|
-| One implementation against one approved plan | `TASK_REVIEW` |
-| Multiple completed tasks against one roadmap or roadmap slice | `ROADMAP_IMPLEMENTATION_REVIEW` |
-| PRD, architecture, ADR, roadmap, and/or plan consistency before implementation | `ARTIFACT_CONSISTENCY_REVIEW` |
-| Mixed or unclear scope | Split the review or choose `SPLIT_REVIEW_SCOPE` as the next step |
+---
 
-## `ARTIFACT_CONSISTENCY_REVIEW`
+## 7. Default Workflow Patterns
 
-Use this mode before implementation or before continuing implementation when multiple durable artifacts exist and may be inconsistent.
+### Pattern A: New product or major feature
 
-It checks:
+Brainstorm → PRD → Architecture → ADR if needed → Roadmap → Plan → Implementation → Review
 
-1. PRD -> Architecture
-2. Architecture -> ADRs
-3. Architecture / ADRs -> Roadmap
-4. PRD / Architecture / ADRs / Roadmap -> PLAN
-5. Handoff completeness
-6. Implementation readiness
+### Pattern B: Existing product behavior change
 
-It must not create or rewrite artifacts. It only identifies gaps and routes to exactly one next artifact/action.
+Brainstorm → PRD Update → Architecture Update if needed → Roadmap Update or Plan → Implementation → Review
 
-## Conflict routing
+### Pattern C: Broad technical architecture change
 
-When artifacts conflict, route to the highest-authority artifact that must change first.
+Brainstorm → Architecture → ADR if needed → Roadmap or Plan → Implementation → Review
 
-| Conflict | Next step |
-|---|---|
-| product behavior is unclear or contradicted | `UPDATE_PRD` |
-| architecture is required but missing | `CREATE_ARCHITECTURE` |
-| system-shape truth is outdated or contradicted | `UPDATE_ARCHITECTURE` |
-| one durable technical decision is missing | `CREATE_ADR` |
-| recorded decision is stale or contradicted | `UPDATE_ADR` |
-| delivery sequence violates dependencies | `UPDATE_ROADMAP` |
-| plan violates upstream source artifacts | `UPDATE_PLAN` |
-| source artifacts required for fair review are missing | `REQUEST_MISSING_SOURCE_ARTIFACT` |
-| review target is too broad or mixed | `SPLIT_REVIEW_SCOPE` |
+### Pattern D: One significant technical decision
 
-## Concrete next step requirement
+Brainstorm → ADR → Architecture Update if needed → Roadmap or Plan → Implementation → Review
 
-Every phase output must end with exactly one `Concrete Next Step` block.
+### Pattern E: Existing initiative change
+
+Brainstorm → PRD/Architecture/Roadmap Update, whichever resolves current uncertainty → Plan → Implementation → Review
+
+### Pattern F: Small local implementation task
+
+Issue/request/brainstorm summary → Lightweight Plan → Implementation → Lightweight Review
+
+Use Pattern F only when product intent, architecture constraints, ADRs, and roadmap sequencing are clear or not relevant.
+
+### Pattern G: Weak or premature idea
+
+Brainstorm → Reject / Defer
+
+---
+
+## 8. Minimum Next-Step Requirement
+
+Every phase must end with the shared `Concrete Next Step` block.
 
 ```md
 ## Concrete Next Step
@@ -121,3 +242,11 @@ Every phase output must end with exactly one `Concrete Next Step` block.
 - `blocking_condition`:
 - `suggested_prompt`:
 ```
+
+No phase should end with only analysis and no routing.
+
+---
+
+## 9. Portability Rule
+
+This matrix is workflow-generic. Domain-specific rules should be layered through `AGENTS.md`, nested `AGENTS.md`, domain-specific checklists, or domain-specific skills. Do not overload this matrix with domain-specific regulations.
