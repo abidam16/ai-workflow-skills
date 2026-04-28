@@ -30,7 +30,7 @@
 
 ## 5. Decision
 
-Decision: `<choose exactly one>`
+Decision: `<choose exactly one allowed decision>`
 
 ## 6. Artifact Action
 

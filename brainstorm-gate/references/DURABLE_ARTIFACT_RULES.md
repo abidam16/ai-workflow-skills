@@ -1,127 +1,93 @@
 # Durable Artifact Rules
 
-The brainstorm phase can end as chat-only output or as a durable artifact.
+Use this file to decide whether brainstorm output should be chat-only or durable.
 
-The purpose of durable output is to avoid relying on chat history when another skill, phase, or future session needs the conclusion.
+## Core Rule
 
-## Output Mode Choices
+Do not create a durable brainstorm artifact merely because the discussion was interesting.
 
-### `CHAT_ONLY_BRAINSTORM`
+Create a durable brainstorm artifact when the brainstorm result must become a stable input for another workflow phase.
 
-Use when:
+## Use `CHAT_ONLY_BRAINSTORM` When
 
 - the user is exploring casually
-- no downstream workflow is expected
-- the idea is obviously weak and not worth preserving
-- the user only needs a recommendation in the current conversation
-- the decision does not affect durable product, architecture, roadmap, or implementation context
+- the idea is not expected to continue into another workflow phase
+- the conclusion is simple enough to remain in chat
+- the idea is weak and not likely to be revisited
+- no later AI agent needs to consume the result
 
-### `DURABLE_BRAINSTORM_OUTPUT`
+## Use `DURABLE_BRAINSTORM_OUTPUT` When
 
-Use when:
+- the brainstorm will feed PRD, Architecture, ADR, roadmap, document plan, implementation, or review
+- the user explicitly asks for a durable document
+- the decision rationale matters later
+- the idea is deferred but likely to be revisited
+- another session or AI agent must consume the result
+- the idea affects product direction, architecture direction, delivery sequencing, documentation workflow, or implementation scope
+- the brainstorm resolves ambiguity that would otherwise be lost in chat history
 
-- the user asks for a durable document
-- the brainstorm will feed PRD, ADR, roadmap, plan, implementation, or review
-- the decision rationale should be preserved
-- the idea may be revisited later
-- future AI agents need a compact source of truth
-- the conclusion changes product direction, architecture, sequencing, or task scope
+## Artifact Path
 
-## Default File Path
-
-Use:
+Default path:
 
 ```text
 docs/brainstorm/BRAINSTORM-<sequence>-<short-slug>.md
 ```
 
-If sequence cannot be known:
+Examples:
 
 ```text
-docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
+docs/brainstorm/BRAINSTORM-001-notification-inbox.md
+docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md
+docs/brainstorm/BRAINSTORM-003-roadmap-scope-split.md
 ```
 
-## Naming Rules
+Use `BRAINSTORM-XXX` when the sequence number cannot be safely determined.
 
-- Use uppercase `BRAINSTORM` prefix.
-- Use a 3-digit sequence when known: `001`, `002`, `003`.
-- Use `XXX` only when the agent cannot inspect existing files.
-- Use a short lowercase slug.
-- Use hyphens, not spaces or underscores.
-- Avoid vague slugs like `context`, `idea`, or `notes`.
+## Artifact Status
 
-Good:
+Use one of:
 
-```text
-BRAINSTORM-001-notification-inbox.md
-BRAINSTORM-002-ai-report-template-builder.md
-BRAINSTORM-003-kafka-log-monitoring.md
-```
+- `DRAFT`
+- `APPROVED`
+- `UPDATED`
+- `DEFERRED`
+- `REJECTED`
+- `BLOCKED`
 
-Weak:
+Default to `DRAFT` unless the user explicitly approves the conclusion or the decision is reject/defer.
 
-```text
-BRAINSTORM-001-context.md
-BRAINSTORM-001-idea.md
-brainstorm-notes.md
-```
+## Durable Artifact Must Include
 
-## Artifact Status Rules
+- metadata
+- final decision
+- artifact action
+- decision rationale
+- compact carry-forward context
+- explicit non-next artifacts
+- next artifact handoff payload
+- immediate next step
+- continuation prompt
 
-Use:
+## Durable Artifact Must Not Include
 
-- `DRAFT` when the brainstorm has not been explicitly accepted
-- `APPROVED` when the decision is accepted as source of truth
-- `UPDATED` when revising an existing brainstorm artifact
-- `DEFERRED` when the final decision is `REJECT_OR_DEFER` but the rationale should be preserved
-- `REJECTED` when the idea should not be pursued and does not need future revisit
-- `BLOCKED` when required information is missing and no responsible decision can be made
+- full chat transcript
+- full downstream document content
+- full PRD sections
+- full Architecture sections
+- full ADR sections
+- full roadmap phases
+- full document plan sections
+- implementation task breakdown
+- speculative detail not needed by the next skill
 
-## Source Artifact Rule
+## Reject / Defer Handling
 
-When a durable brainstorm artifact exists, every downstream artifact should reference it in `source_artifacts`.
+A rejected or deferred idea can still have a durable brainstorm artifact when:
 
-Example:
+- the rationale must be preserved
+- the idea may return later
+- stakeholders may ask why it was not pursued
+- there are clear reopen conditions
 
-```yaml
-source_artifacts:
-  - docs/brainstorm/BRAINSTORM-001-notification-inbox.md
-```
-
-## Minimality Rule
-
-The durable brainstorm artifact should be compact.
-
-Include only what the next phase needs:
-
-- decision
-- rationale
-- key problem or intent
-- constraints
-- risks
-- material open questions
-- selected next artifact
-- handoff payload
-
-Do not include:
-
-- the full chat transcript
-- every discarded thought
-- downstream artifact templates
-- implementation steps
-- detailed task decomposition
-- low-importance context
-
-## Deferred Idea Rule
-
-A `REJECT_OR_DEFER` decision does not automatically require a durable artifact.
-
-Create a durable artifact for defer/reject only when:
-
-- the idea is likely to be revisited
-- the rationale is important to preserve
-- the user asks for a record
-- the decision prevents repeated re-discussion
-- the idea has enough context to make future revisit useful
-
-Otherwise, keep the result chat-only.
+For lightweight rejection, use chat-only output.

@@ -7,7 +7,7 @@ artifact_status: DRAFT
 source_skill: brainstorm-gate
 created_at: YYYY-MM-DD
 updated_at: YYYY-MM-DD
-decision: <NEW_PRD | PRD_UPDATE | NEW_PRODUCT_ROADMAP | PRODUCT_ROADMAP_UPDATE | NEW_INITIATIVE_ROADMAP | INITIATIVE_ROADMAP_UPDATE | NEW_ADR | ADR_UPDATE | REJECT_OR_DEFER>
+decision: <REJECT_OR_DEFER | NEW_PRD | PRD_UPDATE | NEW_ARCHITECTURE | ARCHITECTURE_UPDATE | NEW_ADR | ADR_UPDATE | NEW_PRODUCT_ROADMAP | PRODUCT_ROADMAP_UPDATE | NEW_INITIATIVE_ROADMAP | INITIATIVE_ROADMAP_UPDATE | NEW_DOCUMENT_PLAN | DOCUMENT_PLAN_UPDATE>
 output_mode: DURABLE_BRAINSTORM_OUTPUT
 durable_artifact_path: docs/brainstorm/BRAINSTORM-XXX-<short-slug>.md
 source_artifacts:
@@ -102,7 +102,7 @@ Decision: `<choose exactly one>`
 
 Use the payload shape from `references/HANDOFF_PAYLOADS.md` that matches the final decision.
 
-Do not include a full PRD, ADR, roadmap, or plan here.
+Do not include a full PRD, Architecture document, ADR, roadmap, document plan, or implementation plan here.
 
 ```yaml
 artifact_type: BRAINSTORM_OUTPUT

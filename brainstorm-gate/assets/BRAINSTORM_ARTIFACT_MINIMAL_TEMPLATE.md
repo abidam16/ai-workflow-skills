@@ -18,7 +18,7 @@ next_step: <exact next step>
 
 ## Decision
 
-Decision: `<choose exactly one>`
+Decision: `<choose exactly one allowed decision>`
 
 ## Rationale
 

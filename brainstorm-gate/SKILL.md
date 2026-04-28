@@ -2,17 +2,19 @@
 name: brainstorm-gate
 description: |
   Use this skill as the first decision gate for new ideas, feature additions,
-  user-reported problems, technical concerns, roadmap shifts, and product changes.
+  user-reported problems, technical concerns, architecture concerns, roadmap
+  shifts, documentation workflow changes, and product changes.
   The skill pressure-tests the problem, value, alternatives, risks, and trade-offs,
-  then routes to exactly one next artifact: PRD creation/update, roadmap
-  creation/update, ADR creation/update, or reject/defer.
+  then routes to exactly one next artifact: PRD creation/update, ARCHITECTURE
+  creation/update, ADR creation/update, roadmap creation/update, document plan
+  creation/update, or reject/defer.
 
   This skill can produce either a lightweight chat-only brainstorm conclusion or
   a durable BRAINSTORM artifact that becomes the source-of-truth handoff for the
   next workflow phase.
 
-  Do not use this skill to write full PRDs, roadmaps, ADRs, execution plans, or
-  implementation tasks directly.
+  Do not use this skill to write full PRDs, ARCHITECTURE documents, ADRs,
+  roadmaps, document plans, execution plans, or implementation tasks directly.
 ---
 
 # Brainstorm Gate
@@ -61,8 +63,10 @@ Use this skill when the user is exploring or evaluating:
 - a new capability or feature addition
 - a user-reported problem or recurring pain point
 - a technical concern that may require an ADR
+- an architecture concern that may require `ARCHITECTURE.md` creation or update
 - a scope change in an existing product
 - a roadmap or delivery sequencing change
+- a documentation or artifact workflow change that may require a document plan
 - whether an idea should proceed, stop, or be deferred
 
 Use this skill when the main question is:
@@ -76,7 +80,10 @@ Do not use this skill when the correct artifact is already explicitly selected a
 Examples:
 
 - The user asks directly to write a PRD from already-approved context.
+- The user asks directly to write or update `ARCHITECTURE.md` from already-approved context.
 - The user asks directly to write an ADR for a clearly bounded technical decision.
+- The user asks directly to write a roadmap from already-approved product/technical intent.
+- The user asks directly to write a document plan from an approved scope.
 - The user asks directly to write an execution plan from an approved roadmap slice.
 - The user asks to implement code.
 - The user asks to review completed work.
@@ -87,15 +94,19 @@ In those cases, use the corresponding downstream skill directly.
 
 Every brainstorm run must end with exactly one explicit decision:
 
+- `REJECT_OR_DEFER`
 - `NEW_PRD`
 - `PRD_UPDATE`
+- `NEW_ARCHITECTURE`
+- `ARCHITECTURE_UPDATE`
+- `NEW_ADR`
+- `ADR_UPDATE`
 - `NEW_PRODUCT_ROADMAP`
 - `PRODUCT_ROADMAP_UPDATE`
 - `NEW_INITIATIVE_ROADMAP`
 - `INITIATIVE_ROADMAP_UPDATE`
-- `NEW_ADR`
-- `ADR_UPDATE`
-- `REJECT_OR_DEFER`
+- `NEW_DOCUMENT_PLAN`
+- `DOCUMENT_PLAN_UPDATE`
 
 Do not end with:
 
@@ -126,12 +137,12 @@ Output a concise brainstorm conclusion using `assets/BRAINSTORM_RESPONSE_TEMPLAT
 
 Use this mode when:
 
-- the brainstorm result will feed a PRD, ADR, roadmap, plan, implementation, or review phase
+- the brainstorm result will feed a PRD, architecture document, ADR, roadmap, document plan, implementation, or review phase
 - the user wants a durable document
 - the decision rationale must be preserved
 - another AI agent or future session must consume the result
 - the idea is deferred but likely to be revisited
-- the idea affects product direction, architecture, roadmap sequencing, or implementation scope
+- the idea affects product direction, architecture, roadmap sequencing, document workflow, or implementation scope
 
 Output a durable artifact using `assets/BRAINSTORM_OUTPUT_TEMPLATE.md`.
 
@@ -154,12 +165,13 @@ Examples:
 ```text
 /docs/brainstorm/BRAINSTORM-001-notification-inbox.md
 /docs/brainstorm/BRAINSTORM-002-ai-report-template-builder.md
+/docs/brainstorm/BRAINSTORM-003-modular-backend-architecture.md
 /docs/brainstorm/BRAINSTORM-XXX-payment-reconciliation.md
 ```
 
 ## 7. Durable Artifact Rule
 
-A durable brainstorm artifact is not a PRD, ADR, roadmap, or plan.
+A durable brainstorm artifact is not a PRD, architecture document, ADR, roadmap, document plan, or implementation plan.
 
 It is:
 
@@ -173,7 +185,7 @@ It must include:
 - request classification
 - problem/opportunity summary
 - value assessment
-- users or actors affected
+- users, actors, systems, or stakeholders affected
 - options considered
 - trade-offs
 - constraints
@@ -191,11 +203,13 @@ It must not include:
 
 - full exploratory chat transcript
 - full PRD sections
+- full `ARCHITECTURE.md` sections
 - full ADR sections
 - full roadmap phases
+- full document plan sections
 - implementation task breakdown
 - file lists
-- class names, endpoint lists, or table schemas unless they are necessary to explain a technical decision boundary
+- class names, endpoint lists, or table schemas unless they are necessary to explain a decision boundary
 - low-importance observations
 
 ## 8. Handoff Discipline
@@ -211,8 +225,10 @@ Next Artifact Handoff Payload
 Do not create special sections such as:
 
 - `PRD Section`
+- `Architecture Section`
 - `ADR Section`
 - `Roadmap Section`
+- `Document Plan Section`
 
 The selected downstream skill owns the downstream artifact format.
 
@@ -239,21 +255,47 @@ Follow this sequence:
 
 Use PRD when product intent, user-facing behavior, goals, non-goals, scope, product rules, or success criteria must be defined or changed.
 
-Use ADR when the main unresolved issue is a lasting technical or architectural decision with meaningful alternatives and trade-offs.
+Use Architecture when the system structure, boundaries, layers, integration map, runtime model, or repo-level conventions must be made durable before later work can proceed.
+
+Use ADR when the main unresolved issue is one lasting technical or architectural decision with meaningful alternatives and trade-offs.
 
 Use roadmap when the intent is already accepted and the next need is staged delivery structure, sequencing, dependencies, risks, and exit criteria.
 
+Use document plan when the product/technical intent is already accepted and the next need is planning how a bounded documentation artifact or artifact set should be produced/refactored.
+
 Use reject/defer when the idea is weak, low-value, under-evidenced, premature, or missing material constraints.
 
-If PRD is required, do not also route directly to roadmap in the same final decision.
+If PRD is required, do not also route directly to architecture, ADR, roadmap, or document plan in the same final decision.
+
+If architecture is required, do not also route directly to ADR unless the architecture context already exists and the only remaining question is one bounded decision.
 
 If roadmap is required, specify whether it is a product roadmap or initiative roadmap.
+
+If document plan is required, specify whether it is a new document plan or an update/refactor of an existing document plan.
 
 If ADR is required, specify whether it is a new ADR or an update.
 
 If reject/defer is selected, state what evidence or clarification would reopen the idea.
 
-## 11. Mandatory Closing Behavior
+## 11. Architecture vs ADR Boundary
+
+Choose Architecture when the question is:
+
+```text
+How is the system structured, and what durable context must future work share?
+```
+
+Choose ADR when the question is:
+
+```text
+Which one technical option should we choose, and why?
+```
+
+Architecture is broader and living. ADR is narrower and historical.
+
+Do not overuse Architecture. Choose it only when multiple future decisions or tasks need the same system-level context.
+
+## 12. Mandatory Closing Behavior
 
 Every output must end with all of the following:
 
@@ -280,13 +322,21 @@ Continuation prompt: Proceed to create the PRD based on docs/brainstorm/BRAINSTO
 ```
 
 ```text
+Decision: NEW_ARCHITECTURE
+Artifact action: CREATE_DURABLE_BRAINSTORM_ARTIFACT
+Durable artifact path: docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md
+Immediate next step: Proceed to NEW_ARCHITECTURE.
+Continuation prompt: Proceed to create the architecture document based on docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md.
+```
+
+```text
 Decision: REJECT_OR_DEFER
 Artifact action: CHAT_ONLY_NO_ARTIFACT
 Immediate next step: Stop here. Do not proceed until stronger evidence exists.
 Continuation prompt: Stop here and revisit after gathering stronger evidence.
 ```
 
-## 12. Stop Condition
+## 13. Stop Condition
 
 When the final decision is `REJECT_OR_DEFER`, do not create a downstream artifact.
 
@@ -299,7 +349,7 @@ State:
 
 Use a durable artifact for `REJECT_OR_DEFER` only when the idea is likely to be revisited or the rationale is important to preserve.
 
-## 13. Output Quality Bar
+## 14. Output Quality Bar
 
 A good brainstorm output must be:
 
@@ -323,7 +373,7 @@ Before finalizing, check:
 - Are non-next artifacts explicitly excluded?
 - Is the continuation prompt copy-paste usable?
 
-## 14. Read Before Use
+## 15. Read Before Use
 
 Read these local files before using the skill:
 

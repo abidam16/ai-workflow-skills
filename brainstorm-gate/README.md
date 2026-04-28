@@ -9,8 +9,10 @@ This skill is the first gate for idea evaluation.
 It converts raw brainstorming into one clear decision:
 
 - create/update PRD
+- create/update Architecture
 - create/update ADR
 - create/update roadmap
+- create/update document plan
 - reject/defer
 
 It can also produce a durable brainstorm artifact:
@@ -31,8 +33,10 @@ This refactor adds:
 - durable artifact rules
 - artifact naming convention
 - generic handoff payloads
+- Architecture and ADR as first-class next-artifact targets
+- Document Plan as a first-class next-artifact target
 - stop/defer handling
-- stronger anti-overlap rules against PRD/ADR/roadmap writers
+- stronger anti-overlap rules against PRD/Architecture/ADR/roadmap/document-plan writers
 
 ## Installation
 
@@ -59,7 +63,7 @@ Then commit:
 
 ```bash
 git add brainstorm-gate
-git commit -m "Refactor brainstorm-gate durable handoff output"
+git commit -m "Refactor brainstorm-gate artifact routing"
 ```
 
 ## Files
@@ -82,6 +86,7 @@ brainstorm-gate/
     HANDOFF_PAYLOADS.md
   examples/
     BRAINSTORM-001-example-notification-inbox.md
+    BRAINSTORM-002-example-modular-backend-architecture.md
 ```
 
 ## Usage Pattern
@@ -98,15 +103,15 @@ For durable workflow handoff:
 Use brainstorm-gate and create a durable brainstorm artifact if the idea should proceed to another workflow phase: <idea>
 ```
 
-For continuing to PRD/ADR/roadmap:
+For continuing to a downstream writer:
 
 ```text
-Proceed to create the PRD based on docs/brainstorm/BRAINSTORM-001-example.md.
+Proceed to create the architecture document based on docs/brainstorm/BRAINSTORM-002-modular-backend-architecture.md.
 ```
 
 ## Boundary
 
-This skill must not write full PRDs, ADRs, roadmaps, plans, or implementation tasks.
+This skill must not write full PRDs, Architecture documents, ADRs, roadmaps, document plans, execution plans, or implementation tasks.
 
 It only produces:
 
