@@ -96,7 +96,7 @@ FIX_ISSUES
 | `RUN_ROADMAP_REVIEW` | Run roadmap implementation review |
 | `RUN_ARTIFACT_CONSISTENCY_REVIEW` | Review PRD, architecture, ADRs, roadmap, and plan for consistency before implementation |
 | `REQUEST_MISSING_EVIDENCE` | Request missing validation, diff, or artifact evidence before approval |
-| `MERGE_OR_CLOSE_TASK` | Accept the work and proceed to merge/close the task |
+| `MERGE_OR_CLOSE_TASK` | Accept the work and perform or route task closure, including plan/checkpoint updates when required before merge |
 | `START_NEXT_PLAN` | Start planning the next roadmap/task slice after approval |
 | `RETURN_TO_REVIEW` | Return to review after fixes or missing evidence are supplied |
 

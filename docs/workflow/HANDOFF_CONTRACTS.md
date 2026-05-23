@@ -715,7 +715,57 @@ If review finds architecture, ADR, PRD, roadmap, or plan drift, it must route to
 
 ---
 
-## 22. Artifact Consistency Review Output
+## 22. Approved Review -> Task Closure
+
+Use when a task review approves an implementation and the task must be closed cleanly before merge, commit, or the next roadmap slice.
+
+Review approval is not the same as closure. Review decides whether work is acceptable. Closure updates durable task state after approval.
+
+Required handoff payload:
+
+```yaml
+artifact_type: TASK_REVIEW_REPORT | LIGHTWEIGHT_TASK_REVIEW_REPORT
+artifact_status: APPROVED | APPROVED_WITH_MINOR_IMPROVEMENTS
+decision: MERGE_OR_CLOSE_TASK
+core_rationale:
+approved_review:
+  review_status:
+  review_findings_remaining: none | minor
+  validation_evidence:
+    -
+closure_targets:
+  plan_path:
+  checkpoint_path:
+closure_actions:
+  update_plan_status: true | false
+  update_plan_review_checklist: true | false
+  add_plan_closure_summary: true | false
+  update_plan_concrete_next_step: true | false
+  update_checkpoint: true | false
+  stage_changes: true | false
+```
+
+Required closure actions when applicable:
+
+- update plan `implementation_status`, `review_status`, and closure metadata
+- check off the plan review checklist when final review approved each item
+- add or update a plan closure summary with implementation, review, scope-control, and validation evidence
+- change the plan's final `Concrete Next Step` from implementation/review routing to `MERGE_OR_CLOSE_TASK`, `START_NEXT_PLAN`, or the next approved action
+- update `checkpoint.md` with scope completed, scope not added, validation evidence, review evidence, documentation updates, and next handoff
+- stage closure docs only when the user asks to prepare changes for commit
+
+Do not use closure to change implementation behavior. If closure exposes a new code, product, architecture, ADR, roadmap, or plan issue, stop and route to the correct workflow phase.
+
+Required `Concrete Next Step` from an approved review:
+
+- `next_step_type`: `MERGE_OR_CLOSE_TASK`
+- `target`: approved plan and closure artifacts, or merge/commit target if closure is already complete
+- `action`: close the task by updating closure artifacts, or proceed with merge/commit when closure artifacts are already current
+- `blocking_condition`: new changes before merge, missing validation evidence, or source-artifact conflict
+
+---
+
+## 23. Artifact Consistency Review Output
 
 Use before implementation when durable artifacts may contradict each other.
 
@@ -750,7 +800,7 @@ Required `Concrete Next Step`:
 
 ---
 
-## 23. Portability Rule
+## 24. Portability Rule
 
 These handoff contracts are workflow-generic.
 

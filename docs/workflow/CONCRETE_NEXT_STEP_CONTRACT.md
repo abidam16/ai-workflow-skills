@@ -108,6 +108,19 @@ Do not rename it to:
 - `suggested_prompt`: Use `review-phase` in `TASK_REVIEW` mode to review the implementation summary, changed files, validation evidence, `PLAN.md`, and relevant PRD/architecture/ADR constraints.
 ```
 
+### Route from approved review to closure
+
+```md
+## Concrete Next Step
+
+- `next_step_type`: MERGE_OR_CLOSE_TASK
+- `target`: `PLAN.md` and `checkpoint.md`
+- `action`: Close the approved task by updating plan status, review checklist, closure summary, final next step, and checkpoint evidence before merge.
+- `why_this_is_next`: Review approved the implementation, but durable closure artifacts still need to reflect that approval.
+- `blocking_condition`: Re-run review if any code or source artifact changes before closure.
+- `suggested_prompt`: Close the approved task by updating `PLAN.md` and `checkpoint.md` with implementation status, review approval, checklist completion, validation evidence, and the next handoff, then stage the closure changes.
+```
+
 ---
 
 ## 5. Invalid Examples

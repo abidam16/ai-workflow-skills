@@ -14,6 +14,8 @@ Supported execution modes:
 - `FULL_PLAN_IMPLEMENTATION`
 - `LIGHTWEIGHT_PLAN_IMPLEMENTATION`
 
+Implementation executes the approved task and reports evidence. It does not approve its own work and does not close the task. After successful implementation, route to review.
+
 ## 2. Shared Workflow Sources
 
 Use these shared workflow docs when present:
@@ -70,6 +72,23 @@ Stop implementation and report a blocker when:
 ## 6. Completion Output
 
 After implementation, produce an implementation summary.
+
+For full-plan implementation, include:
+
+- changed files or components
+- behavior change
+- validation performed
+- deviations from the plan, if any
+- durable docs updated, if any
+- one next review action
+
+Do not update plan closure status, mark review checklists complete, or update checkpoint closure entries during implementation unless the user explicitly asks for a post-review closure task and an approved review already exists.
+
+When explicitly closing an approved task after review, treat the work as closure documentation only:
+
+- update plan `implementation_status`, `review_status`, closure summary, review checklist, and final `Concrete Next Step`
+- update `checkpoint.md` with scope, validation evidence, review evidence, documentation updates, and next handoff
+- avoid code changes unless closure exposes a new implementation defect, in which case route back to implementation or review
 
 For lightweight mode, include:
 

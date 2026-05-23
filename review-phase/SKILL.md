@@ -9,6 +9,8 @@ description: Review completed implementation work or artifact consistency agains
 
 This skill is the enforcement layer. It reviews implementation or artifact consistency against relevant approved sources of truth and decides one concrete next action.
 
+Review decides acceptance, revision, or escalation. It does not implement fixes and does not silently mutate source artifacts. Approval is not the same as task closure; closure is a separate `MERGE_OR_CLOSE_TASK` action unless the user explicitly asks this turn to update closure artifacts.
+
 ## 2. Shared Workflow Sources
 
 Use these shared workflow docs when present:
@@ -83,6 +85,16 @@ For artifact consistency review:
 - `CONSISTENT_WITH_MINOR_GAPS`
 - `NEEDS_ARTIFACT_REVISION`
 - `BLOCKED`
+
+## 6.5 Approved Task Closure Routing
+
+For `TASK_REVIEW` and `LIGHTWEIGHT_TASK_REVIEW` with `APPROVED` or `APPROVED_WITH_MINOR_IMPROVEMENTS`:
+
+- If plan/checkpoint closure artifacts are not current, route to `MERGE_OR_CLOSE_TASK`.
+- The next action should explicitly update any applicable plan status fields, review checklist checkboxes, closure summary, final `Concrete Next Step`, and checkpoint entry.
+- If closure artifacts are already current, route to `MERGE_OR_CLOSE_TASK` for merge/commit handling or `START_NEXT_PLAN` only when the current task is already closed.
+- Do not use `START_NEXT_PLAN` while the approved task's closure docs are stale.
+- Do not update closure docs inside review unless the user explicitly asked review to do that mutation in the same turn.
 
 ## 7. Mandatory Closing
 
